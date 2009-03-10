@@ -4,15 +4,15 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     SOPERA GmbH - initial API and implementation
  *******************************************************************************/
 package org.eclipse.swordfish.core.test.util;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.xml.namespace.QName;
 
@@ -45,7 +45,7 @@ public class ServiceMixSupport {
                     exchange.setStatus(Status.Done);
                 }
             };
-        endpoint.setQueue(new LinkedList<Exchange>());
+        endpoint.setQueue(new LinkedBlockingQueue<Exchange>());
        nmr.getEndpointRegistry().register(endpoint, props);
         return endpoint;
     }
