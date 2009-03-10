@@ -46,14 +46,15 @@
     </properties>
     <modules>
         <module>org.eclipse.swordfish.core.integrationtest/org.eclipse.swordfish.core.test.util</module>
-      
-	<module>org.eclipse.swordfish.api</module>
+    	<module>org.eclipse.swordfish.api</module>
         <module>org.eclipse.swordfish.core.util</module>
         <module>org.eclipse.swordfish.core.planner</module>
         <module>org.eclipse.swordfish.core.configuration</module>
         <module>org.eclipse.swordfish.core.event</module>
+        <module>org.eclipse.swordfish.core.resolver</module>
         <module>org.eclipse.swordfish.core</module>
         <module>org.eclipse.swordfish.core.tracking</module>
+        <module>org.eclipse.swordfish.registry.proxy</module>
         <module>org.eclipse.swordfish.samples</module>
         <module>org.eclipse.swordfish.compatibility</module>
         <module>org.eclipse.swordfish.bundles</module>
