@@ -31,10 +31,16 @@ public class TargetPlatformOsgiTestCase extends BaseOsgiTestCase {
     private static Map<String, Integer> bundlePriorities;
     static {
         bundlePriorities = new HashMap<String, Integer>();
+        bundlePriorities.put("common-3.3", 2);
+        bundlePriorities.put("org.eclipse.osgi", 2);
+        bundlePriorities.put("org.eclipse.equinox", 2);
         bundlePriorities.put("servicemix.transaction", 2);
         bundlePriorities.put("geronimo-jta", 2);
+        bundlePriorities.put("spring-osgi-extender", 1);
+        bundlePriorities.put("org.eclipse.swordfish.core.configuration", 1);
         bundlePriorities.put("org.eclipse.swordfish.core.configuration", 1);
         bundlePriorities.put("org.apache.servicemix.kernel.management", 1);
+        bundlePriorities.put("jaas", -1);
         bundlePriorities.put("servicemix.kernel.filemonitor", -5);
         bundlePriorities.put("servicemix.transaction", -4);
         bundlePriorities.put("servicemix.kernel.filemonitor", -5);
