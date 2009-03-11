@@ -1,6 +1,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:http="http://servicemix.apache.org/http/1.0"       
        xmlns:osgi="http://www.springframework.org/schema/osgi"
+       xmlns:swordfishCxf="http://cxf.samples.swordfish.eclipse.org/"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
 	 http://www.springframework.org/schema/beans
@@ -11,13 +12,16 @@
 	 http://servicemix.apache.org/http/1.0/servicemix-http.xsd">  
 	<bean class="org.apache.servicemix.common.osgi.EndpointExporter" />  
   	
+    
     <http:endpoint                  
-                 endpoint="endpoint1"                 
-                 service="endpoint1"
+                 endpoint="httpConsumerEndpoint"                 
+                 service="httpConsumerEndpoint"
+                 targetService="swordfishCxf:BookingServiceImpl"
                  soap="true"
                  role="consumer"                  
                  locationURI="http://0.0.0.0:8192/cxfsample/"
                  defaultMep="http://www.w3.org/2004/08/wsdl/in-out" />
+   
     <http:endpoint                  
                  endpoint="cxfEndpointHttpProvider"                 
                  service="endpoint2"

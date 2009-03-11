@@ -65,8 +65,8 @@ public class ServiceMixSupport {
 		Assert.notEmpty(serviceEndpoints);
 		messageExchange.setProperty(JbiConstants.SENDER_ENDPOINT, serviceEndpoints[0].getServiceName() + ":" + serviceEndpoints[0].getEndpointName());
 	}
-	public static InternalEndpoint getEndpoint(Reference reference) {
-	    Iterator<InternalEndpoint> endpointsIterator = ((InternalReference)reference).choose().iterator();
+	public static InternalEndpoint getEndpoint(NMR nmr, Reference reference) {
+	    Iterator<InternalEndpoint> endpointsIterator = ((InternalReference)reference).choose(nmr.getEndpointRegistry()).iterator();
     	if (!endpointsIterator.hasNext()) {
     		return null;
         }
@@ -74,7 +74,7 @@ public class ServiceMixSupport {
     }
 	public static InternalEndpoint getEndpoint(NMR nmr, Map<String, ?> props) {
     	InternalReference reference = (InternalReference)nmr.getEndpointRegistry().lookup(props);
-    	Iterator<InternalEndpoint> endpointsIterator = reference.choose().iterator();
+    	Iterator<InternalEndpoint> endpointsIterator = reference.choose(nmr.getEndpointRegistry()).iterator();
     	if (!endpointsIterator.hasNext()) {
         	return null;
         }

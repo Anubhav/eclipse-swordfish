@@ -22,7 +22,7 @@ import org.apache.servicemix.nmr.api.NMR;
 import org.apache.servicemix.nmr.api.Reference;
 import org.apache.servicemix.nmr.api.Status;
 import org.apache.servicemix.nmr.api.internal.InternalEndpoint;
-import org.apache.servicemix.nmr.core.DynamicReferenceImpl;
+import org.apache.servicemix.nmr.core.DynamicReference;
 import org.apache.servicemix.nmr.core.util.Filter;
 import org.eclipse.swordfish.core.util.xml.StringSource;
 
@@ -52,7 +52,7 @@ public class ServiceMixSupport {
 
 
     public static Reference lookup(final NMR nmr, final Map<String, ?> properties) {
-        DynamicReferenceImpl ref = new DynamicReferenceImpl(nmr.getEndpointRegistry(), new Filter<InternalEndpoint>() {
+        DynamicReference ref = new DynamicReference(new Filter<InternalEndpoint>() {
             public boolean match(InternalEndpoint endpoint) {
                 Map<String, ?> epProps = nmr.getEndpointRegistry().getProperties(endpoint);
                 for (Map.Entry<String, ?> name : properties.entrySet()) {//epProps.put(name.getKey(), name.getValue())

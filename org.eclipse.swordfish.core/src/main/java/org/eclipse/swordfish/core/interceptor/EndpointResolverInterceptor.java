@@ -28,7 +28,7 @@ import org.apache.servicemix.nmr.api.NMR;
 import org.apache.servicemix.nmr.api.Reference;
 import org.apache.servicemix.nmr.api.Role;
 import org.apache.servicemix.nmr.api.internal.InternalEndpoint;
-import org.apache.servicemix.nmr.core.DynamicReferenceImpl;
+import org.apache.servicemix.nmr.core.DynamicReference;
 import org.apache.servicemix.nmr.core.StaticReferenceImpl;
 import org.apache.servicemix.nmr.core.util.Filter;
 import org.eclipse.swordfish.api.SwordfishException;
@@ -58,7 +58,7 @@ public class EndpointResolverInterceptor<T> implements ConfigurationConsumer<T>,
 		if (exchange.getRole() != Role.Consumer) {
 			return;
 		}
-		if (exchange.getTarget() != null && ServiceMixSupport.getEndpoint(exchange.getTarget()) != null) {
+		if (exchange.getTarget() != null && ServiceMixSupport.getEndpoint(nmr, exchange.getTarget()) != null) {
 		    return;
 		}
 		QName interfaceName = (QName) exchange.getProperty(Endpoint.INTERFACE_NAME);
@@ -119,7 +119,7 @@ public class EndpointResolverInterceptor<T> implements ConfigurationConsumer<T>,
 	}
 
 	public Reference lookup(final Map<String, ?> properties) {
-        DynamicReferenceImpl ref = new DynamicReferenceImpl(nmr.getEndpointRegistry(), new Filter<InternalEndpoint>() {
+        DynamicReference ref = new DynamicReference(new Filter<InternalEndpoint>() {
             public boolean match(InternalEndpoint endpoint) {
                 Map<String, ?> epProps = nmr.getEndpointRegistry().getProperties(endpoint);
                 for (Map.Entry<String, ?> name : properties.entrySet()) {//epProps.put(name.getKey(), name.getValue())

@@ -12,21 +12,27 @@ package org.eclipse.swordfish.core.interceptor;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jbi.messaging.MessageExchange;
 import javax.xml.transform.Source;
 
 import org.apache.servicemix.jbi.jaxp.SourceTransformer;
+import org.apache.servicemix.jbi.runtime.impl.AbstractComponentContext;
 import org.apache.servicemix.nmr.api.Endpoint;
 import org.apache.servicemix.nmr.api.NMR;
+import org.apache.servicemix.nmr.api.Reference;
 import org.apache.servicemix.nmr.api.Role;
 import org.apache.servicemix.nmr.api.Status;
 import org.apache.servicemix.nmr.api.internal.InternalEndpoint;
 import org.apache.servicemix.nmr.api.internal.InternalExchange;
+import org.apache.servicemix.nmr.core.DynamicReference;
 import org.apache.servicemix.nmr.core.InternalEndpointWrapper;
+import org.apache.servicemix.nmr.core.util.Filter;
 import org.eclipse.swordfish.api.Interceptor;
 import org.eclipse.swordfish.api.SwordfishException;
+import org.eclipse.swordfish.core.util.ReflectionUtil;
 import org.eclipse.swordfish.core.util.ServiceMixSupport;
 import org.eclipse.swordfish.core.util.xml.StringSource;
 import org.eclipse.swordfish.core.util.xml.XmlUtil;
@@ -51,7 +57,10 @@ public class CxfDecoratingInterceptor implements Interceptor {
 	}
 
 	private boolean isCxfEndpoint(InternalEndpoint endpoint) {
-		try {
+		if (endpoint == null) {
+		    return false;
+		}
+	    try {
 			InternalEndpointWrapper endpointWrapper = (InternalEndpointWrapper) endpoint;
 
 			Field endpointField = InternalEndpointWrapper.class.getDeclaredField("endpoint");
@@ -66,13 +75,46 @@ public class CxfDecoratingInterceptor implements Interceptor {
 		}
 		return false;
 	}
+	private Map<String, ?> getTargetProperties(MessageExchange exchange) {
+	    InternalExchange messageExchange = (InternalExchange) ServiceMixSupport.toNMRExchange(exchange);
+	    Reference reference = messageExchange.getTarget();
+        if (reference == null || !(reference instanceof DynamicReference)) {
+            return null;
+        }
+        Filter filter = (Filter) ReflectionUtil.getDeclaredField(reference, DynamicReference.class, "filter");
+        if (filter == null) {
+            return null;
+        }
+        List<Object> instanceVariables = ReflectionUtil.getAnonymousClassInstanceValues(filter);
+        if (instanceVariables.size() == 0) {
+            return null;
+        }
+        if (instanceVariables.get(0) instanceof Map) {
+            return (Map<String, ?>) instanceVariables.get(0);
+        }
+        return null;
 
+	}
 	public void process(MessageExchange exchange) throws SwordfishException {
 		InternalExchange messageExchange = (InternalExchange) ServiceMixSupport.toNMRExchange(exchange);
 		if (messageExchange.getTarget() == null) {
 			throw new UnsupportedOperationException();
 		}
-		InternalEndpoint endpoint = ServiceMixSupport.getEndpoint(messageExchange.getTarget());
+		InternalEndpoint endpoint = ServiceMixSupport.getEndpoint(nmr, messageExchange.getTarget());
+		if (endpoint == null) {
+		    Map<String, ?> targetProps = getTargetProperties(exchange);
+		    if (targetProps != null && targetProps.containsKey(AbstractComponentContext.INTERNAL_ENDPOINT)) {
+		        targetProps.remove(AbstractComponentContext.INTERNAL_ENDPOINT);
+		        try {
+		        Field field = DynamicReference.class.getDeclaredField("matches");
+		        field.setAccessible(true);
+		        field.set(messageExchange.getTarget(), null);
+		        endpoint = ServiceMixSupport.getEndpoint(nmr, messageExchange.getTarget());
+		        } catch (Exception ex) {
+		            LOG.error(ex.getMessage(), ex);
+		        }
+		    }
+		}
 		if (!isCxfEndpoint(endpoint)) {
 			 return;
 		}
