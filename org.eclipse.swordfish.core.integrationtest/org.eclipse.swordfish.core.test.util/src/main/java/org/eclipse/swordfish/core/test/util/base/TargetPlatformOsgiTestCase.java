@@ -38,7 +38,7 @@ public class TargetPlatformOsgiTestCase extends BaseOsgiTestCase {
         bundlePriorities.put("geronimo-jta", 2);
         bundlePriorities.put("spring-osgi-extender", 1);
         bundlePriorities.put("org.eclipse.swordfish.core.configuration", 1);
-        bundlePriorities.put("org.eclipse.swordfish.core.configuration", 1);
+        bundlePriorities.put("org.eclipse.swordfish.samples.configurationprovider", 1);
         bundlePriorities.put("org.apache.servicemix.kernel.management", 1);
         bundlePriorities.put("jaas", -1);
         bundlePriorities.put("servicemix.kernel.filemonitor", -5);
@@ -77,7 +77,7 @@ public class TargetPlatformOsgiTestCase extends BaseOsgiTestCase {
     }
 
     protected List<Pattern> getExcludeBundlePatterns() {
-        return Arrays.asList(Pattern.compile("org.eclipse.osgi-3.4.2.*"), Pattern.compile("org.eclipse.swordfish.samples.http.*"));
+        return Arrays.asList(Pattern.compile("org.eclipse.osgi-3.4.2.*"), Pattern.compile("org.eclipse.swordfish.samples.configuration.*"), Pattern.compile("org.eclipse.swordfish.samples.http.*"));
     }
     private int getIndex(Resource[] bundles, String bundleNamePart) {
         int i = -1;
