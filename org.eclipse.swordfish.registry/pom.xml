@@ -41,13 +41,11 @@
             <artifactId>easymock</artifactId>
             <version>2.4</version>
         </dependency>
- <!--
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>osgi_R4_compendium</artifactId>
             <version>1.0</version>
         </dependency>
--->
         <dependency>
             <groupId>wsdl4j</groupId>
             <artifactId>wsdl4j</artifactId>
