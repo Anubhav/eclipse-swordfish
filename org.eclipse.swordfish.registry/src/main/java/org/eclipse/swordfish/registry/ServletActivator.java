@@ -44,9 +44,9 @@ public class ServletActivator {
 		try {
 			httpService.registerServlet(SERVLET_ALIAS, servlet, params, null);
 		} catch (ServletException e) {
-			throwRegistryExcpetion("The initialization of the LookupServlet failed.", e);
+			throwRegistryException("The initialization of the LookupServlet failed.", e);
 		} catch (NamespaceException e) {
-			throwRegistryExcpetion("The LookupServlet cannot be registered under the alias " + SERVLET_ALIAS + " because another servlet is already registered under this name", e);
+			throwRegistryException("The LookupServlet cannot be registered under the alias " + SERVLET_ALIAS + " because another servlet is already registered under this name", e);
 		}
 	}
 
@@ -67,7 +67,7 @@ public class ServletActivator {
 		String fileLocation = System.getProperty(LOCATION_PROPERTY);
 		
 		if (fileLocation == null) {
-			throwRegistryExcpetion("The system property " + LOCATION_PROPERTY + " is not defined.", null);
+			throwRegistryException("The system property " + LOCATION_PROPERTY + " is not defined.", null);
 		}
 	
 		Hashtable<String, String> params = new Hashtable<String, String>();
@@ -75,7 +75,7 @@ public class ServletActivator {
 		return params;
 	}
 	
-	private static void throwRegistryExcpetion(String errorMessage, Throwable e) throws RegistryException {
+	private static void throwRegistryException(String errorMessage, Throwable e) throws RegistryException {
 		LOGGER.error(errorMessage);
 		throw new RegistryException(errorMessage, e);		
 	}

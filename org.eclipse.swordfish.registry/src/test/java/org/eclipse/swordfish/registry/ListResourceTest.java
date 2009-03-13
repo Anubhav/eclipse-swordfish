@@ -34,7 +34,7 @@ public class ListResourceTest {
 	}
 	
 	@Test
-	public void testGetRespurces() {
+	public void testGetResources() {
 		ListResource<WSDLResource> resources = new ListResource<WSDLResource>(input);
 		assertThat(resources.getResources(), isIteratorReturning(input));
 	}
