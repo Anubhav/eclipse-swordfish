@@ -49,6 +49,7 @@ public class EndpointResolverInterceptor<T> implements ConfigurationConsumer<T>,
     private NMR nmr;
     private WSDLManager wsdlManager;
     private String wsdlStorage;
+    private String wsdlStorage1;
     private Map<String, ?> properties = new HashMap<String, Object>();
 
 	public void process(MessageExchange messageExchange) throws SwordfishException {
@@ -163,8 +164,10 @@ public class EndpointResolverInterceptor<T> implements ConfigurationConsumer<T>,
     public void onReceiveConfiguration(Map<String, T> configuration) {
         if (configuration != null) {
             wsdlStorage = (String) configuration.get("wsdlStorage");
+            wsdlStorage1 = (String) configuration.get("wsdlStorage1");
             try {
                 wsdlManager.setupWSDLs(new URL(wsdlStorage));
+                wsdlManager.setupWSDLs(new URL(wsdlStorage1));
             } catch (Exception ex) {
                throw new SwordfishException(ex);
             }

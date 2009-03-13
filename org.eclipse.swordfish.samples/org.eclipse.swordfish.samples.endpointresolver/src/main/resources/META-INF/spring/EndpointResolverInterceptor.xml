@@ -38,10 +38,20 @@
   
     <bean id="configurationInjector" class="org.eclipse.swordfish.core.configuration.ConfigurationInjector"
         p:id="org.eclipse.swordfish.core.interceptor.EndpointResolverInterceptor" p:context-ref="swordfishContext">
-        <property name="configuration"><map><entry key="wsdlStorage"> <ref bean="resourceToStringConverter.url"/></entry></map></property>
+        <property name="configuration">
+            <map>
+               <entry key="wsdlStorage"> <ref bean="resourceToStringConverter.url"/></entry>
+               <entry key="wsdlStorage1"> <ref bean="resourceToStringConverter1.url"/></entry>
+            </map>
+        </property>
     </bean> 
     <bean id="resourceToStringConverter.url" class="org.springframework.beans.factory.config.PropertyPathFactoryBean"/>
      <bean id="resourceToStringConverter" class="wsdl.ResourceToStringConverter">
          <constructor-arg value="wsdl/BookingServiceImpl.zip"/>
+     </bean>
+     
+     <bean id="resourceToStringConverter1.url" class="org.springframework.beans.factory.config.PropertyPathFactoryBean"/>
+     <bean id="resourceToStringConverter1" class="wsdl.ResourceToStringConverter">
+         <constructor-arg value="wsdl/ReservationStorageService.zip"/>
      </bean>
   </beans>
