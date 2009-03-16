@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     SOPERA GmbH - initial API and implementation
  *******************************************************************************/
@@ -34,6 +34,14 @@ public interface JbiConstants {
 	    String SENDER_ENDPOINT = "org.apache.servicemix.senderEndpoint";
 
 	    String HTTP_DESTINATION_URI = "org.apache.servicemix.http.destination.uri";
+
+	    String WSA_NS = "http://www.w3.org/2005/08/addressing";
+
+	    String WSA_PREFIX = "wsa";
+
+	    String WSAW_NS = "http://www.w3.org/2005/03/addressing/wsdl";
+
+	    String WSAW_PREFIX = "wsaw";
 
 	    /**
 	     * This property should be set when a consumer endpoint creates an exchange

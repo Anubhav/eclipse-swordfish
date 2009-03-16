@@ -18,6 +18,7 @@ import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.servicedesc.ServiceEndpoint;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 
 import org.apache.servicemix.jbi.runtime.impl.MessageExchangeImpl;
@@ -29,13 +30,19 @@ import org.apache.servicemix.nmr.api.Reference;
 import org.apache.servicemix.nmr.api.internal.InternalEndpoint;
 import org.apache.servicemix.nmr.api.internal.InternalReference;
 import org.apache.servicemix.nmr.core.MessageImpl;
+import org.eclipse.swordfish.api.registry.EndpointDescription;
 import org.eclipse.swordfish.core.util.xml.StringSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.Element;
 
 public class ServiceMixSupport {
+
 	private final Logger LOG = LoggerFactory.getLogger(ServiceMixSupport.class);
+
 	public static Exchange toNMRExchange(MessageExchange messageExchange) {
 		Assert.notNull(messageExchange);
 		Assert.isTrue(messageExchange instanceof MessageExchangeImpl);
@@ -43,7 +50,6 @@ public class ServiceMixSupport {
 	}
 
 	public static void setStringMessage(MessageExchange source, String messageType, String content) {
-
 		try {
 			if (source.getMessage(messageType) != null) {
 			source.getMessage(messageType).setContent(new StringSource(content));
@@ -57,6 +63,7 @@ public class ServiceMixSupport {
 			throw new RuntimeException(ex);
 		}
 	}
+
 	public static void setSourceService(ComponentContext componentContext, MessageExchange messageExchange, QName sourceService) {
 		Assert.notNull(componentContext);
 		Assert.notNull(messageExchange);
@@ -65,6 +72,42 @@ public class ServiceMixSupport {
 		Assert.notEmpty(serviceEndpoints);
 		messageExchange.setProperty(JbiConstants.SENDER_ENDPOINT, serviceEndpoints[0].getServiceName() + ":" + serviceEndpoints[0].getEndpointName());
 	}
+
+	public static DocumentFragment getEndpointReference(EndpointDescription description) {
+		try {
+			Assert.notNull(description);
+
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+			Document doc = factory.newDocumentBuilder().newDocument();
+			Element endpRef = doc.createElementNS(JbiConstants.WSA_NS, "EndpointReference");
+			endpRef.setPrefix(JbiConstants.WSA_PREFIX);
+			Element address = doc.createElementNS(JbiConstants.WSA_NS, "Address");
+			address.setPrefix(JbiConstants.WSA_PREFIX);
+			address.appendChild(doc.createTextNode(description.getAddress()));
+			endpRef.appendChild(address);
+
+			QName serviceName = description.getServiceDescription().getServiceName();
+			Element metadata = doc.createElementNS(JbiConstants.WSA_NS, "Metadata");
+			metadata.setPrefix(JbiConstants.WSA_PREFIX);
+			Element service = doc.createElementNS(JbiConstants.WSA_NS, "ServiceName");
+			service.setAttribute("EndpointName", description.getName());
+			service.setPrefix(JbiConstants.WSAW_PREFIX);
+			service.appendChild(doc.createTextNode(serviceName.getNamespaceURI()
+				+ "/" + serviceName.getLocalPart()));
+			metadata.appendChild(service);
+			endpRef.appendChild(metadata);
+
+			doc.appendChild(endpRef);
+			DocumentFragment frag = doc.createDocumentFragment();
+			frag.appendChild(doc.getDocumentElement());
+			return frag;
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Unexpected failure of enpoint reference creation", e);
+		}
+	}
+
 	public static InternalEndpoint getEndpoint(NMR nmr, Reference reference) {
 	    Iterator<InternalEndpoint> endpointsIterator = ((InternalReference)reference).choose(nmr.getEndpointRegistry()).iterator();
     	if (!endpointsIterator.hasNext()) {
@@ -72,6 +115,7 @@ public class ServiceMixSupport {
         }
         return endpointsIterator.next();
     }
+
 	public static InternalEndpoint getEndpoint(NMR nmr, Map<String, ?> props) {
     	InternalReference reference = (InternalReference)nmr.getEndpointRegistry().lookup(props);
     	Iterator<InternalEndpoint> endpointsIterator = reference.choose(nmr.getEndpointRegistry()).iterator();
@@ -81,10 +125,10 @@ public class ServiceMixSupport {
         return endpointsIterator.next();
     }
 
-	public static java.io.InputStream convertStringToIS(String xml,
-            String encoding) {
-        if (xml == null)
+	public static java.io.InputStream convertStringToIS(String xml, String encoding) {
+        if (xml == null) {
             return null;
+        }
         xml = xml.trim();
         java.io.InputStream in = null;
         try {
