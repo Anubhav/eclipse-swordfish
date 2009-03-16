@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:res="http://cxf.samples.swordfish.eclipse.org" xmlns:sto="http://storage.samples.swordfish.eclipse.org" xmlns:tns="http://bpel.samples.swordfish.eclipse.org" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" targetNamespace="http://bpel.samples.swordfish.eclipse.org">
+    <plnk:partnerLinkType name="BookingServicePLT">
+    <plnk:role name="provider" portType="sto:BookingService"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="ReservationStoragePLT">
+    <plnk:role name="provider" portType="res:ReservationStorageService"/>
+  </plnk:partnerLinkType>
+    <import location="BookingService.wsdl" namespace="http://storage.samples.swordfish.eclipse.org"/>
+    <import location="ReservationStorageService.wsdl" namespace="http://cxf.samples.swordfish.eclipse.org"/>
+</definitions>
