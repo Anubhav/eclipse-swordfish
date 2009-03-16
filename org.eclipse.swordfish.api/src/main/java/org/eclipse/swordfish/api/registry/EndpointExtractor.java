@@ -10,26 +10,25 @@
  *******************************************************************************/
 package org.eclipse.swordfish.api.registry;
 
-import java.util.Collection;
-
 /**
  * Responsible for extracting endpoint parts (endpoint address,
  * transport protocol) from the service description document.
  */
-public interface EndpointExtractor<T extends ServiceDescription> {
+public interface EndpointExtractor {
+
+	/**
+	 * Checks if the passed description can be processed by this type of extractor.
+	 * @param description A <code>ServiceDescription</code> to check.
+	 * @return <code>true</code> if the extractor can handle passed service description,
+	 * <code>false</code> otherwise.
+	 */
+	boolean canHandle(ServiceDescription<?> description);
 
 	/**
 	 * Extracts endpoint part from the given service description.
 	 * @param endpointDocument A service description to parse.
 	 * @return endpoint description, not <code>null</code>
 	 */
-	EndpointDescription<?, ?> extractEndpoint(T endpointDocument);
-
-	/**
-	 * Returns collection of service description types the endpoint extractor can handle.
-	 * @return A collection of <code>Class</code> objects of supported types
-	 * or empty collection if the endpoint extractor doesn't support any.
-	 */
-	Collection<Class<T>> getSupportedTypes();
+	EndpointDescription extractEndpoint(ServiceDescription<?> description);
 
 }

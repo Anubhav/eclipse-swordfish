@@ -18,8 +18,14 @@ import javax.xml.namespace.QName;
 public interface ServiceDescription<T> {
 
 	/**
-	 * @return A qualified name of service.
+	 *
+	 * @return
 	 */
-	QName getServiceQName();
+	Class<T> getType();
+
+	/**
+	 * @return A qualified name of the service, not <code>null</code>.
+	 */
+	QName getServiceName();
 
 }

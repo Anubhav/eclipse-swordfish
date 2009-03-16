@@ -11,20 +11,26 @@
 package org.eclipse.swordfish.api.registry;
 
 /**
- * Represents an endpoint part of service descriptions. Includes endpoint address
- * and protocol used to access the service.
+ * Description of particular endpoint of the service.
  */
-public interface EndpointDescription<T, U> {
+public interface EndpointDescription {
 
 	/**
 	 *
-	 * @return T endpoint address
+	 * @return An endpoint address, not <code>null</code>.
 	 */
-	T getEndpointAddress();
+	String getAddress();
 
 	/**
 	 *
-	 * @return U transport used to communicate with service
+	 * @return An endpoint name, not <code>null</code>.
 	 */
-	U getEndpointTransport();
+	String getName();
+
+	/**
+	 *
+	 * @return A description of the service containing endpoint.
+	 */
+	ServiceDescription getServiceDescription();
+
 }
