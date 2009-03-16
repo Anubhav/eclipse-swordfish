@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ServiceResolver integration test
+Bundle-SymbolicName: org.eclipse.swordfish.plugins.resolver.test
+Bundle-Version: 1.0.0
+Bundle-Activator: org.springframework.osgi.test.JUnitTestActivator
+Bundle-Vendor: SOPERA
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: junit.framework,
+ org.osgi.framework,
+ org.springframework.core.io,
+ org.springframework.osgi.test,
+ org.springframework.osgi.util,
+ org.springframework.util,
+ org.springframework.osgi.test.provisioning, 
+ org.slf4j,
+ javax.jbi.messaging,
+ javax.xml.namespace,
+ org.apache.servicemix.jbi.runtime.impl,
+ org.apache.servicemix.nmr.api,
+ org.apache.servicemix.nmr.core,
+ org.eclipse.swordfish.api,
+ org.eclipse.swordfish.api.registry,
+ org.eclipse.swordfish.core.resolver,
+ org.eclipse.swordfish.plugins.resolver,
+ org.eclipse.swordfish.core.util.xml
+Require-Bundle: org.eclipse.swordfish.core.test.util
