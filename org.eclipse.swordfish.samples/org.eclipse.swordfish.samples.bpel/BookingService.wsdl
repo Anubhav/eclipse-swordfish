@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="BookingService"
-	targetNamespace="http://storage.samples.swordfish.eclipse.org"
-	xmlns:tns="http://storage.samples.swordfish.eclipse.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://booking.samples.swordfish.eclipse.org"
+	xmlns:tns="http://booking.samples.swordfish.eclipse.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
 	<wsdl:types>
 		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns:tns="http://storage.samples.swordfish.eclipse.org"
+			xmlns:tns="http://booking.samples.swordfish.eclipse.org"
 			attributeFormDefault="unqualified" elementFormDefault="unqualified"
-			targetNamespace="http://storage.samples.swordfish.eclipse.org">
+			targetNamespace="http://booking.samples.swordfish.eclipse.org">
 			<xs:element name="createReservation" type="tns:createReservation" />
 			<xs:element name="createReservationResponse" type="tns:createReservationResponse" />
 			<xs:element name="findReservation" type="tns:findReservation" />

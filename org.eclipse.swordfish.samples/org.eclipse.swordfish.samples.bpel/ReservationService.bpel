@@ -5,11 +5,11 @@
          xmlns:tns="http://eclipse.org/swordfish/bpel/reservation"
          xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
          xmlns:art="http://bpel.samples.swordfish.eclipse.org"         
-         xmlns:res="http://cxf.samples.swordfish.eclipse.org"
+         xmlns:boo="http://booking.samples.swordfish.eclipse.org"
          xmlns:sto="http://storage.samples.swordfish.eclipse.org">
 
     <!-- Import the client WSDL -->
-    <bpel:import namespace="http://cxf.samples.swordfish.eclipse.org" location="BookingService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
+    <bpel:import namespace="http://booking.samples.swordfish.eclipse.org" location="BookingService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
     <bpel:import namespace="http://storage.samples.swordfish.eclipse.org" location="ReservationStorageService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
     <bpel:import location="ReservationServiceArtifacts.wsdl" namespace="http://bpel.samples.swordfish.eclipse.org" 
 	        importType="http://schemas.xmlsoap.org/wsdl/" />
@@ -62,7 +62,7 @@
         <bpel:assign validate="no" name="AssignReservationData">
             <bpel:copy>
                 <bpel:from>
-                    <bpel:literal xml:space="preserve"><tns:addReservation xmlns:tns="http://cxf.samples.swordfish.eclipse.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <bpel:literal xml:space="preserve"><tns:addReservation xmlns:tns="http://booking.samples.swordfish.eclipse.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 </tns:addReservation>
 </bpel:literal>
                 </bpel:from>

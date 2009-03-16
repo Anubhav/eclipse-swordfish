@@ -14,7 +14,7 @@
   </extensions>
   <extensions>
     <extendedObject href="ReservationService.bpel#/"/>
-    <extensionObject xsi:type="org.eclipse.bpel.ui.uiextensionmodel:ProcessExtension" modificationStamp="1237214912000"/>
+    <extensionObject xsi:type="org.eclipse.bpel.ui.uiextensionmodel:ProcessExtension" modificationStamp="1237218175000"/>
   </extensions>
   <extensions>
     <extendedObject href="ReservationService.bpel#//@activity/@activities.3"/>

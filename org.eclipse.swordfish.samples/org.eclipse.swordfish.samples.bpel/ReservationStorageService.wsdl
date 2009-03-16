@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <wsdl:definitions name="ReservationStorageServiceImpl"
-    targetNamespace="http://cxf.samples.swordfish.eclipse.org"
+    targetNamespace="http://storage.samples.swordfish.eclipse.org"
     xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-    xmlns:tns="http://cxf.samples.swordfish.eclipse.org"
+    xmlns:tns="http://storage.samples.swordfish.eclipse.org"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <wsdl:types>
         <xs:schema attributeFormDefault="unqualified"
             elementFormDefault="unqualified"
-            targetNamespace="http://cxf.samples.swordfish.eclipse.org"
-            xmlns:tns="http://cxf.samples.swordfish.eclipse.org"
+            targetNamespace="http://storage.samples.swordfish.eclipse.org"
+            xmlns:tns="http://storage.samples.swordfish.eclipse.org"
             xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:element name="addReservation" type="tns:addReservation" />
             <xs:element name="addReservationResponse"
