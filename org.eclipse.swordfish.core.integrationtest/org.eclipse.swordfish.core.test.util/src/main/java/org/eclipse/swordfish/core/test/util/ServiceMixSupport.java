@@ -17,6 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.xml.namespace.QName;
 
 import org.apache.servicemix.jbi.runtime.impl.EndpointImpl;
+import org.apache.servicemix.nmr.api.Endpoint;
 import org.apache.servicemix.nmr.api.Exchange;
 import org.apache.servicemix.nmr.api.NMR;
 import org.apache.servicemix.nmr.api.Reference;
@@ -50,6 +51,15 @@ public class ServiceMixSupport {
         return endpoint;
     }
 
+	public static void unregisterEndpoints(NMR nmr, Endpoint... endpoints) {
+	    for (Endpoint endpoint : endpoints) {
+	        try {
+	            nmr.getEndpointRegistry().unregister(endpoint, null);
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+	}
 
     public static Reference lookup(final NMR nmr, final Map<String, ?> properties) {
         DynamicReference ref = new DynamicReference(new Filter<InternalEndpoint>() {
