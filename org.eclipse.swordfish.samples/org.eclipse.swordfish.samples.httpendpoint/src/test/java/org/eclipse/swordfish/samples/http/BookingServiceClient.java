@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.eclipse.swordfish.samples.cxf.BookingService;
 import org.eclipse.swordfish.samples.cxf.domain.Flight;
 import org.eclipse.swordfish.samples.cxf.domain.Passenger;
+import org.eclipse.swordfish.samples.cxf.domain.Reservation;
 
 
 
@@ -25,9 +26,9 @@ public class BookingServiceClient {
         //Now we will leverage cxf to access the jaxws based webservice
         String wsdlUrl = BookingServiceClient.class.getClassLoader().getResource("./BookingService.wsdl").toString();
         BookingService bookingService = ClientUtil.createWebServiceStub(BookingService.class, wsdlUrl);
-        int bookingId = bookingService.createReservation(Arrays.asList(new Passenger(1, "Elena", "Krytelova", 24)), new Flight(1, "LC023"));
-        //Reservation reservation = bookingService.findReservation(bookingId);
-        //System.out.println("Server said: " + bookingId);
+        int bookingId = bookingService.createReservation(Arrays.asList(new Passenger(1, "Elena", "Krytelyova", 24)), new Flight(1, "LC023"));
+        Reservation reservation = bookingService.findReservation(bookingId);
+        System.out.println("Server said: " + bookingId);
 
     }
 
