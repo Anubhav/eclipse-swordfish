@@ -21,7 +21,7 @@
       <module>org.eclipse.swordfish.core.planner.test</module>
       <module>org.eclipse.swordfish.core.tracking.test</module>
       <module>org.eclipse.swordfish.core.test</module>
-        
+      <module>org.eclipse.swordfish.plugins.resolver.test</module>
   </modules>
     <dependencies>
         <dependency>
@@ -37,6 +37,11 @@
         <dependency>
             <groupId>org.eclipse.swordfish</groupId>
             <artifactId>org.eclipse.swordfish.core.event</artifactId>
+            <version>${swordfishVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.swordfish</groupId>
+            <artifactId>org.eclipse.swordfish.plugins.resolver</artifactId>
             <version>${swordfishVersion}</version>
         </dependency>
         <dependency>
