@@ -35,8 +35,6 @@
         <junit.version>4.4_1</junit.version>
         <log4j.version>1.2.14</log4j.version>
         <mina.version>1.1.6_1</mina.version>
-        
-        
         <pax.logging.version>1.1.1</pax.logging.version>
         <servicemix3.version>3.2.1</servicemix3.version>
         <smx4.version>1.0.0-SNAPSHOT</smx4.version>
@@ -54,11 +52,10 @@
         <module>org.eclipse.swordfish.core.planner</module>
         <module>org.eclipse.swordfish.core.configuration</module>
         <module>org.eclipse.swordfish.core.event</module>
-        <module>org.eclipse.swordfish.core.resolver</module>
         <module>org.eclipse.swordfish.core</module>
         <module>org.eclipse.swordfish.core.tracking</module>
-        <module>org.eclipse.swordfish.registry.proxy</module>
         <module>org.eclipse.swordfish.registry</module>
+        <module>org.eclipse.swordfish.plugins.resolver</module>
         <module>org.eclipse.swordfish.samples</module>
         <module>org.eclipse.swordfish.compatibility</module>
         <module>org.eclipse.swordfish.bundles</module>
