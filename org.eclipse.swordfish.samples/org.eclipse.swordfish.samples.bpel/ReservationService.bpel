@@ -4,14 +4,14 @@
          suppressJoinFailure="yes"
          xmlns:tns="http://eclipse.org/swordfish/bpel/reservation"
          xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
-         xmlns:art="http://bpel.samples.swordfish.eclipse.org"         
-         xmlns:boo="http://booking.samples.swordfish.eclipse.org"
-         xmlns:sto="http://storage.samples.swordfish.eclipse.org">
+         xmlns:art="http://bpel.jaxws.samples.swordfish.eclipse.org"         
+         xmlns:boo="http://booking.jaxws.samples.swordfish.eclipse.org"
+         xmlns:sto="http://storage.jaxws.samples.swordfish.eclipse.org">
 
     <!-- Import the client WSDL -->
-    <bpel:import namespace="http://booking.samples.swordfish.eclipse.org" location="BookingService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
-    <bpel:import namespace="http://storage.samples.swordfish.eclipse.org" location="ReservationStorageService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
-    <bpel:import location="ReservationServiceArtifacts.wsdl" namespace="http://bpel.samples.swordfish.eclipse.org" 
+    <bpel:import namespace="http://booking.jaxws.samples.swordfish.eclipse.org" location="BookingService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
+    <bpel:import namespace="http://storage.jaxws.samples.swordfish.eclipse.org" location="ReservationStorageService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"></bpel:import>
+    <bpel:import location="ReservationServiceArtifacts.wsdl" namespace="http://bpel.jaxws.samples.swordfish.eclipse.org" 
 	        importType="http://schemas.xmlsoap.org/wsdl/" />
          
     <!-- ================================================================= -->         
@@ -37,10 +37,10 @@
           -->
         
         
-        <bpel:variable name="providerRequest" messageType="sto:createReservation"></bpel:variable>
-        <bpel:variable name="providerResponse" messageType="sto:createReservationResponse"></bpel:variable>
-        <bpel:variable name="consumerResponse" messageType="res:addReservationResponse"></bpel:variable>
-        <bpel:variable name="consumerRequest" messageType="res:addReservation"></bpel:variable>
+        <bpel:variable name="providerRequest" messageType="boo:createReservation"></bpel:variable>
+        <bpel:variable name="providerResponse" messageType="boo:createReservationResponse"></bpel:variable>
+        <bpel:variable name="consumerResponse" messageType="sto:addReservationResponse"></bpel:variable>
+        <bpel:variable name="consumerRequest" messageType="sto:addReservation"></bpel:variable>
     </bpel:variables>
 
     <!-- ================================================================= -->         
@@ -62,7 +62,7 @@
         <bpel:assign validate="no" name="AssignReservationData">
             <bpel:copy>
                 <bpel:from>
-                    <bpel:literal xml:space="preserve"><tns:addReservation xmlns:tns="http://booking.samples.swordfish.eclipse.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <bpel:literal xml:space="preserve"><tns:addReservation xmlns:tns="http://booking.jaxws.samples.swordfish.eclipse.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 </tns:addReservation>
 </bpel:literal>
                 </bpel:from>
@@ -101,7 +101,7 @@
         <bpel:assign validate="no" name="AssignReservation">
             <bpel:copy>
                 <bpel:from>
-                    <bpel:literal xml:space="preserve"><tns:createReservationResponse xmlns:tns="http://storage.samples.swordfish.eclipse.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <bpel:literal xml:space="preserve"><tns:createReservationResponse xmlns:tns="http://storage.jaxws.samples.swordfish.eclipse.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <return></return>
 </tns:createReservationResponse>
 </bpel:literal>
@@ -110,7 +110,9 @@
             </bpel:copy>
             <bpel:copy>
                 <bpel:from part="parameters" variable="consumerResponse">
-                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[return]]></bpel:query>
+                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">
+                        <![CDATA[return]]>
+                    </bpel:query>
                 </bpel:from>
                 <bpel:to part="parameters" variable="providerResponse">
                     <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[return]]></bpel:query>
