@@ -2,7 +2,8 @@
        xmlns:http="http://servicemix.apache.org/http/1.0"       
        xmlns:osgi="http://www.springframework.org/schema/osgi"
        xmlns:swordfishCxf="http://cxf.samples.swordfish.eclipse.org/"
-       xmlns:swordfishJaxWs="http://storage.jaxws.samples.swordfish.eclipse.org/"
+       xmlns:jaxWsStorage="http://storage.jaxws.samples.swordfish.eclipse.org/"
+       xmlns:jaxWsReservation="http://reservation.jaxws.samples.swordfish.eclipse.org/"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
 	 http://www.springframework.org/schema/beans
@@ -24,9 +25,18 @@
                  defaultMep="http://www.w3.org/2004/08/wsdl/in-out" />
    
     <http:endpoint                  
-                 endpoint="httpConsumerEndpoint1"                 
-                 service="httpConsumerEndpoint1"
-                 targetService="swordfishJaxWs:ReservationStorageServiceImpl"
+                 endpoint="httpConsumerEndpointStorage"                 
+                 service="httpConsumerEndpointStorage"
+                 targetService="jaxWsStorage:ReservationStorageServiceImpl"
+                 soap="true"
+                 role="consumer"                  
+                 locationURI="http://0.0.0.0:8194/storage/"
+                 defaultMep="http://www.w3.org/2004/08/wsdl/in-out" />
+    
+    <http:endpoint                  
+                 endpoint="httpConsumerEndpointReservation"                 
+                 service="httpConsumerEndpointReservation"
+                 targetService="jaxWsReservation:ReservationServiceImpl"
                  soap="true"
                  role="consumer"                  
                  locationURI="http://0.0.0.0:8194/reservation/"

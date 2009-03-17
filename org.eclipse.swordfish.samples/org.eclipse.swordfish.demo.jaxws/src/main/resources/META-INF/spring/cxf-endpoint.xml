@@ -18,4 +18,9 @@
                     implementor="org.eclipse.swordfish.samples.jaxws.storage.ReservationStorageServiceImpl"
                     address="nmr:ReservationStorageService"> 
     </jaxws:endpoint>
+    
+    <jaxws:endpoint id="reservationService"
+                    implementor="org.eclipse.swordfish.samples.jaxws.reservation.ReservationServiceImpl"
+                    address="nmr:ReservationService"> 
+    </jaxws:endpoint>
 </beans>

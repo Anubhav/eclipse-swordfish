@@ -35,6 +35,7 @@
             <map>
                 <entry key="wsdlStorage" value-ref="resourceToStringConverter.url"/>
                 <entry key="wsdlStorage1" value-ref="resourceToStringConverter1.url"/>
+                <entry key="wsdlReservationService" value-ref="resourceToStringConverter2.url"/>
             </map>
         </property>
     </bean> 
@@ -47,6 +48,11 @@
 	<bean id="resourceToStringConverter1" class="org.eclipse.swordfish.plugins.resolver.proxy.local.ResourceToStringConverter">
 		<constructor-arg value="wsdl/ReservationStorageService.zip" />
 	</bean>
+
+    <bean id="resourceToStringConverter2.url" class="org.springframework.beans.factory.config.PropertyPathFactoryBean" />
+    <bean id="resourceToStringConverter2" class="org.eclipse.swordfish.plugins.resolver.proxy.local.ResourceToStringConverter">
+        <constructor-arg value="wsdl/ReservationService.zip" />
+    </bean>
 
     <bean id="filesystemProvider"
         class="org.eclipse.swordfish.plugins.resolver.proxy.local.FilesystemDocumentProvider" />

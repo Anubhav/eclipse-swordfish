@@ -14,7 +14,7 @@ import org.eclipse.swordfish.samples.jaxws.domain.Reservation;
 
 public class  ReservationStorageServiceHelper {
 	
-	public static final String url = "http://localhost:8194/reservation/";
+	public static final String url = "http://localhost:8194/storage/";
 	
 	private static final String REQUEST_BODY_START =
 		"<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:wsa=\"http://www.w3.org/2005/08/addressing\"> " +

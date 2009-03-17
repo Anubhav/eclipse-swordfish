@@ -8,7 +8,7 @@
  * Contributors:
  *     SOPERA GmbH - initial API and implementation
  *******************************************************************************/
-package org.eclipse.swordfish.samples.jaxws.booking;
+package org.eclipse.swordfish.samples.jaxws.reservation;
 
 import java.util.List;
 
@@ -17,11 +17,10 @@ import javax.jws.WebService;
 
 import org.eclipse.swordfish.samples.jaxws.domain.Flight;
 import org.eclipse.swordfish.samples.jaxws.domain.Passenger;
-import org.eclipse.swordfish.samples.jaxws.domain.Reservation;
+
 
 
 @WebService
-public interface BookingService {
+public interface ReservationService {
 	public int createReservation(@WebParam(name = "passengers")List<Passenger> passengers, @WebParam(name = "flight")Flight flight);
-	public Reservation findReservation(@WebParam(name = "reservationId")int reservationId);
 }
