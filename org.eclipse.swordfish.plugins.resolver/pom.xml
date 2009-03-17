@@ -78,6 +78,11 @@
 	      <version>1.5.5</version>
 	      <scope>provided</scope>
 	    </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-policy</artifactId>
+            <version>${cxf.version}</version>            
+        </dependency>
 	    <dependency>
 	      <groupId>org.slf4j</groupId>
 	      <artifactId>slf4j-jcl</artifactId>
