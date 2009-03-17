@@ -11,6 +11,7 @@
 package org.eclipse.swordfish.registry;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,21 +19,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.easymock.EasyMock;
 import org.easymock.IAnswer;
+import org.easymock.IArgumentMatcher;
 
 public final class TstUtil {
 
-	public static WSDLResource createWSDLResource(final String id) {
-		return new WSDLResource() {
+	public static WSDLResource wsdlResource(final String id) {
+		return new WSDLResource(null) {
 			@Override
 			public String getId() {
 				return id;
 			}
+			
+			@Override
+			public void delete() {}
 		};
 	}
 
-	public static WSDLResource createWSDLResource(final String id, final String content) {
-		return new WSDLResource() {
+	public static WSDLResource wsdlResource(final String id, final String content) {
+		return new WSDLResource(null) {
 			@Override
 			public String getId() {
 				return id;
@@ -66,7 +72,6 @@ public final class TstUtil {
 			value = v;
 		}
 	}
-
 	
 	public static <T> IAnswer<Iterator<T>> asIterator(final T... items) {
 		return new IAnswer<Iterator<T>>() {
@@ -79,5 +84,47 @@ public final class TstUtil {
 			}
 		};		
 	}
+	
+	public static Reader eqReader(String expected) {
+	    EasyMock.reportMatcher(new ReaderEquals(expected));
+	    return null;
+	}
 
+	
+	private static class ReaderEquals implements IArgumentMatcher {
+	    private String expectedContent;
+
+	    public ReaderEquals(String content) {
+	        this.expectedContent = content;
+	    }
+
+	    public boolean matches(Object actual) {
+	        if (actual == null || !(actual instanceof Reader)) {
+	            return false;
+	        }
+	        
+	        try {
+	        char[] buffer = new char[1000];
+	        StringBuffer actualStr = new StringBuffer(10000);
+	        Reader actualReader = (Reader) actual;
+	        int noChar = 0;
+	        do {
+	        	noChar = actualReader.read(buffer);
+	        	if (noChar > -1) {
+	        		actualStr.append(buffer, 0, noChar);
+	        	}
+	        } while (noChar > -1);
+	        	return expectedContent.equals(actualStr.toString());
+	        } catch (IOException e) {
+	        	throw new RuntimeException(e); 
+	        }
+	    }
+
+	    public void appendTo(StringBuffer buffer) {
+	        buffer.append("Reader(");
+	        buffer.append(" with content \"");
+	        buffer.append(expectedContent);
+	        buffer.append("\"");
+	    }
+	}
 }

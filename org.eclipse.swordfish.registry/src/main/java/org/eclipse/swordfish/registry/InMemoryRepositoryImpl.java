@@ -40,8 +40,26 @@ public class InMemoryRepositoryImpl implements InMemoryRepository {
 	public WSDLResource getWithId(String id) {
 		return byId.get(id);
 	}
-
 	
+	public ListResource<WSDLResource> getAll() {
+		return new ListResource<WSDLResource>(byId.values());
+	}
+
+	public void add(WSDLResource wsdl) throws RegistryException {
+		wsdl.register(this);
+	}
+	
+	public boolean delete(String id) {
+		WSDLResource toBeDeleted = getWithId(id);
+		if (toBeDeleted != null) {
+			unregisterAll(id);
+			toBeDeleted.delete();
+			return true;
+		}
+		return false;
+	}
+
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.swordfish.registry.WSDLRepository#registerByPortTypeName(javax.xml.namespace.QName, org.eclipse.swordfish.registry.WSDLResource)
 	 */
@@ -57,7 +75,14 @@ public class InMemoryRepositoryImpl implements InMemoryRepository {
 		byId.put(id, wsdl);	
 	}
 
-	private <T extends Resource> ListResource<T> get(QName name, Map<QName, Set<T>> wsdls) {
+	public void unregisterAll(String id) {
+		WSDLResource toBeRemoved = wsdlResource(id);
+		unregister(toBeRemoved, portTypeWsdls);
+		unregister(toBeRemoved, servicesRefPortType);
+		byId.remove(id);
+	}
+	
+	private static <T extends Resource> ListResource<T> get(QName name, Map<QName, Set<T>> wsdls) {
 		Set<T> referencing = wsdls.get(name);
 		if (referencing == null) {
 			referencing =  emptySet();
@@ -65,12 +90,27 @@ public class InMemoryRepositoryImpl implements InMemoryRepository {
 		return new ListResource<T>(referencing);
 	}
 	
-	private <T extends Resource> void register(QName name, T wsdl, Map<QName, Set<T>> wsdls) {
+	private static <T extends Resource> void register(QName name, T wsdl, Map<QName, Set<T>> wsdls) {
 		Set<T> matching = wsdls.get(name);
 		if (matching == null) {
 			matching = new HashSet<T>();
 			wsdls.put(name, matching);
 		}
 		matching.add(wsdl);
+	}
+
+	private static void unregister(WSDLResource toBeRemoved, Map<QName, Set<WSDLResource>> wsdlSets) {
+		for (Set<WSDLResource> wsdls : wsdlSets.values()) {
+			wsdls.remove(toBeRemoved);
+		}
+	}
+	
+	private static WSDLResource wsdlResource(final String id) {
+		return new WSDLResource(null) {
+			@Override
+			public String getId() {
+				return id;
+			}
+		};
 	}
 }

@@ -31,7 +31,7 @@ public class ServletActivator {
     private static final Logger LOGGER = LoggerFactory
     .getLogger(ServletActivator.class);
 
-    private LookupServlet servlet;
+    private WSDLServlet servlet;
 	
 	private HttpService httpService;
 	
@@ -55,7 +55,7 @@ public class ServletActivator {
 		httpService.unregister(SERVLET_ALIAS);
 	}
 	
-	public void setServlet(LookupServlet servlet) {
+	public void setServlet(WSDLServlet servlet) {
 		this.servlet = servlet;
 	}
 

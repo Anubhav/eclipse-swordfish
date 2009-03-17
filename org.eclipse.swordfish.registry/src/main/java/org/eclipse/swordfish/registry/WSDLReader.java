@@ -10,28 +10,10 @@
 *******************************************************************************/
 package org.eclipse.swordfish.registry;
 
+import java.io.Reader;
 
-public class RegistryException extends Exception {
+public interface WSDLReader {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8500631841012079558L;
-
-	public RegistryException() {
-		super();
-	}
-
-	public RegistryException(String message) {
-		super(message);
-	}
-
-	public RegistryException(Throwable e) {
-		super(e);
-	}
-
-	public RegistryException(String message, Throwable e) {
-		super(message, e);
-	}
+	WSDLResource readFrom(String id, Reader content) throws RegistryException;
 
 }

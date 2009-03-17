@@ -22,14 +22,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
 
+import org.junit.Before;
 import org.junit.Test;
 
-public class LookupServletTest {
+public class WSDLServletGetTest {
 
 	private StringWriter writer = new StringWriter();
 
@@ -37,19 +37,27 @@ public class LookupServletTest {
 
 	private HttpServletResponseStub response = createHttpServletResponse(writer);
 
-	private WSDLRepository repMock = createMock(WSDLRepository.class);
+	private WSDLRepository repositoryMock;
 
-	private LookupServlet servlet = new LookupServlet(repMock);
+	private WSDLServlet servlet;
+	
+	@Before
+	public void setup() {
+		repositoryMock = createMock(WSDLRepository.class);
+		servlet = new WSDLServlet();
+		servlet.setRepository(repositoryMock);
+		
+	}
 
 	@Test
 	public void givenParameterTypeIsPortTypeShouldReturnPortTypeWSDLs()
 			throws Exception {
 		request = createPortTypeRequest(PORT_TYPE_NAME_11);
 
-		expect(repMock.getByPortTypeName(PORT_TYPE_NAME_11)).andReturn(
+		expect(repositoryMock.getByPortTypeName(PORT_TYPE_NAME_11)).andReturn(
 				createListResource(CONTENT));
 
-		replay(repMock);
+		replay(repositoryMock);
 
 		servlet.doGet(request, response);
 
@@ -59,7 +67,28 @@ public class LookupServletTest {
 		assertThat("Wrong character encoding: ", response
 				.getCharacterEncoding(), equalTo("UTF-8"));
 
-		verify(repMock);
+		verify(repositoryMock);
+	}
+
+	@Test
+	public void givenNoParameterShouldReturnAllWdls()
+			throws Exception {
+		request = createHttpRequestWithParams(EMPTY_PARAMS);
+
+		expect(repositoryMock.getAll()).andReturn(
+				createListResource(CONTENT));
+
+		replay(repositoryMock);
+
+		servlet.doGet(request, response);
+
+		assertThat("Wrong response", writer.toString(), equalTo(CONTENT));
+		assertThat("Wrong content type: ", response.getContentType(),
+				equalTo("application/xml"));
+		assertThat("Wrong character encoding: ", response
+				.getCharacterEncoding(), equalTo("UTF-8"));
+
+		verify(repositoryMock);
 	}
 
 	@Test
@@ -67,10 +96,10 @@ public class LookupServletTest {
 			throws Exception {
 		request = createRefPortTypeRequest(PORT_TYPE_NAME_11);
 
-		expect(repMock.getReferencingPortType(PORT_TYPE_NAME_11)).andReturn(
+		expect(repositoryMock.getReferencingPortType(PORT_TYPE_NAME_11)).andReturn(
 				createListResource(CONTENT));
 
-		replay(repMock);
+		replay(repositoryMock);
 
 		servlet.doGet(request, response);
 
@@ -80,7 +109,7 @@ public class LookupServletTest {
 		assertThat("Wrong character encoding: ", response
 				.getCharacterEncoding(), equalTo("UTF-8"));
 
-		verify(repMock);
+		verify(repositoryMock);
 	}
 
 	@Test
@@ -88,10 +117,10 @@ public class LookupServletTest {
 			throws Exception {
 		request = createResourceRequest("/" + ID_1);
 
-		expect(repMock.getWithId(ID_1)).andReturn(
-				createWSDLResource(ID_1, CONTENT));
+		expect(repositoryMock.getWithId(ID_1)).andReturn(
+				wsdlResource(ID_1, CONTENT));
 
-		replay(repMock);
+		replay(repositoryMock);
 
 		servlet.doGet(request, response);
 
@@ -101,7 +130,7 @@ public class LookupServletTest {
 		assertThat("Wrong character encoding: ", response
 				.getCharacterEncoding(), equalTo("UTF-8"));
 
-		verify(repMock);
+		verify(repositoryMock);
 	}
 
 	@Test
@@ -138,24 +167,13 @@ public class LookupServletTest {
 	}
 
 	@Test
-	public void givenParameterTypeIsnotDefinedAndNoPathInfoIsDefinedShouldReturnBadArgumentCode()
-			throws Exception {
-		request = createHttpRequestWithParams(new HashMap<String, String>());
-
-		servlet.doGet(request, response);
-
-		assertThat("Wrong HTTP code: ", response.getError(),
-				equalTo(SC_BAD_REQUEST));
-	}
-
-	@Test
 	public void givenPathInfoDoesNotSpecifyValidIDShouldReturn404()
 			throws Exception {
 		request = createResourceRequest("/" + ID_1);
 
-		expect(repMock.getWithId(ID_1)).andReturn(null);
+		expect(repositoryMock.getWithId(ID_1)).andReturn(null);
 
-		replay(repMock);
+		replay(repositoryMock);
 
 		servlet.doGet(request, response);
 
@@ -185,6 +203,15 @@ public class LookupServletTest {
 			public String getPathInfo() {
 				return id;
 			}
+			@Override
+			public String getParameter(String name) {
+				return null;
+			}
+	
+			@Override
+			public Map getParameterMap() {
+				return EMPTY_PARAMS;
+			}
 		};
 	}
 
@@ -193,8 +220,14 @@ public class LookupServletTest {
 		return new HttpServletRequestStub() {
 			protected Map<String, String> parameters = params;
 
+			@Override
 			public String getParameter(String name) {
 				return parameters.get(name);
+			}
+	
+			@Override
+			public Map getParameterMap() {
+				return parameters;
 			}
 		};
 	}

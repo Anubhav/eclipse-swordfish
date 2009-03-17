@@ -29,7 +29,7 @@ public class ServletActivatorTest {
 	
 	public static final String ALIAS = "/registry/wsdl";
 
-	private LookupServlet servlet = new LookupServlet();
+	private WSDLServlet servlet = new WSDLServlet();
 
 	private HttpService httpService = createMock(HttpService.class);
 

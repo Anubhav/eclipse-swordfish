@@ -10,6 +10,9 @@
 *******************************************************************************/
 package org.eclipse.swordfish.registry;
 
+import java.util.Collections;
+import java.util.Map;
+
 import javax.xml.namespace.QName;
 
 public class TstData {
@@ -24,13 +27,17 @@ public class TstData {
 	public static final QName PORT_TYPE_NAME_12 = new QName(NAME_SPACE_1, LOCAL_NAME_2);
 	public static final QName PORT_TYPE_NAME_21 = new QName(NAME_SPACE_2, LOCAL_NAME_1);
 	
-	
-	public static final String WSDL_ID_1 = "wsdl_1";
-	public static final String WSDL_ID_2 = "wsdl_2";
+//	public static final String WSDL_ID_1 = "wsdl_1";
+//	public static final String WSDL_ID_2 = "wsdl_2";
 
 	public static final String ID_1 = "id_1";
 	public static final String ID_2 = "id_2";
+	public static final String ID_3 = "id_3";
+	public static final String ID_4 = "id_4";
 	
 	public static final String CONTENT = "{ydvüdfskdflks";
+	
+	public static final Map<String, String> EMPTY_PARAMS = Collections.emptyMap();
+
 
 }

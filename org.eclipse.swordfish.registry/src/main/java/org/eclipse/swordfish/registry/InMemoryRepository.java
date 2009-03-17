@@ -19,4 +19,6 @@ public interface InMemoryRepository extends WSDLRepository {
 	void registerServiceRefPortType(QName portTypeName, WSDLResource wsdl);
 
 	void registerById(String id, WSDLResource wsdl);
+
+	void unregisterAll(String id);
 }

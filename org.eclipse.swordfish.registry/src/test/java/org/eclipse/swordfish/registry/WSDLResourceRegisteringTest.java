@@ -35,7 +35,7 @@ import static org.eclipse.swordfish.registry.TstData.*;
 
 public class WSDLResourceRegisteringTest {
 
-	private final WSDLResource wsdl = new WSDLResource();
+	private final WSDLResource wsdl = new WSDLResource(null);
 
 	private final InMemoryRepository repositoryMock = createMock(InMemoryRepository.class);
 	
@@ -51,7 +51,8 @@ public class WSDLResourceRegisteringTest {
 		Definition definition = createWSDlWithPortType(NAME_SPACE_1, LOCAL_NAME_1, LOCAL_NAME_2);
 
 		wsdl.setData(createPersistentData(definition, ID_1));
-		
+
+		repositoryMock.unregisterAll(ID_1);
 		repositoryMock.registerByPortTypeName(PORT_TYPE_NAME_11, wsdl);
 		repositoryMock.registerByPortTypeName(PORT_TYPE_NAME_12, wsdl);
 		repositoryMock.registerById(ID_1, wsdl);
@@ -68,7 +69,8 @@ public class WSDLResourceRegisteringTest {
 		Definition definition = createWSDlWithPortType(NAME_SPACE_1);
 
 		wsdl.setData(createPersistentData(definition, ID_1));
-//			never(repositoryMock).registerByPortTypeName(null, null);
+
+		repositoryMock.unregisterAll(ID_1);
 		repositoryMock.registerById(ID_1, wsdl);
 
 		replay(repositoryMock);
@@ -83,8 +85,9 @@ public class WSDLResourceRegisteringTest {
 		Definition definition = createWSDlWithServiceRefPortType(NAME_SPACE_1, PORT_TYPE_NAME_21);
 		
 		wsdl.setData(createPersistentData(definition, ID_1));
-			repositoryMock.registerServiceRefPortType(PORT_TYPE_NAME_21, wsdl);
-			repositoryMock.registerById(ID_1, wsdl);
+		repositoryMock.unregisterAll(ID_1);
+		repositoryMock.registerServiceRefPortType(PORT_TYPE_NAME_21, wsdl);
+		repositoryMock.registerById(ID_1, wsdl);
 
 		replay(repositoryMock);
 
@@ -98,8 +101,9 @@ public class WSDLResourceRegisteringTest {
 		Definition definition = createWSDlWithBindingRefPortType(NAME_SPACE_1, PORT_TYPE_NAME_21);
 		
 		wsdl.setData(createPersistentData(definition, ID_1));
-//			never(repositoryMock).registerServiceRefPortType(null, null);
-			repositoryMock.registerById(ID_1, wsdl);
+
+		repositoryMock.unregisterAll(ID_1);
+		repositoryMock.registerById(ID_1, wsdl);
 
 		replay(repositoryMock);
 
@@ -193,12 +197,14 @@ public class WSDLResourceRegisteringTest {
 	}
 
 	private PersistentData createPersistentData(final Definition definition, final String id) {
-		return new PersistentData() {
+		return new PersistentDataStub() {
+			@Override
 			public String getId() {
 				return id;
 			}
 
-			public InputStream getContent() throws IOException {
+			@Override
+			public InputStream read() throws IOException {
 				return definition2Stream(definition);
 			}
 		};

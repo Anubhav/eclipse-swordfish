@@ -10,28 +10,18 @@
 *******************************************************************************/
 package org.eclipse.swordfish.registry;
 
-
-public class RegistryException extends Exception {
+public class InvalidFormatException extends RegistryException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8500631841012079558L;
+	private static final long serialVersionUID = -463891819176753351L;
 
-	public RegistryException() {
+	public InvalidFormatException() {
 		super();
 	}
 
-	public RegistryException(String message) {
-		super(message);
-	}
-
-	public RegistryException(Throwable e) {
+	public InvalidFormatException(Throwable e) {
 		super(e);
 	}
-
-	public RegistryException(String message, Throwable e) {
-		super(message, e);
-	}
-
 }

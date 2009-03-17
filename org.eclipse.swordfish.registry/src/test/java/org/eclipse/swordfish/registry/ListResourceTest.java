@@ -30,7 +30,7 @@ public class ListResourceTest {
 
 	@Before
 	public void setUp() {
-		input = Arrays.asList(createWSDLResource(ID_1), createWSDLResource(ID_2));
+		input = Arrays.asList(wsdlResource(ID_1), wsdlResource(ID_2));
 	}
 	
 	@Test

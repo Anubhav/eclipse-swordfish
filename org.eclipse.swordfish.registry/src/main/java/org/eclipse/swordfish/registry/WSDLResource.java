@@ -13,6 +13,8 @@ package org.eclipse.swordfish.registry;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,8 +34,16 @@ import org.xml.sax.InputSource;
 public class WSDLResource implements Resource{
 	
 	private PersistentData persistent;
-	
-	
+
+/*
+	public WSDLResource() {
+		this(null);
+	}
+*/
+	public WSDLResource(PersistentData persistent) {
+		this.persistent = persistent;		
+	}
+
 	public void setData(PersistentData persistent) {
 		this.persistent = persistent;
 	}
@@ -58,14 +68,15 @@ public class WSDLResource implements Resource{
 			Definition wsdl = null;
 
 			try {
-				wsdl = definition(persistent.getContent());
+				wsdl = definition(persistent.read());
 			} catch (WSDLException e) {
-				throw new RegistryException(e);
+				throw new InvalidFormatException(e);
 			} catch (IOException e) {
 				throw new RegistryException(e);
 			}
+			repository.unregisterAll(getId());
 
-			repository.registerById(persistent.getId(), this);
+			repository.registerById(getId(), this);
 
 			Collection<PortType> portTypes = wsdl.getPortTypes().values();
 			for (PortType portType : portTypes) {
@@ -90,7 +101,31 @@ public class WSDLResource implements Resource{
 			}
 		}		
 	}
+
+	public void appendContent(Writer writer) throws IOException {
+		InputStreamReader reader = new InputStreamReader(persistent
+				.read(), "utf8");
+		try {
+			swap(reader, writer);
+		} finally {
+			reader.close();
+		}
+	}
+
+	public void persist(Reader reader)  throws IOException {
+		OutputStreamWriter writer = new OutputStreamWriter(persistent.write(),"utf8");
+		try {
+			swap(reader, writer);
+		} finally {
+			writer.close();
+		}
+	}
 	
+
+	public void delete() {
+		persistent.delete();
+	}	
+
 	private Definition definition(InputStream stream) throws WSDLException {
 		WSDLFactory factory = WSDLFactory.newInstance();
 		InputSource inputSource = new InputSource(stream);
@@ -99,11 +134,7 @@ public class WSDLResource implements Resource{
 		reader.setFeature("javax.wsdl.importDocuments", false);
 		return reader.readWSDL(null, inputSource);
 	}
-
-	public void appendContent(Writer writer) throws IOException {
-		InputStreamReader reader = new InputStreamReader(persistent
-				.getContent(), "utf8");
-		try {
+	private static void swap(Reader reader, Writer writer) throws IOException {
 			char[] buffer = new char[1000];
 			int length = 0;
 			do {
@@ -112,8 +143,26 @@ public class WSDLResource implements Resource{
 					writer.write(buffer, 0, length);
 				}
 			} while (length >= 0);
-		} finally {
-			reader.close();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || ! (obj instanceof WSDLResource)) {
+			return false;
 		}
+		
+		WSDLResource other = (WSDLResource) obj;
+		
+		return getId().equals(other.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return getId().hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return "WSDLResource[" + getId() + "]";
 	}
 }

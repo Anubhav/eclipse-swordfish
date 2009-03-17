@@ -4,12 +4,22 @@
    xsi:schemaLocation="http://www.springframework.org/schema/beans   
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<bean id="servletActivator" class="org.eclipse.swordfish.registry.ServletActivator" init-method="start" destroy-method="stop">
-	<property name="servlet" ref="lookupServlet"></property>
-	<property name="httpService" ref="httpService"></property>
-</bean>
-<bean id="lookupServlet" class="org.eclipse.swordfish.registry.LookupServlet">
-<!--  <property name="parsers" ref="parserServices"></property>  --> 
-</bean>
-
+	<bean id="servletActivator"
+	      class="org.eclipse.swordfish.registry.ServletActivator"
+	      init-method="start" destroy-method="stop">
+		<property name="servlet" ref="lookupServlet"/>
+		<property name="httpService" ref="httpService"/>
+	</bean>
+	<bean id="lookupServlet" class="org.eclipse.swordfish.registry.LookupServlet">
+		<property name="wsdlReader" ref="wsdlManager"/>
+		<property name="repository" ref="wsdlRepository"/> 
+	</bean>
+	<bean id="wsdlRepository"
+	      class="org.eclipse.swordfish.registry.InMemoryRepositoryImpl">
+	</bean>
+	<bean id="wsdlManager" 
+	      class="org.eclipse.swordfish.registry.FileBasedWSDLManager"
+	      init-method="fill">
+		<property name="repository" ref="wsdlRepository"/> 
+	</bean>
 </beans>

@@ -19,4 +19,10 @@ public interface WSDLRepository {
 	ListResource<WSDLResource> getReferencingPortType(QName portTypeName);
 
 	WSDLResource getWithId(String id);
+
+	void add(WSDLResource wsdl) throws RegistryException;
+
+	ListResource<WSDLResource> getAll();
+
+	boolean delete(String id_1);
 }
