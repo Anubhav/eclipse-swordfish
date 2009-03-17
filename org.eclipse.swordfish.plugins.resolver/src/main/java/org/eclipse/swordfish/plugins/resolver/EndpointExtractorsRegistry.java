@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.swordfish.plugins.resolver;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -29,15 +28,7 @@ public class EndpointExtractorsRegistry implements InitializingBean {
 		return Collections.unmodifiableCollection(extractors);
 	}
 
-	public Collection<EndpointExtractor> getExtractorsByType(Class<?> cls) {
-	    Collection<EndpointExtractor> ret = new ArrayList<EndpointExtractor>();
-	    for (EndpointExtractor extractor : getExtractors()) {
-	        if (cls.isInstance(extractor)) {
-	            ret.add(extractor);
-	        }
-	    }
-	    return ret;
-    }
+
 	public void setExtractors(Collection<EndpointExtractor> extractors) {
 		this.extractors = extractors;
 	}

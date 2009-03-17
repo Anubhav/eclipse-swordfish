@@ -81,8 +81,12 @@ public class ServiceResolverImpl implements ServiceResolver {
 						continue;
 					}
 				}
-				Collection<EndpointExtractor> extractors =
-					extractorsRegistry.getExtractorsByType(description.getClass());
+				Collection<EndpointExtractor> extractors =	extractorsRegistry.getExtractors();
+				for (EndpointExtractor endpointExtractor :  extractors) {
+				    if (endpointExtractor.canHandle(description)) {
+				        endpoints.add(endpointExtractor.extractEndpoint(description));
+				    }
+				}
 				Assert.isTrue(extractors != null && extractors.size() > 0, "Could not find extractor for class = " + description.getClass());
 				endpoints.add(extractors.iterator().next().extractEndpoint(description));
 
