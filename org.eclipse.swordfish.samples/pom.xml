@@ -13,7 +13,8 @@
     		<version>basic</version>
   	</parent>
 	<description />
-  <modules>
+  <modules>    
+      <module>org.eclipse.swordfish.samples.jaxws</module>
       <module>org.eclipse.swordfish.samples.endpointresolver</module>
       <module>org.eclipse.swordfish.samples.cxfendpoint</module>
       <module>org.eclipse.swordfish.samples.httpendpoint</module>	

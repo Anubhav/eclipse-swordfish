@@ -2,6 +2,7 @@
        xmlns:http="http://servicemix.apache.org/http/1.0"       
        xmlns:osgi="http://www.springframework.org/schema/osgi"
        xmlns:swordfishCxf="http://cxf.samples.swordfish.eclipse.org/"
+       xmlns:swordfishJaxWs="http://storage.jaxws.samples.swordfish.eclipse.org/"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
 	 http://www.springframework.org/schema/beans
@@ -25,10 +26,10 @@
     <http:endpoint                  
                  endpoint="httpConsumerEndpoint1"                 
                  service="httpConsumerEndpoint1"
-                 targetService="swordfishCxf:ReservationStorageServiceImpl"
+                 targetService="swordfishJaxWs:ReservationStorageServiceImpl"
                  soap="true"
                  role="consumer"                  
-                 locationURI="http://0.0.0.0:8192/cxfsample1/"
+                 locationURI="http://0.0.0.0:8194/reservation/"
                  defaultMep="http://www.w3.org/2004/08/wsdl/in-out" />
    
     <http:endpoint                  
