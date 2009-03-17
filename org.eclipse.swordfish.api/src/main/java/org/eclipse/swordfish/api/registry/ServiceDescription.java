@@ -14,16 +14,20 @@ import javax.xml.namespace.QName;
 
 /**
  * A basic entity used to present a service description.
+ *
+ * @param <T> A service description wrapped by this interface.
  */
 public interface ServiceDescription<T> {
 
 	/**
-	 *
-	 * @return
+	 * Get an actual type of the description object, used by
+	 * <code>EndpointExtractor</code> to identify the supported descriptions.
+	 * @return A <code>Class</code> object on an entity.
 	 */
 	Class<T> getType();
 
 	/**
+	 * Get the qualified name of the service the service description presents.
 	 * @return A qualified name of the service, not <code>null</code>.
 	 */
 	QName getServiceName();

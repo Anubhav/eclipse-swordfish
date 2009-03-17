@@ -11,26 +11,26 @@
 package org.eclipse.swordfish.api.registry;
 
 /**
- * Description of particular endpoint of the service.
+ * Description of the particular service endpoint.
  */
 public interface EndpointDescription {
 
 	/**
-	 *
+	 * Get the physical address which can be used to access the service.
 	 * @return An endpoint address, not <code>null</code>.
 	 */
 	String getAddress();
 
 	/**
-	 *
+	 * Get the name of the endpoint.
 	 * @return An endpoint name, not <code>null</code>.
 	 */
 	String getName();
 
 	/**
-	 *
+	 * Get a reference to the service description declaring the endpoint.
 	 * @return A description of the service containing endpoint.
 	 */
-	ServiceDescription getServiceDescription();
+	ServiceDescription<?> getServiceDescription();
 
 }

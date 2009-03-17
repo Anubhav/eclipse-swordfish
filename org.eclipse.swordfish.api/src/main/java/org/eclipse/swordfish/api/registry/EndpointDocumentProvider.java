@@ -14,19 +14,21 @@ import java.util.Collection;
 import javax.xml.namespace.QName;
 
 /**
- * Base interface of services responsible for retrieval of service information
- * (descriptions, policies) from different kinds of location.
+ * Interface of the provider responsible for retrieval of service related
+ * information (descriptions, policies) from different kinds of location.
  */
 public interface EndpointDocumentProvider {
 
 	/**
-	 *
-	 * @param portType A qualified name of port type element
-	 *
-	 * @return A <code>Collection</code> of service descriptions providing operations
-         * specified by given port type. Returns an empty collection if no service
-         * descriptions were found.
+	 * Perform a query to the registry it can communicate with and returns
+	 * a <code>Collection</code> of <code>ServiceDescription</code> objects
+	 * implementing specified interface.
+	 * @param interfaceName A qualified name of the interface of the service.
+	 * Corresponds to the value of <code>portType</code> element.
+	 * @return A <code>Collection</code> of the service descriptions providing
+	 * operations specified by given port type. Returns an empty collection if
+	 * no service descriptions were found.
 	 */
-	Collection<ServiceDescription<?>> getServiceProviderDescriptions(QName portType);
+	Collection<ServiceDescription<?>> getServiceProviderDescriptions(QName interfaceName);
 
 }
