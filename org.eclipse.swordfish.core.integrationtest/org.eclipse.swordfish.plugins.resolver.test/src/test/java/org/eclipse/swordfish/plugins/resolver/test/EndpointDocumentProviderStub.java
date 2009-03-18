@@ -36,4 +36,9 @@ public class EndpointDocumentProviderStub implements EndpointDocumentProvider {
 		return result;
 	}
 
+    public int getPriority() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }
