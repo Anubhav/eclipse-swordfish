@@ -29,7 +29,6 @@ import org.eclipse.swordfish.api.registry.EndpointDocumentProvider;
 import org.eclipse.swordfish.api.registry.EndpointExtractor;
 import org.eclipse.swordfish.api.registry.ServiceDescription;
 import org.eclipse.swordfish.core.resolver.ServiceResolver;
-import org.springframework.util.Assert;
 
 /**
  *
@@ -90,8 +89,6 @@ public class ServiceResolverImpl implements ServiceResolver {
 				        break;
 				    }
 				}
-				Assert.isTrue(extractors != null && extractors.size() > 0, "Could not find extractor for class = " + description.getClass());
-				endpoints.add(extractors.iterator().next().extractEndpoint(description));
 
 			}
 		}
