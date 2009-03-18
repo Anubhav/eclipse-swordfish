@@ -41,11 +41,13 @@ public class TargetPlatformOsgiTestCase extends BaseOsgiTestCase {
         bundlePriorities.put("org.eclipse.swordfish.samples.configurationprovider", 1);
         bundlePriorities.put("org.apache.servicemix.kernel.management", 1);
         bundlePriorities.put("jaas", -1);
-        bundlePriorities.put("servicemix.kernel.filemonitor", -5);
+       // bundlePriorities.put("servicemix.kernel.filemonitor", -5);
         bundlePriorities.put("servicemix.transaction", -4);
-        bundlePriorities.put("servicemix.kernel.filemonitor", -5);
         bundlePriorities.put("cxfendpoint", -6);
         bundlePriorities.put("samples.http", -7);
+    }
+    protected List<Pattern> getExcludeBundlePatterns() {
+        return Arrays.asList(Pattern.compile("org.eclipse.osgi-3.4.2.*"), Pattern.compile("org.eclipse.swordfish.samples.configuration.*"));
     }
 
     @Override
@@ -76,9 +78,7 @@ public class TargetPlatformOsgiTestCase extends BaseOsgiTestCase {
         return ret;
     }
 
-    protected List<Pattern> getExcludeBundlePatterns() {
-        return Arrays.asList(Pattern.compile("org.eclipse.osgi-3.4.2.*"), Pattern.compile("org.eclipse.swordfish.samples.configuration.*"), Pattern.compile("org.eclipse.swordfish.samples.http.*"));
-    }
+
     private int getIndex(Resource[] bundles, String bundleNamePart) {
         int i = -1;
         for (Resource resource : bundles) {
