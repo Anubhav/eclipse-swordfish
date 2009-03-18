@@ -26,7 +26,7 @@ public class PolicyIntersectorTest extends Assert {
 
     @Before
     public void setUp() {
-        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("META-INF/cxf/cxf-extension-policy.xml");
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("policy-test.xml");
         builder = (PolicyBuilderImpl)applicationContext.getBean("org.apache.cxf.ws.policy.PolicyBuilder");
         XMLPrimitiveAssertionBuilder primitiveAssertionBuilder = new XMLPrimitiveAssertionBuilder();
          XMLPrimitiveAssertionBuilder xmlPrimitiveAssertionBuilder = new  XMLPrimitiveAssertionBuilder();
