@@ -46,9 +46,6 @@
 		<name>SOPERA GmbH</name>
 		<url>http://www.eclipse.org</url>
 	</organization>
-	<build>
-		<plugins>
-
-		</plugins>
-	</build>
+	
+ 
 </project>

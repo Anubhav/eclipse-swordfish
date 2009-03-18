@@ -76,7 +76,7 @@
 						</Bundle-SymbolicName>
 						<Import-Package>org.eclipse.swordfish.core.util, com.ctc.wstx.stax, org.springframework.beans.factory.config, org.apache.servicemix.nmr.api, org.apache.servicemix.common.osgi, javax.jbi.component</Import-Package>
 						<Private-Package></Private-Package>
-						 <Spring-Context>*;create-asynchronously:=false</Spring-Context>	
+						 <Spring-Context>*;create-asynchronously:=true</Spring-Context>	
                           	<Require-Bundle>servicemix-http</Require-Bundle> 
 					</instructions>
 				</configuration>

@@ -4,13 +4,18 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     SOPERA GmbH - initial API and implementation
  *******************************************************************************/
 package org.eclipse.swordfish.core.configuration.test;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.createStrictMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.makeThreadSafe;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reportMatcher;
+import static org.easymock.EasyMock.verify;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +40,7 @@ public class ConfigurationTest extends TargetPlatformOsgiTestCase {
 	@SuppressWarnings("unchecked")
 	public void testPublishUpdateConfiguration() throws Exception {
 		String servicePid = "testPublishUpdateConfiguration";
-
+		Thread.sleep(10000);
 		// This is the update we push in ...
 		final Map<String, String> configuration = createConfiguration("TestTime");
 
@@ -63,7 +68,7 @@ public class ConfigurationTest extends TargetPlatformOsgiTestCase {
 		verify(configurationConsumer);
 	}
 
-	
+
 	/**
 	 * Verify that a configuration stored in a PollableConfigurationSource will update a configuration consumer
 	 * upon availability of the pollable source.
@@ -83,21 +88,21 @@ public class ConfigurationTest extends TargetPlatformOsgiTestCase {
 		// On update we first receive an empty (null) configuration ...
 		configurationConsumer.onReceiveConfiguration(null);
 		configurationConsumer.onReceiveConfiguration(mapContainsEntry(configuration, "TestTime"));
-		
+
 		PollableConfigurationSource pollableConfig = createStrictMock(PollableConfigurationSource.class);
 		makeThreadSafe(pollableConfig, true);
-		
+
 		// The PollableConfigurationSource delivers a map of configurations with String keys ...
 		final Map<String, Map<String, String>> pollConfig = new HashMap<String, Map<String, String>>();
-		pollConfig.put(servicePid, configuration);		
+		pollConfig.put(servicePid, configuration);
 		expect(pollableConfig.getConfigurations()).andReturn(pollConfig);
-		
+
 		// Go, Willi!
 		replay(configurationConsumer, pollableConfig);
-		
+
 		addRegistrationToCancel(bundleContext.registerService(
 				ConfigurationConsumer.class.getCanonicalName(), configurationConsumer, null));
-		
+
 		addRegistrationToCancel(bundleContext.registerService(
 				PollableConfigurationSource.class.getCanonicalName(), pollableConfig, null));
 		Thread.sleep(500);
@@ -105,7 +110,7 @@ public class ConfigurationTest extends TargetPlatformOsgiTestCase {
 		verify(configurationConsumer, pollableConfig);
 	}
 
-	
+
 	/**
 	 * Check if an explicitly created configuration event will reach a configuration consumer.
 	 */
@@ -127,7 +132,7 @@ public class ConfigurationTest extends TargetPlatformOsgiTestCase {
 
 		// Go, Willi!
 		replay(configurationConsumer);
-		
+
 		addRegistrationToCancel(bundleContext.registerService(
 				ConfigurationConsumer.class.getCanonicalName(),	configurationConsumer, null));
 
@@ -141,7 +146,7 @@ public class ConfigurationTest extends TargetPlatformOsgiTestCase {
 		Map<String, Object> configurations = new HashMap<String, Object>();
 		configurations.put(servicePid, configuration);
 		configurationEvent.setConfiguration(configurations);
-		
+
 		// ... and publish it!
 		eventSender.postEvent(configurationEvent);
 		Thread.sleep(500);
@@ -150,7 +155,7 @@ public class ConfigurationTest extends TargetPlatformOsgiTestCase {
 	}
 
 	// -------------------------------- HELPERS --------------------------------
-	
+
 	/**
 	 * Create a default configuration
 	 * @param key - the key that should be added with the current nano time as value.
@@ -162,7 +167,7 @@ public class ConfigurationTest extends TargetPlatformOsgiTestCase {
 		return configuration;
 	}
 
-	
+
 	/**
 	 * Verify that a Map contains an expected key with expected value
 	 * @param mapIn - the expected map
@@ -174,7 +179,7 @@ public class ConfigurationTest extends TargetPlatformOsgiTestCase {
 		return null;
 	}
 
-	
+
 	@Override
 	protected String getManifestLocation() {
 		return "classpath:org/eclipse/swordfish/core/configuration/test/MANIFEST.MF";
