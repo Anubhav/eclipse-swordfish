@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright (c) 2008, 2009 SOPERA GmbH.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+    
+    Contributors:
+        SOPERA GmbH - initial API and implementation
+ -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:osgi="http://www.springframework.org/schema/osgi"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:p="http://www.springframework.org/schema/p"
+    osgi:default-cardinality="0..X"
+    default-lazy-init="false"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util.xsd
+    http://www.springframework.org/schema/osgi
+    http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+    <import resource="classpath:/META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:/META-INF/cxf/cxf-extension-policy.xml"/>
+
+    <osgi:reference id="swordfishContext"
+        interface="org.eclipse.swordfish.api.context.SwordfishContext"/>
+ 
+    <bean id="configurationInjectorPDP"
+        class="org.eclipse.swordfish.core.configuration.ConfigurationInjector"
+        p:id="org.eclipse.swordfish.policies.definitions.provider.FilesystemPolicyDefinitionProvider"
+        p:context-ref="swordfishContext">
+        <property name="configuration">
+            <map>
+                <entry key="policyStorage" value-ref="resourceToStringConverterPS.url"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="resourceToStringConverterPS.url"
+        class="org.springframework.beans.factory.config.PropertyPathFactoryBean"/>
+    <bean id="resourceToStringConverterPS"
+        class="org.eclipse.swordfish.policies.helpers.ResourceToStringConverter">
+        <constructor-arg value="policies/Policies.zip"/>
+    </bean>
+    <bean id="fsPolicyDefinitionProvider"
+        class="org.eclipse.swordfish.policies.definitions.provider.FilesystemPolicyDefinitionProvider"/>
+    <bean id="policyStreamExtractor"
+        class="org.eclipse.swordfish.policies.extractor.WsPolicyStreamExtractor">
+        <property name="policyBuilder"
+            ref="org.apache.cxf.ws.policy.PolicyBuilder"/>
+    <bean/>
+    <bean id="policyProcessor"
+        class="org.eclipse.swordfish.policies.processor.WsPolicyProcessor"
+        p:policyIntersector-ref="policyIntersector"/>
+    <bean id="policyIntersector"
+        class="org.eclipse.swordfish.policies.trading.impl.PolicyIntersectorImpl">
+        <property name="assertionBuilderRegistry"
+            ref="org.apache.cxf.ws.policy.AssertionBuilderRegistry"/>
+    </bean>
+
+    <osgi:service ref="fsPolicyDefinitionProvider">
+        <osgi:interfaces>
+            <value>org.eclipse.swordfish.api.policy.PolicyDefinitionProvider</value>
+            <value>org.eclipse.swordfish.api.configuration.ConfigurationConsumer</value>
+        </osgi:interfaces>
+    </osgi:service>
+    <osgi:service ref="policyStreamExtractor"
+        interface="org.eclipse.swordfish.api.policy.PolicyExtractor"/>
+    <osgi:service ref="policyProcessor"
+        interface="org.eclipse.swordfish.api.policy.PolicyProcessor"/>
+    <osgi:service ref="policyIntersector"
+        interface="org.eclipse.swordfish.policies.trading.PolicyIntersector"/>
+</beans>
+
