@@ -23,11 +23,16 @@
     http://www.springframework.org/schema/osgi
     http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
-    <osgi:reference id="serviceDescriptionProvider" cardinality="0..1"
-        interface="org.eclipse.swordfish.api.registry.EndpointDocumentProvider" />
+    <osgi:list id="providers" cardinality="0..N"
+        interface="org.eclipse.swordfish.api.registry.EndpointDocumentProvider">
+    </osgi:list>
 
     <osgi:list id="extractors" cardinality="0..N"
         interface="org.eclipse.swordfish.api.registry.EndpointExtractor" />
+
+    <bean id="providersRegistry"
+        class="org.eclipse.swordfish.plugins.resolver.DocumentProvidersRegistry"
+        p:providers-ref="providers" />
 
     <bean id="extractorsRegistry"
         class="org.eclipse.swordfish.plugins.resolver.EndpointExtractorsRegistry"
@@ -35,8 +40,8 @@
 
     <bean id="serviceResolver"
         class="org.eclipse.swordfish.plugins.resolver.ServiceResolverImpl"
-        p:serviceDescriptionProvider-ref="serviceDescriptionProvider"
-        p:extractorsRegistry-ref="extractorsRegistry" />
+        p:documentProvidersRegistry-ref="providersRegistry"
+        p:endpointExtractorsRegistry-ref="extractorsRegistry" />
 
     <osgi:service ref="serviceResolver"
         interface="org.eclipse.swordfish.core.resolver.ServiceResolver" />

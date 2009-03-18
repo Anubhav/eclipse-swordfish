@@ -33,6 +33,7 @@
         p:context-ref="swordfishContext">
         <property name="configuration">
             <map>
+                <entry key="priority" value="5" />
                 <entry key="wsdlStorage" value-ref="resourceToStringConverter.url"/>
                 <entry key="wsdlStorage1" value-ref="resourceToStringConverter1.url"/>
                 <entry key="wsdlReservationService" value-ref="resourceToStringConverter2.url"/>
@@ -57,7 +58,7 @@
     <bean id="filesystemProvider"
         class="org.eclipse.swordfish.plugins.resolver.proxy.local.FilesystemDocumentProvider" />
 
-    <osgi:service ref="filesystemProvider" ranking="5">
+    <osgi:service ref="filesystemProvider">
         <osgi:interfaces>
             <value>org.eclipse.swordfish.api.registry.EndpointDocumentProvider</value>
             <value>org.eclipse.swordfish.api.configuration.ConfigurationConsumer</value>

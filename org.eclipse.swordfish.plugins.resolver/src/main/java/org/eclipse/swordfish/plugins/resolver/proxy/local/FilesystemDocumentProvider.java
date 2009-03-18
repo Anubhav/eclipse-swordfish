@@ -22,9 +22,8 @@ import javax.wsdl.WSDLException;
 import javax.xml.namespace.QName;
 
 import org.eclipse.swordfish.api.SwordfishException;
-import org.eclipse.swordfish.api.configuration.ConfigurationConsumer;
-import org.eclipse.swordfish.api.registry.EndpointDocumentProvider;
 import org.eclipse.swordfish.api.registry.ServiceDescription;
+import org.eclipse.swordfish.plugins.resolver.proxy.impl.AbstractDocumentProvider;
 import org.eclipse.swordfish.plugins.resolver.wsdl11.WSDL11ServiceDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,14 +31,16 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class FilesystemDocumentProvider implements EndpointDocumentProvider, ConfigurationConsumer<String> {
+public class FilesystemDocumentProvider extends AbstractDocumentProvider {
 
-    private final Logger logger = LoggerFactory.getLogger(FilesystemDocumentProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(FilesystemDocumentProvider.class);
 
 	private static final String WSDL_STORAGE_PROPERTY = "wsdlStorage";
 
-    private URL wsdlStorage;
+	private URL wsdlStorage;
+
     private URL wsdlStorage1;
+
     private WSDLManager wsdlManager;
 
 	public List<ServiceDescription<?>> getServiceProviderDescriptions(QName interfaceName) {
@@ -63,7 +64,10 @@ public class FilesystemDocumentProvider implements EndpointDocumentProvider, Con
 		return descriptions;
 	}
 
+	@Override
 	public void onReceiveConfiguration(Map<String, String> configuration) {
+		super.onReceiveConfiguration(configuration);
+
 		if (configuration != null && configuration.containsKey(WSDL_STORAGE_PROPERTY)) {
 			try {
 				wsdlStorage = new URL(configuration.get(WSDL_STORAGE_PROPERTY));
@@ -93,10 +97,6 @@ public class FilesystemDocumentProvider implements EndpointDocumentProvider, Con
 					+ "document provider: an error occured during intialization of WSDL manager.", e);
 			}
 		}
-	}
-
-	public String getId() {
-		return getClass().getName();
 	}
 
 	public WSDLManager getWsdlManager() {

@@ -36,11 +36,11 @@ import org.springframework.util.Assert;
  */
 public class ServiceResolverImpl implements ServiceResolver {
 
+	private DocumentProvidersRegistry providersRegistry;
+
 	private EndpointExtractorsRegistry extractorsRegistry;
 
 	private PolicyExtractorsRegistry policyExtractorsRegistry;
-
-	private EndpointDocumentProvider serviceDescriptionProvider;
 
 	private PolicyDefinitionProvider policyDefinitionProvider;
 
@@ -51,14 +51,16 @@ public class ServiceResolverImpl implements ServiceResolver {
 	}
 
 	public List<EndpointDescription> getEndpointsFor(QName portType, QName consumer) {
-		if (serviceDescriptionProvider == null) {
+		EndpointDocumentProvider descriptionProvider =
+			providersRegistry.getPreferredProvider();
+		if (descriptionProvider == null) {
 			throw new SwordfishException("Couldn't get endpoints for: "
 				+ portType + ", no registered document providers were found");
 		}
 
 		List<EndpointDescription> endpoints = new ArrayList<EndpointDescription>();
 		Collection<ServiceDescription<?>> descriptions =
-			serviceDescriptionProvider.getServiceProviderDescriptions(portType);
+			descriptionProvider.getServiceProviderDescriptions(portType);
 		final boolean isPolicySupportActive = policyExtractorsRegistry != null
 				&& policyDefinitionProvider != null && policyProcessor != null
 				&& consumer != null;
@@ -96,20 +98,22 @@ public class ServiceResolverImpl implements ServiceResolver {
 		return endpoints;
 	}
 
-	public EndpointExtractorsRegistry getExtractorsRegistry() {
+	public EndpointExtractorsRegistry getEndpointExtractorsRegistry() {
 		return extractorsRegistry;
 	}
 
-	public void setExtractorsRegistry(EndpointExtractorsRegistry extractorsRegistry) {
+	public void setEndpointExtractorsRegistry(
+			EndpointExtractorsRegistry extractorsRegistry) {
 		this.extractorsRegistry = extractorsRegistry;
 	}
 
-	public EndpointDocumentProvider getServiceDescriptionProvider() {
-		return serviceDescriptionProvider;
+	public DocumentProvidersRegistry getDocumentProvidersRegistry() {
+		return providersRegistry;
 	}
 
-	public void setServiceDescriptionProvider(EndpointDocumentProvider serviceDescriptionProvider) {
-		this.serviceDescriptionProvider = serviceDescriptionProvider;
+	public void setDocumentProvidersRegistry(
+			DocumentProvidersRegistry providersRegistry) {
+		this.providersRegistry = providersRegistry;
 	}
 
 	public PolicyExtractorsRegistry getPolicyExtractorsRegistry() {
@@ -154,6 +158,10 @@ public class ServiceResolverImpl implements ServiceResolver {
 			}
 		}
 		return policies;
+	}
+
+	public EndpointDocumentProvider getServiceDescriptionProvider() {
+		return providersRegistry.getPreferredProvider();
 	}
 
     public Collection<EndpointExtractor> getEndpointExtractors() {

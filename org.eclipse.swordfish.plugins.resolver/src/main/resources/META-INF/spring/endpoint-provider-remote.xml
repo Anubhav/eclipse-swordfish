@@ -33,6 +33,7 @@
         p:context-ref="swordfishContext">
         <property name="configuration">
             <map>
+                <entry key="priority" value="1" />
                 <entry key="registryURL" value="http://localhost:9001/registry" />
             </map>
         </property>

@@ -23,14 +23,13 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.eclipse.swordfish.api.SwordfishException;
-import org.eclipse.swordfish.api.configuration.ConfigurationConsumer;
-import org.eclipse.swordfish.api.registry.EndpointDocumentProvider;
 import org.eclipse.swordfish.api.registry.ServiceDescription;
 import org.eclipse.swordfish.plugins.resolver.proxy.ClientRequest;
 import org.eclipse.swordfish.plugins.resolver.proxy.ClientResponse;
 import org.eclipse.swordfish.plugins.resolver.proxy.RegistryProxy;
 import org.eclipse.swordfish.plugins.resolver.proxy.WSDLList;
 import org.eclipse.swordfish.plugins.resolver.proxy.ProxyConstants.Status;
+import org.eclipse.swordfish.plugins.resolver.proxy.impl.AbstractDocumentProvider;
 import org.eclipse.swordfish.plugins.resolver.wsdl.ServiceDescriptionReader;
 import org.eclipse.swordfish.plugins.resolver.wsdl.ServiceDescriptionReaderFactory;
 import org.slf4j.Logger;
@@ -39,9 +38,9 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class SwordfishRegistryProvider implements EndpointDocumentProvider, ConfigurationConsumer<String> {
+public class SwordfishRegistryProvider extends AbstractDocumentProvider {
 
-    private final Logger logger = LoggerFactory.getLogger(SwordfishRegistryProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(SwordfishRegistryProvider.class);
 
 	private static final String REGISTRY_URL_PROPERTY = "registryURL";
 
@@ -97,13 +96,15 @@ public class SwordfishRegistryProvider implements EndpointDocumentProvider, Conf
 		return descriptions;
 	}
 
+	@Override
 	public void onReceiveConfiguration(Map<String, String> configuration) {
-		if (configuration != null &&
-			configuration.containsKey(REGISTRY_URL_PROPERTY)) {
+		super.onReceiveConfiguration(configuration);
+
+		if (configuration != null && configuration.containsKey(REGISTRY_URL_PROPERTY)) {
 			try {
-				registryURL = new URL(configuration.get(REGISTRY_URL_PROPERTY));
+				setRegistryURL(new URL(configuration.get(REGISTRY_URL_PROPERTY)));
 				if (logger.isDebugEnabled()) {
-					logger.debug("Service registry URL has been set to: " + registryURL);
+					logger.debug("Service registry URL has been set to: " + getRegistryURL());
 				}
 			} catch (MalformedURLException e) {
 				logger.error("Couldn't initialize Swordfish "
@@ -133,10 +134,6 @@ public class SwordfishRegistryProvider implements EndpointDocumentProvider, Conf
 		return exception;
 	}
 
-	public String getId() {
-		return getClass().getName();
-	}
-
 	public URL getRegistryURL() {
 		return registryURL;
 	}
@@ -144,4 +141,5 @@ public class SwordfishRegistryProvider implements EndpointDocumentProvider, Conf
 	public void setRegistryURL(URL registryURL) {
 		this.registryURL = registryURL;
 	}
+
 }

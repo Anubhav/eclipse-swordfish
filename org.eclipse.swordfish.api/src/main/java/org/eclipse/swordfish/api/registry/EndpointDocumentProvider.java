@@ -31,4 +31,10 @@ public interface EndpointDocumentProvider {
 	 */
 	Collection<ServiceDescription<?>> getServiceProviderDescriptions(QName interfaceName);
 
+	/**
+	 * Get the provider's priority. If several document providers are registered
+	 * at runtime the one with the highest priority will be chosen.
+	 */
+	int getPriority();
+
 }
