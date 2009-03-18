@@ -20,6 +20,16 @@ public interface PolicyProcessor<P> {
 			PolicyDescription<?> consumerPolicy, List<PolicyDescription<?>> providerPolicies);
 
 	/**
+	 * Trade a list of provider policies against a consumer policy.
+	 * Return an agreed policy for the first matching provider policy.
+	 * @param consumerPolicy consumer policy.
+	 * @param providerPolicies provider policy.
+	 * @return agreed policy or <code>null</code> if policies do not match.
+	 */
+	PolicyDescription<P> tradeAgreedPolicy(
+			PolicyDescription<?> consumerPolicy, PolicyDescription<?> ... providerPolicies);
+
+	/**
 	 * Trade a provider against a consumer policy.
 	 * @param consumerPolicy consumer policy.
 	 * @param providerPolicy provider policy.

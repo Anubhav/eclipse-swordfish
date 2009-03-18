@@ -45,7 +45,6 @@ public class WsPolicyStreamExtractor implements PolicyExtractor<WsPolicyStreamDe
 		}
 		final WsPolicyStreamDefinition pd =
 			(WsPolicyStreamDefinition) policyDefinition;
-		initPolicyBuilder();
 		try {
 	        final Policy policy = policyBuilder.getPolicy(pd.getPolicyData());
 	        final WsPolicyDescription p = new WsPolicyDescription();
@@ -74,24 +73,10 @@ public class WsPolicyStreamExtractor implements PolicyExtractor<WsPolicyStreamDe
 		this.policyBuilder = policyBuilder;
 	}
 
-	private void initPolicyBuilder() {
-		if (policyBuilder == null) {
-	        final ClassPathXmlApplicationContext ac =
-	        	new ClassPathXmlApplicationContext("cxf-extension-policy.xml");
-	        final PolicyBuilderImpl pb =
-	        	(PolicyBuilderImpl) ac.getBean(
-	        			"org.apache.cxf.ws.policy.PolicyBuilder");
-	        if (pb != null) {
-	        	policyBuilder = pb;
-	        }
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	private static List<Class<WsPolicyStreamDefinition>> unmodifiableList(
 			final List<Class<WsPolicyStreamDefinition>> l) {
 		return (List<Class<WsPolicyStreamDefinition>>)
 				Collections.unmodifiableList(l);
 	}
-
 }

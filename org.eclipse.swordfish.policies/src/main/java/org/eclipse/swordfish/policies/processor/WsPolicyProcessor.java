@@ -24,9 +24,23 @@ public class WsPolicyProcessor implements PolicyProcessor<Policy> {
 	public PolicyDescription<Policy> tradeAgreedPolicy(
 			final PolicyDescription<?> consumerPolicy,
 			final List<PolicyDescription<?>> providerPolicies) {
+		final PolicyDescription<Policy> cpd = asCheckedPD(consumerPolicy);
 		for (final PolicyDescription<?> providerPolicy : providerPolicies) {
-			final PolicyDescription<Policy> cpd = asCheckedPD(consumerPolicy);
 			final PolicyDescription<Policy> ppd = asCheckedPD(providerPolicy);
+			final PolicyDescription<Policy> result = doTradeAgreedPolicy(cpd, ppd);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	public PolicyDescription<Policy> tradeAgreedPolicy(
+			PolicyDescription<?> consumerPolicy,
+			PolicyDescription<?>... providerPolicies) {
+		final PolicyDescription<Policy> cpd = asCheckedPD(consumerPolicy);
+		for (int i = 0; i < providerPolicies.length; i++) {
+			final PolicyDescription<Policy> ppd = asCheckedPD(providerPolicies[i]);
 			final PolicyDescription<Policy> result = doTradeAgreedPolicy(cpd, ppd);
 			if (result != null) {
 				return result;

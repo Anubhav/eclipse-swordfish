@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.eclipse.swordfish.policies.helpers;
 
+import java.net.URL;
+
+import org.eclipse.swordfish.api.SwordfishException;
 import org.springframework.core.io.Resource;
 
 public class ResourceToStringConverter {
@@ -17,19 +20,20 @@ public class ResourceToStringConverter {
     private Resource resource;
     private String url;
 
-    public ResourceToStringConverter(String resource) {
-        try {
-            url = getClass().getClassLoader().getResource(resource).toString();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+    public ResourceToStringConverter(final String resource) {
+    	final URL resUrl = getClass().getClassLoader().getResource(resource);
+    	if (resUrl == null) {
+    		throw new SwordfishException(
+    				"Resource " + resource + " not found. ");
+    	}
+        url = resUrl.toString();
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -37,7 +41,7 @@ public class ResourceToStringConverter {
         return resource;
     }
 
-    public void setResource(Resource resource) {
+    public void setResource(final Resource resource) {
         this.resource = resource;
     }
 }
