@@ -77,21 +77,26 @@ public class TrackingEventHandlerTest extends TargetPlatformOsgiTestCase {
 			assertTrue(nmr.createChannel().sendSync(exchange));
 
 			Thread.sleep(500);
+			List<SimpleExchange> filteredList = new ArrayList<SimpleExchange>();
+            for (SimpleExchange simpleExchange : exchangeList) {
+                if (exchange.getId().equals(simpleExchange.id)) {
+                    filteredList.add(simpleExchange);
+                }
+            }
+			assertEquals(2, filteredList.size());
 
-			assertEquals(2, exchangeList.size());
-
-			assertEquals(Role.CONSUMER, exchangeList.get(0).role);
-			assertEquals("StringSource[<Hello/>]", exchangeList.get(0).in
+			assertEquals(Role.CONSUMER, filteredList.get(0).role);
+			assertEquals("StringSource[<Hello/>]", filteredList.get(0).in
 					.getContent().toString());
-			assertEquals(null, exchangeList.get(0).out);
+			assertEquals(null, filteredList.get(0).out);
 
-			assertEquals(exchangeList.get(0).id, exchangeList.get(1).id);
-			assertEquals(Role.PROVIDER, exchangeList.get(1).role);
-			assertEquals("StringSource[<Hello/>]", exchangeList.get(1).in
+			assertEquals(exchangeList.get(0).id, filteredList.get(1).id);
+			assertEquals(Role.PROVIDER, filteredList.get(1).role);
+			assertEquals("StringSource[<Hello/>]", filteredList.get(1).in
 					.getContent().toString());
 			assertEquals(
 					"StringSource[<Aloha from=\"{namespace}Service2\" />]",
-					exchangeList.get(1).out.getContent().toString());
+					filteredList.get(1).out.getContent().toString());
 
 		} finally {
 		    unregisterEndpoints(nmr, endpointService1, endpointService2);
@@ -139,17 +144,22 @@ public class TrackingEventHandlerTest extends TargetPlatformOsgiTestCase {
             } catch(Exception ex){
             }
             Thread.sleep(500);
+            List<SimpleExchange> filteredList = new ArrayList<SimpleExchange>();
+            for (SimpleExchange simpleExchange : exchangeList) {
+                if (exchange.getId().equals(simpleExchange.id)) {
+                    filteredList.add(simpleExchange);
+                }
+            }
+            assertEquals(2, filteredList.size());
 
-            assertEquals(2, exchangeList.size());
+            assertEquals(Role.CONSUMER, filteredList.get(0).role);
+            assertEquals("StringSource[<Hello/>]", filteredList.get(0).in.getContent().toString());
+            assertEquals(null, filteredList.get(0).out);
 
-            assertEquals(Role.CONSUMER, exchangeList.get(0).role);
-            assertEquals("StringSource[<Hello/>]", exchangeList.get(0).in.getContent().toString());
-            assertEquals(null, exchangeList.get(0).out);
-
-            assertEquals(exchangeList.get(0).id, exchangeList.get(1).id);
-            assertEquals(Role.CONSUMER, exchangeList.get(1).role);
-            assertEquals("StringSource[<Hello/>]", exchangeList.get(1).in.getContent().toString());
-            assertEquals(EXCEPTION_TEST_MESSAGE, exchangeList.get(1).error.getMessage());
+            assertEquals(filteredList.get(0).id, filteredList.get(1).id);
+            assertEquals(Role.CONSUMER, filteredList.get(1).role);
+            assertEquals("StringSource[<Hello/>]", filteredList.get(1).in.getContent().toString());
+            assertEquals(EXCEPTION_TEST_MESSAGE, filteredList.get(1).error.getMessage());
 
 
         } finally {
