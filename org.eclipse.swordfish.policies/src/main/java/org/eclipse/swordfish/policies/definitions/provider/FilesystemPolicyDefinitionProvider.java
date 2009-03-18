@@ -7,11 +7,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -37,23 +37,27 @@ public class FilesystemPolicyDefinitionProvider implements
 
 	private URL policyStorage;
 
-	private Properties directory;
+	private final Map<String, List<String>> directory =
+		new HashMap<String, List<String>>();
 
-	private Map<String, byte[]> policies;
+	private final Map<String, byte[]> policies =
+		new HashMap<String, byte[]>();
+
+	public FilesystemPolicyDefinitionProvider() {
+		super();
+	}
 
 	public Collection<PolicyDefinitionDescription> getPolicyDefinitions(
 			final QName serviceProviderName) {
 		final String key = serviceProviderName.toString();
-		final String values = directory.getProperty(key);
+		final List<String> values = directory.get(key);
 		if (values == null) {
 			return emptyList();
 		}
-		final StringTokenizer t = new StringTokenizer(",");
 		final List<PolicyDefinitionDescription> result =
 			new LinkedList<PolicyDefinitionDescription>();
-		while (t.hasMoreTokens()) {
-			final String k = t.nextToken().trim();
-			final byte[] b = policies.get(k);
+		for (final String value : values) {
+			final byte[] b = policies.get(value);
 			if (b == null) {
 				continue;
 			}
@@ -102,6 +106,7 @@ public class FilesystemPolicyDefinitionProvider implements
 	}
 
 	private void readOut(final ZipInputStream in) throws IOException {
+		Properties dirProps = null;
 		for (ZipEntry e = in.getNextEntry(); e != null; e = in.getNextEntry()) {
 			if (e.isDirectory()) {
 				continue;
@@ -111,12 +116,28 @@ public class FilesystemPolicyDefinitionProvider implements
 				continue;
 			}
 			if (n.endsWith("policies.dir")) {
-				Properties p = new Properties();
-				p.load(in);
+				dirProps = new Properties();
+				dirProps.load(in);
 				continue;
 			}
 			final byte[] bytes = streamToByteArray(in);
 			policies.put(n, bytes);
+		}
+		if (null == dirProps) {
+			throw new SwordfishException(
+					"Directory file policies.dir missing in archive. ");
+		}
+		for (final String fname : policies.keySet()) {
+			final String pname = dirProps.getProperty(fname);
+			if (null == pname) {
+				continue;
+			}
+			List<String> fnames = directory.get(pname);
+			if (null == fnames) {
+				fnames = new LinkedList<String>();
+				directory.put(pname, fnames);
+			}
+			fnames.add(fname);
 		}
 	}
 
