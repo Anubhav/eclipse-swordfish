@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" 
-	xmlns:boo="http://booking.jaxws.samples.swordfish.eclipse.org"
+	xmlns:res="http://reservation.jaxws.samples.swordfish.eclipse.org"
 	xmlns:sto="http://storage.jaxws.samples.swordfish.eclipse.org" 
 	xmlns:tns="http://bpel.jaxws.samples.swordfish.eclipse.org"
 	xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop"
 	targetNamespace="http://bpel.jaxws.samples.swordfish.eclipse.org">
-	<plnk:partnerLinkType name="BookingServicePLT">
-		<plnk:role name="provider" portType="boo:BookingService" />
+	<plnk:partnerLinkType name="ReservationServicePLT">
+		<plnk:role name="provider" portType="res:ReservationService" />
 	</plnk:partnerLinkType>
 	<plnk:partnerLinkType name="ReservationStoragePLT">
 		<plnk:role name="provider" portType="sto:ReservationStorageService" />
 	</plnk:partnerLinkType>
-	<import location="BookingService.wsdl" namespace="http://booking.jaxws.samples.swordfish.eclipse.org" />
+	<import location="ReservationService.wsdl" namespace="http://reservation.jaxws.samples.swordfish.eclipse.org" />
 	<import location="ReservationStorageService.wsdl" namespace="http://storage.jaxws.samples.swordfish.eclipse.org" />
 </definitions>

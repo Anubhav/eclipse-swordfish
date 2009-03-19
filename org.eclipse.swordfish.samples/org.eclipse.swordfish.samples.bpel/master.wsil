@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inspection xmlns="http://schemas.xmlsoap.org/ws/2001/10/inspection/" xmlns:uddi="urn:uddi-org:api" xmlns:wsiluddi="http://schemas.xmlsoap.org/ws/2001/10/inspection/uddi/" xmlns:wsilwsdl="http://schemas.xmlsoap.org/ws/2001/10/inspection/wsdl/">
+  <link location="ReservationService.wsil" referencedNamespace="http://schemas.xmlsoap.org/ws/2001/10/inspection/">
+    <abstract>Booking Service</abstract>
+  </link>
+</inspection>

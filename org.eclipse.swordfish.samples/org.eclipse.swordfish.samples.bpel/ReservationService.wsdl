@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="BookingService"
-	targetNamespace="http://booking.jaxws.samples.swordfish.eclipse.org"
-	xmlns:tns="http://booking.jaxws.samples.swordfish.eclipse.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+<wsdl:definitions name="ReservationService"
+	targetNamespace="http://reservation.jaxws.samples.swordfish.eclipse.org"
+	xmlns:tns="http://reservation.jaxws.samples.swordfish.eclipse.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
 	<wsdl:types>
 		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns:tns="http://booking.jaxws.samples.swordfish.eclipse.org"
+			xmlns:tns="http://reservation.jaxws.samples.swordfish.eclipse.org"
 			attributeFormDefault="unqualified" elementFormDefault="unqualified"
-			targetNamespace="http://booking.jaxws.samples.swordfish.eclipse.org">
+			targetNamespace="http://reservation.jaxws.samples.swordfish.eclipse.org">
 			<xs:element name="createReservation" type="tns:createReservation" />
 			<xs:element name="createReservationResponse" type="tns:createReservationResponse" />
 			<xs:element name="findReservation" type="tns:findReservation" />
@@ -73,7 +73,7 @@
 		<wsdl:part name="parameters" element="tns:findReservationResponse">
 		</wsdl:part>
 	</wsdl:message>
-	<wsdl:portType name="BookingService">
+	<wsdl:portType name="ReservationService">
 		<wsdl:operation name="findReservation">
 			<wsdl:input name="findReservation" message="tns:findReservation">
 			</wsdl:input>
@@ -87,7 +87,7 @@
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:portType>
-	<wsdl:binding name="BookingServiceSoapBinding" type="tns:BookingService">
+	<wsdl:binding name="ReservationServiceSoapBinding" type="tns:ReservationService">
 		<soap:binding style="document"
 			transport="http://schemas.xmlsoap.org/soap/http" />
 		<wsdl:operation name="findReservation">
@@ -109,9 +109,13 @@
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
-	<wsdl:service name="BookingService">
-		<wsdl:port name="BookingServicePort" binding="tns:BookingServiceSoapBinding">
-			<soap:address location="http://localhost:9090/BookingServiceImplPort" />
-		</wsdl:port>
-	</wsdl:service>
+	
+	<!--
+    
+    This is an abstract interface/portType definition.  Note the lack of 
+    binding and service: these are defined by the HTTP binding component.
+    See ReservationService-http/ReservationService.wsdl for details.
+    
+    -->
+	
 </wsdl:definitions>

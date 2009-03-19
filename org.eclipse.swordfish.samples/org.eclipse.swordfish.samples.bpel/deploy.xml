@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy xmlns="http://www.apache.org/ode/schemas/dd/2007/03"
+	xmlns:booking.jaxws.samples.swordfish.eclipse.org="http://booking.jaxws.samples.swordfish.eclipse.org"
+	xmlns:reservation="http://eclipse.org/swordfish/bpel/reservation"
+	xmlns:reservation.jaxws.samples.swordfish.eclipse.org="http://reservation.jaxws.samples.swordfish.eclipse.org"
+	xmlns:storage.jaxws.samples.swordfish.eclipse.org="http://storage.jaxws.samples.swordfish.eclipse.org">
+	<process name="reservation:ReservationService">
+		<active>true</active>
+		<retired>false</retired>
+		<in-memory>true</in-memory>
+		<process-events generate="none" />
+		<provide partnerLink="provider">
+			<service
+				name="storage.jaxws.samples.swordfish.eclipse.org:ReservationService"
+				port="ReservationServicePort" />
+		</provide>
+		<invoke partnerLink="consumer">
+			<service
+				name="storage.jaxws.samples.swordfish.eclipse.org:ReservationStorageService"
+				port="ReservationStoragePort" />
+		</invoke>
+	</process>
+</deploy>

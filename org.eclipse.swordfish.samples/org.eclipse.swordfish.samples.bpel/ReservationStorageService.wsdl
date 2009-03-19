@@ -78,7 +78,7 @@
         </wsdl:operation>
 
     </wsdl:portType>
-    <wsdl:binding name="ReservationStorageServiceImplSoapBinding"
+    <wsdl:binding name="ReservationStorageServiceSoapBinding"
         type="tns:ReservationStorageService">
         <soap:binding style="document"
             transport="http://schemas.xmlsoap.org/soap/http" />
@@ -93,11 +93,11 @@
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
-    <wsdl:service name="ReservationStorageServiceImpl">
-        <wsdl:port binding="tns:ReservationStorageServiceImplSoapBinding"
+    <wsdl:service name="ReservationStorageService">
+        <wsdl:port binding="tns:ReservationStorageServiceSoapBinding"
             name="ReservationStoragePort">
             <soap:address
-                location="http://localhost:9000/bookingService" />
+                location="http://localhost:8194/storage/" />
         </wsdl:port>
     </wsdl:service>
 
