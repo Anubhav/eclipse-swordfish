@@ -13,8 +13,8 @@ import org.eclipse.swordfish.api.policy.PolicyExtractor;
 import org.eclipse.swordfish.api.policy.PolicyRole;
 import org.eclipse.swordfish.api.policy.PolicyStatus;
 import org.eclipse.swordfish.policies.definitions.WsPolicyStreamDefinition;
+import org.eclipse.swordfish.policies.helpers.PolicyBuilderInitializer;
 import org.eclipse.swordfish.policies.processor.WsPolicyDescription;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
@@ -22,7 +22,7 @@ public class WsPolicyStreamExtractor implements PolicyExtractor<WsPolicyStreamDe
 
 	private static List<Class<WsPolicyStreamDefinition>> SUPPORTED_TYPES;
 
-	private PolicyBuilderImpl policyBuilder;
+	private PolicyBuilderInitializer policyBuilderInitializer;
 
 	static {
 		final Class<WsPolicyStreamDefinition> c = WsPolicyStreamDefinition.class;
@@ -46,7 +46,11 @@ public class WsPolicyStreamExtractor implements PolicyExtractor<WsPolicyStreamDe
 		final WsPolicyStreamDefinition pd =
 			(WsPolicyStreamDefinition) policyDefinition;
 		try {
-	        final Policy policy = policyBuilder.getPolicy(pd.getPolicyData());
+	        final Policy policy;
+	        synchronized (policyBuilderInitializer) {
+				final PolicyBuilderImpl pb = policyBuilderInitializer.getPolicyBuilder();
+		        policy = pb.getPolicy(pd.getPolicyData());
+	        }
 	        final WsPolicyDescription p = new WsPolicyDescription();
 	        p.setPolicy(policy);
 	        p.setPolicyRole(PolicyRole.UNKNOWN);
@@ -65,12 +69,13 @@ public class WsPolicyStreamExtractor implements PolicyExtractor<WsPolicyStreamDe
 		return SUPPORTED_TYPES;
 	}
 
-	public PolicyBuilderImpl getPolicyBuilder() {
-		return policyBuilder;
+	public PolicyBuilderInitializer getPolicyBuilderInitializer() {
+		return policyBuilderInitializer;
 	}
 
-	public void setPolicyBuilder(final PolicyBuilderImpl policyBuilder) {
-		this.policyBuilder = policyBuilder;
+	public void setPolicyBuilderInitializer(
+			final PolicyBuilderInitializer policyBuilderInitializer) {
+		this.policyBuilderInitializer = policyBuilderInitializer;
 	}
 
 	@SuppressWarnings("unchecked")

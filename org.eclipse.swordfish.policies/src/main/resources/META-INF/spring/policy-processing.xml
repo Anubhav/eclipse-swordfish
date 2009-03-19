@@ -50,18 +50,21 @@
     </bean>
     <bean id="fsPolicyDefinitionProvider"
         class="org.eclipse.swordfish.policies.definitions.provider.FilesystemPolicyDefinitionProvider"/>
-    <bean id="policyStreamExtractor"
-        class="org.eclipse.swordfish.policies.extractor.WsPolicyStreamExtractor">
+    <bean id="policyBuilderInitializer"
+        class="org.eclipse.swordfish.helpers.PolicyBuilderInitializer">
         <property name="policyBuilder"
             ref="org.apache.cxf.ws.policy.PolicyBuilder"/>
+    </bean>
+    <bean id="policyStreamExtractor"
+        class="org.eclipse.swordfish.policies.extractor.WsPolicyStreamExtractor">
+        <property name="policyBuilderInitializer" ref="policyBuilderInitializer"/>
     <bean/>
     <bean id="policyProcessor"
         class="org.eclipse.swordfish.policies.processor.WsPolicyProcessor"
         p:policyIntersector-ref="policyIntersector"/>
     <bean id="policyIntersector"
         class="org.eclipse.swordfish.policies.trading.impl.PolicyIntersectorImpl">
-        <property name="assertionBuilderRegistry"
-            ref="org.apache.cxf.ws.policy.AssertionBuilderRegistry"/>
+        <property name="policyBuilderInitializer" ref="policyBuilderInitializer"/>
     </bean>
 
     <osgi:service ref="fsPolicyDefinitionProvider">

@@ -22,14 +22,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class PolicyIntersectorTest extends Assert {
 
     private PolicyBuilderImpl builder;
-    private PolicyIntersectorImpl policyIntercector;
+    private PolicyIntersectorImpl policyIntersector;
 
     @Before
     public void setUp() {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("policy-test.xml");
         builder = (PolicyBuilderImpl)applicationContext.getBean("org.apache.cxf.ws.policy.PolicyBuilder");
-        XMLPrimitiveAssertionBuilder primitiveAssertionBuilder = new XMLPrimitiveAssertionBuilder();
-         XMLPrimitiveAssertionBuilder xmlPrimitiveAssertionBuilder = new  XMLPrimitiveAssertionBuilder();
+        XMLPrimitiveAssertionBuilder xmlPrimitiveAssertionBuilder = new  XMLPrimitiveAssertionBuilder();
         xmlPrimitiveAssertionBuilder.setKnownElements(Arrays.asList(
                 new QName("http://schemas.xmlsoap.org/ws/2002/12/secext", "SecurityToken"),
                 new QName("http://schemas.xmlsoap.org/ws/2002/12/secext", "SecurityTokenType"),
@@ -37,17 +36,14 @@ public class PolicyIntersectorTest extends Assert {
         AssertionBuilderRegistry assertionBuilderRegistry = builder.getAssertionBuilderRegistry();
 
         assertionBuilderRegistry.setIgnoreUnknownAssertions(false);
-        for (QName elem : primitiveAssertionBuilder.getKnownElements()) {
-          //  assertionBuilderRegistry.register(elem, primitiveAssertionBuilder);
-        }
-        for (QName elem : xmlPrimitiveAssertionBuilder.getKnownElements()) {
+       for (QName elem : xmlPrimitiveAssertionBuilder.getKnownElements()) {
             assertionBuilderRegistry.register(elem, xmlPrimitiveAssertionBuilder);
         }
         PolicyConstants constants = new PolicyConstants();
         constants.setNamespace(PolicyConstants.NAMESPACE_XMLSOAP_200409);
         builder.getBus().setExtension(constants, PolicyConstants.class);
-        policyIntercector = new PolicyIntersectorImpl();
-        policyIntercector.setAssertionBuilderRegistry(builder.getAssertionBuilderRegistry());
+        policyIntersector = new PolicyIntersectorImpl();
+        policyIntersector.setAssertionBuilderRegistry(assertionBuilderRegistry);
     }
 
     @Test
@@ -59,7 +55,7 @@ public class PolicyIntersectorTest extends Assert {
         is = PolicyIntersectorTest.class.getResourceAsStream(name);
         builder.getBus().getExtension(PolicyConstants.class).setNamespace(PolicyConstants.NAMESPACE_XMLSOAP_200409);
         Policy p2 = builder.getPolicy(is);
-        Policy policy =  policyIntercector.intersect(p1, p2);
+        Policy policy =  policyIntersector.intersect(p1, p2);
         assertNotNull(policy);
         ExactlyOne policyComponent = (ExactlyOne) policy.getFirstPolicyComponent();
         assertNotNull(policyComponent);
@@ -76,7 +72,7 @@ public class PolicyIntersectorTest extends Assert {
         is = PolicyIntersectorTest.class.getResourceAsStream(name);
         builder.getBus().getExtension(PolicyConstants.class).setNamespace(PolicyConstants.NAMESPACE_XMLSOAP_200409);
         Policy p2 = builder.getPolicy(is);
-        Policy policy =  policyIntercector.intersect(p1, p2);
+        Policy policy =  policyIntersector.intersect(p1, p2);
         assertNull(policy);
     }
 
@@ -89,7 +85,7 @@ public class PolicyIntersectorTest extends Assert {
         is = PolicyIntersectorTest.class.getResourceAsStream(name);
         builder.getBus().getExtension(PolicyConstants.class).setNamespace(PolicyConstants.NAMESPACE_XMLSOAP_200409);
         Policy p2 = builder.getPolicy(is);
-        Policy policy =  policyIntercector.intersect(p1, p2);
+        Policy policy =  policyIntersector.intersect(p1, p2);
         assertNotNull(policy);
         ExactlyOne policyComponent = (ExactlyOne) policy.getFirstPolicyComponent();
         assertNotNull(policyComponent);

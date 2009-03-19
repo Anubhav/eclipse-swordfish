@@ -2,7 +2,6 @@ package org.eclipse.swordfish.policies.definitions.provider;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,14 +10,12 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.apache.cxf.ws.policy.AssertionBuilderRegistry;
 import org.apache.cxf.ws.policy.PolicyBuilderImpl;
-import org.apache.cxf.ws.policy.PolicyConstants;
-import org.apache.cxf.ws.policy.builder.xml.XMLPrimitiveAssertionBuilder;
 import org.apache.neethi.Policy;
 import org.eclipse.swordfish.api.policy.PolicyDefinitionDescription;
 import org.eclipse.swordfish.api.policy.PolicyDescription;
 import org.eclipse.swordfish.policies.extractor.WsPolicyStreamExtractor;
+import org.eclipse.swordfish.policies.helpers.PolicyBuilderInitializer;
 import org.eclipse.swordfish.policies.helpers.ResourceToStringConverter;
 import org.eclipse.swordfish.policies.processor.WsPolicyProcessor;
 import org.eclipse.swordfish.policies.trading.impl.PolicyIntersectorImpl;
@@ -40,6 +37,7 @@ public class FilesystemPolicyDefinitionProviderTest {
 	private FilesystemPolicyDefinitionProvider policyDefinitionProvider;
 	private WsPolicyStreamExtractor policyExtractor;
 	private WsPolicyProcessor policyProcessor;
+	private PolicyBuilderInitializer policyBuilderInitializer;
 	private Map<String, String> configuration;
 
 	@Before
@@ -50,13 +48,13 @@ public class FilesystemPolicyDefinitionProviderTest {
 			new ResourceToStringConverter(POLICY_STORAGE_RESOURCE);
 		configuration.put(POLICY_STORAGE_PROPERTY, cv.getUrl());
 		policyDefinitionProvider.onReceiveConfiguration(configuration);
+		policyBuilderInitializer = createPolicyBuilderInitializer();
 		policyExtractor = new WsPolicyStreamExtractor();
-		policyExtractor.setPolicyBuilder(initPolicyBuilder());
+		policyExtractor.setPolicyBuilderInitializer(policyBuilderInitializer);
 		policyProcessor = new WsPolicyProcessor();
 		final PolicyIntersectorImpl policyIntersector =
 			new PolicyIntersectorImpl();
-		policyIntersector.setAssertionBuilderRegistry(
-				initAssertionBuilderRegistry());
+		policyIntersector.setPolicyBuilderInitializer(policyBuilderInitializer);
 		policyProcessor.setPolicyIntersector(policyIntersector);
 	}
 
@@ -101,43 +99,16 @@ public class FilesystemPolicyDefinitionProviderTest {
 		assertNotNull(agreedC.getPolicy());
 	}
 
-	private PolicyBuilderImpl initPolicyBuilder() {
+	private PolicyBuilderInitializer createPolicyBuilderInitializer() {
         final ClassPathXmlApplicationContext ac =
         	new ClassPathXmlApplicationContext("policy-test.xml");
         final PolicyBuilderImpl pb =
         	(PolicyBuilderImpl) ac.getBean(
         			"org.apache.cxf.ws.policy.PolicyBuilder");
         assertNotNull(pb);
-        return pb;
-	}
-
-	private AssertionBuilderRegistry initAssertionBuilderRegistry() {
-        final ClassPathXmlApplicationContext applicationContext =
-        	new ClassPathXmlApplicationContext("policy-test.xml");
-        final PolicyBuilderImpl builder = (PolicyBuilderImpl)
-        		applicationContext.getBean(
-        				"org.apache.cxf.ws.policy.PolicyBuilder");
-        final XMLPrimitiveAssertionBuilder xmlPrimitiveAssertionBuilder =
-        	new  XMLPrimitiveAssertionBuilder();
-        xmlPrimitiveAssertionBuilder.setKnownElements(Arrays.asList(
-                new QName("http://schemas.xmlsoap.org/ws/2002/12/secext",
-                		"SecurityToken"),
-                new QName("http://schemas.xmlsoap.org/ws/2002/12/secext",
-                		"SecurityTokenType"),
-                new QName("http://schemas.xmlsoap.org/ws/2002/12/secext",
-                		"Integrity")));
-        final AssertionBuilderRegistry assertionBuilderRegistry =
-        	builder.getAssertionBuilderRegistry();
-
-        assertionBuilderRegistry.setIgnoreUnknownAssertions(false);
-        for (QName elem : xmlPrimitiveAssertionBuilder.getKnownElements()) {
-            assertionBuilderRegistry.register(
-            		elem, xmlPrimitiveAssertionBuilder);
-        }
-        PolicyConstants constants = new PolicyConstants();
-        constants.setNamespace(PolicyConstants.NAMESPACE_XMLSOAP_200409);
-        builder.getBus().setExtension(constants, PolicyConstants.class);
-        return builder.getAssertionBuilderRegistry();
+        final PolicyBuilderInitializer pi = new PolicyBuilderInitializer();
+        pi.setPolicyBuilder(pb);
+        return pi;
 	}
 
 	@SuppressWarnings("unchecked")
