@@ -23,8 +23,4 @@
                     </jaxws:inInterceptors>
     </jaxws:endpoint>
     
-    <jaxws:endpoint id="reservationStorageService"
-                    implementor="org.eclipse.swordfish.samples.cxf.ReservationStorageServiceImpl"
-                    address="nmr:ReservationStorageService"> 
-    </jaxws:endpoint>
 </beans>
