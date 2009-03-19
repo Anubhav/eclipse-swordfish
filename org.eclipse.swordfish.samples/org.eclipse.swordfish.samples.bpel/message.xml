@@ -20,18 +20,16 @@
 	<soap:Body>
 		<ns2:createReservation
 			xmlns:ns2="http://reservation.jaxws.samples.swordfish.eclipse.org/">
-			<reservation>
-				<passengers>
-					<age>24</age>
-					<firstName>Volodymyr</firstName>
-					<id>1</id>
-					<lastName>Zhabiuk</lastName>
-				</passengers>
-				<flight>
-					<flightNumber>LC023</flightNumber>
-					<id>1</id>
-				</flight>
-			</reservation>
+			<passengers>
+				<age>24</age>
+				<firstName>Volodymyr</firstName>
+				<id>1</id>
+				<lastName>Zhabiuk</lastName>
+			</passengers>
+			<flight>
+				<flightNumber>LC023</flightNumber>
+				<id>1</id>
+			</flight>
 		</ns2:createReservation>
 	</soap:Body>
 </soap:Envelope>

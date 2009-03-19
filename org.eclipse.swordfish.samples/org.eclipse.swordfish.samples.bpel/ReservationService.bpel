@@ -54,8 +54,8 @@
              Note: This maps to operation defined in ReservationService.wsdl 
              -->
         
-        <bpel:receive name="receiveReservationData" partnerLink="provider"
-                 createInstance="yes" operation="createReservation" portType="sto:ReservationService" variable="providerRequest"/>
+        <bpel:receive name="receiveReservationData" partnerLink="ReservationServicePL"
+                 createInstance="yes" operation="createReservation" portType="res:ReservationService" variable="providerRequest"/>
         
         <!-- Generate reply to synchronous request -->
         
@@ -120,7 +120,7 @@
             </bpel:copy>
             
         </bpel:assign>
-        <bpel:reply name="replyReservation" partnerLink="provider" operation="createReservation" portType="sto:ReservationService" variable="providerResponse"/>
+        <bpel:reply name="replyReservation" partnerLink="ReservationServicePL" operation="createReservation" portType="res:ReservationService" variable="providerResponse"/>
         
     </bpel:sequence>
 </bpel:process>
