@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public abstract class AbstractDocumentProvider implements EndpointDocumentProvider, ConfigurationConsumer<String> {
+public abstract class AbstractDocumentProvider implements EndpointDocumentProvider, ConfigurationConsumer<Object> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractDocumentProvider.class);
 
@@ -28,14 +28,14 @@ public abstract class AbstractDocumentProvider implements EndpointDocumentProvid
 
     private int priority;
 
-	public void onReceiveConfiguration(Map<String, String> configuration) {
+	public void onReceiveConfiguration(Map<String, Object> configuration) {
 		if (configuration == null) {
 			return;
 		}
 
 		if (configuration.containsKey(PRIORITY_PROPERTY)) {
 			try {
-				setPriority(Integer.parseInt(configuration.get(PRIORITY_PROPERTY)));
+				setPriority(Integer.parseInt((String) configuration.get(PRIORITY_PROPERTY)));
 				if (logger.isDebugEnabled()) {
 					logger.debug("Document provider priority has been set to: " + getPriority());
 				}

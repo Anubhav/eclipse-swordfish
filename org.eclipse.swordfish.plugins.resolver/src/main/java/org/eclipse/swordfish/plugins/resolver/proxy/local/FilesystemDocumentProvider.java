@@ -37,10 +37,6 @@ public class FilesystemDocumentProvider extends AbstractDocumentProvider {
 
 	private static final String WSDL_STORAGE_PROPERTY = "wsdlStorage";
 
-	private URL wsdlStorage;
-
-    private URL wsdlStorage1;
-
     private WSDLManager wsdlManager;
 
 	public List<ServiceDescription<?>> getServiceProviderDescriptions(QName interfaceName) {
@@ -65,20 +61,21 @@ public class FilesystemDocumentProvider extends AbstractDocumentProvider {
 	}
 
 	@Override
-	public void onReceiveConfiguration(Map<String, String> configuration) {
+	@SuppressWarnings("unchecked")
+	public void onReceiveConfiguration(Map<String, Object> configuration) {
 		super.onReceiveConfiguration(configuration);
 
 		if (configuration != null && configuration.containsKey(WSDL_STORAGE_PROPERTY)) {
 			try {
-				wsdlStorage = new URL(configuration.get(WSDL_STORAGE_PROPERTY));
-	            wsdlStorage1 = new URL(configuration.get(WSDL_STORAGE_PROPERTY + "1"));
+				List<String> resourcesToLoad = (List<String>) configuration.get(WSDL_STORAGE_PROPERTY);
 
 				wsdlManager = new WSDLManagerImpl();
-				wsdlManager.setupWSDLs(wsdlStorage);
-                wsdlManager.setupWSDLs(wsdlStorage1);
+				for (String nextResource : resourcesToLoad) {
+					URL resourceUrl = new URL(nextResource);
+					wsdlManager.setupWSDLs(resourceUrl);
+				}
 				if (logger.isDebugEnabled()) {
-					logger.debug("Initialized WSDL managed using the following"
-						+ " localtion: " + wsdlStorage);
+					logger.debug("Successfully initialized WSDL manager");
 				}
 			} catch (MalformedURLException e) {
 				logger.error("Couldn't initialize filesystem "

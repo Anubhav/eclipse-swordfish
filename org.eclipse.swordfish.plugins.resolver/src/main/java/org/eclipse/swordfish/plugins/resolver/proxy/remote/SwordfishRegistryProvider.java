@@ -97,12 +97,12 @@ public class SwordfishRegistryProvider extends AbstractDocumentProvider {
 	}
 
 	@Override
-	public void onReceiveConfiguration(Map<String, String> configuration) {
+	public void onReceiveConfiguration(Map<String, Object> configuration) {
 		super.onReceiveConfiguration(configuration);
 
 		if (configuration != null && configuration.containsKey(REGISTRY_URL_PROPERTY)) {
 			try {
-				setRegistryURL(new URL(configuration.get(REGISTRY_URL_PROPERTY)));
+				setRegistryURL(new URL((String) configuration.get(REGISTRY_URL_PROPERTY)));
 				if (logger.isDebugEnabled()) {
 					logger.debug("Service registry URL has been set to: " + getRegistryURL());
 				}

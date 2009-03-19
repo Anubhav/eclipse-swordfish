@@ -28,35 +28,35 @@
 
    <osgi:reference id="swordfishContext" interface="org.eclipse.swordfish.api.context.SwordfishContext"/>
  
+    <bean id="resourceToStringConverter"
+    	class="org.eclipse.swordfish.plugins.resolver.proxy.local.BatchResourceToStringConverter"
+    	init-method="init">
+    	<property name="resources">
+    		<list>
+    			<value>wsdl/BookingServiceImpl.zip</value>
+    			<value>wsdl/FlightServiceImpl.zip</value>
+    			<value>wsdl/ReservationStorageService.zip</value>
+    			<value>wsdl/ReservationService.zip</value>
+    		</list>
+    	</property>
+    </bean>
+
+    <bean id="resourceToStringConverter.resourceUrls"
+    	class="org.springframework.beans.factory.config.PropertyPathFactoryBean" />
+
+    <bean id="filesystemProvider"
+        class="org.eclipse.swordfish.plugins.resolver.proxy.local.FilesystemDocumentProvider" />
+
     <bean id="configurationInjectorFS" class="org.eclipse.swordfish.core.configuration.ConfigurationInjector"
         p:id="org.eclipse.swordfish.plugins.resolver.proxy.local.FilesystemDocumentProvider"
         p:context-ref="swordfishContext">
         <property name="configuration">
             <map>
                 <entry key="priority" value="5" />
-                <entry key="wsdlStorage" value-ref="resourceToStringConverter.url"/>
-                <entry key="wsdlStorage1" value-ref="resourceToStringConverter1.url"/>
-                <entry key="wsdlReservationService" value-ref="resourceToStringConverter2.url"/>
+                <entry key="wsdlStorage" value-ref="resourceToStringConverter.resourceUrls"/>
             </map>
         </property>
-    </bean> 
-    <bean id="resourceToStringConverter.url" class="org.springframework.beans.factory.config.PropertyPathFactoryBean"/>
-    <bean id="resourceToStringConverter" class="org.eclipse.swordfish.plugins.resolver.proxy.local.ResourceToStringConverter">
-         <constructor-arg value="wsdl/BookingServiceImpl.zip"/>
     </bean>
-
-	<bean id="resourceToStringConverter1.url" class="org.springframework.beans.factory.config.PropertyPathFactoryBean" />
-	<bean id="resourceToStringConverter1" class="org.eclipse.swordfish.plugins.resolver.proxy.local.ResourceToStringConverter">
-		<constructor-arg value="wsdl/ReservationStorageService.zip" />
-	</bean>
-
-    <bean id="resourceToStringConverter2.url" class="org.springframework.beans.factory.config.PropertyPathFactoryBean" />
-    <bean id="resourceToStringConverter2" class="org.eclipse.swordfish.plugins.resolver.proxy.local.ResourceToStringConverter">
-        <constructor-arg value="wsdl/ReservationService.zip" />
-    </bean>
-
-    <bean id="filesystemProvider"
-        class="org.eclipse.swordfish.plugins.resolver.proxy.local.FilesystemDocumentProvider" />
 
     <osgi:service ref="filesystemProvider">
         <osgi:interfaces>

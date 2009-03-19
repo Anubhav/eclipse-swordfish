@@ -55,7 +55,7 @@ public class SwordfishRegistryProviderTest {
 	public void testProviderInitialization() {
 		SwordfishRegistryProvider provider = new SwordfishRegistryProvider();
 
-		Map<String, String> providerPorps = new HashMap<String, String>();
+		Map<String, Object> providerPorps = new HashMap<String, Object>();
 		providerPorps.put("registryURL", REGISTRY_URL);
 		provider.onReceiveConfiguration(providerPorps);
 
@@ -91,7 +91,7 @@ public class SwordfishRegistryProviderTest {
 		});
 
 		SwordfishRegistryProvider provider = new SwordfishRegistryProvider();
-		Map<String, String> providerPorps = new HashMap<String, String>();
+		Map<String, Object> providerPorps = new HashMap<String, Object>();
 		providerPorps.put("registryURL", REGISTRY_URL);
 		provider.onReceiveConfiguration(providerPorps);
 
@@ -114,7 +114,7 @@ public class SwordfishRegistryProviderTest {
 		});
 
 		SwordfishRegistryProvider provider = new SwordfishRegistryProvider();
-		Map<String, String> providerPorps = new HashMap<String, String>();
+		Map<String, Object> providerPorps = new HashMap<String, Object>();
 		providerPorps.put("registryURL", REGISTRY_URL);
 		provider.onReceiveConfiguration(providerPorps);
 

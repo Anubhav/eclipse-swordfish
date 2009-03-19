@@ -18,6 +18,8 @@ import static org.eclipse.swordfish.plugins.resolver.proxy.TestConstants.BOOKING
 import static org.eclipse.swordfish.plugins.resolver.proxy.TestConstants.BOOKINGSERVICE_SERVICE_NAME;
 import static org.eclipse.swordfish.plugins.resolver.proxy.TestConstants.FAKE_PORTTYPE_NAME;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,16 +34,20 @@ public class FilesystemDocumentProviderTest {
 	public void testProviderInitialization() {
 		FilesystemDocumentProvider provider = new FilesystemDocumentProvider();
 
-		Map<String, String> providerPorps = new HashMap<String, String>();
-		providerPorps.put("wsdlStorage", getClass().getResource("BookingServiceImpl.zip").toString());
-		providerPorps.put("wsdlStorage1", getClass().getResource("ReservationStorageService.zip").toString());
+		List<String> resources = new ArrayList<String>();
+		resources.add(getClass().getResource("BookingServiceImpl.zip").toString());
+
+		Map<String, Object> providerPorps = new HashMap<String, Object>();
+		providerPorps.put("wsdlStorage", resources);
 		provider.onReceiveConfiguration(providerPorps);
 
 		assertNotNull(provider.getWsdlManager());
 		// there are 2 entries for each definition in definitions map
-		assertEquals(6, provider.getWsdlManager().getDefinitions().size());
+		assertEquals(2, provider.getWsdlManager().getDefinitions().size());
 
-		providerPorps.put("wsdlStorage", "non-existing url");
+		resources.clear();
+		resources.add("non-existing url");
+		providerPorps.put("wsdlStorage", resources);
 		try {
 			provider.onReceiveConfiguration(providerPorps);
 			fail("Provider initialization should fail");
@@ -54,9 +60,11 @@ public class FilesystemDocumentProviderTest {
 	public void testSuccessfullServiceDescriptionRetrieval() {
 		FilesystemDocumentProvider provider = new FilesystemDocumentProvider();
 
-		Map<String, String> providerPorps = new HashMap<String, String>();
-		providerPorps.put("wsdlStorage", getClass().getResource("BookingServiceImpl.zip").toString());
-		providerPorps.put("wsdlStorage1", getClass().getResource("ReservationStorageService.zip").toString());
+		List<String> resources = Arrays.asList(
+			getClass().getResource("BookingServiceImpl.zip").toString());
+
+		Map<String, Object> providerPorps = new HashMap<String, Object>();
+		providerPorps.put("wsdlStorage", resources);
 		provider.onReceiveConfiguration(providerPorps);
 
 		List<ServiceDescription<?>> descriptions =
@@ -71,9 +79,11 @@ public class FilesystemDocumentProviderTest {
 	public void testNoServiceDescriptionFound() {
 		FilesystemDocumentProvider provider = new FilesystemDocumentProvider();
 
-		Map<String, String> providerPorps = new HashMap<String, String>();
-		providerPorps.put("wsdlStorage", getClass().getResource("BookingServiceImpl.zip").toString());
-		providerPorps.put("wsdlStorage1", getClass().getResource("ReservationStorageService.zip").toString());
+		List<String> resources = Arrays.asList(
+				getClass().getResource("BookingServiceImpl.zip").toString());
+
+		Map<String, Object> providerPorps = new HashMap<String, Object>();
+		providerPorps.put("wsdlStorage", resources);
 		provider.onReceiveConfiguration(providerPorps);
 
 		List<ServiceDescription<?>> descriptions =
