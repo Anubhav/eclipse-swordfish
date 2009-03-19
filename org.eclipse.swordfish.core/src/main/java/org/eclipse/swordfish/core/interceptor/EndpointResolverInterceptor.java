@@ -112,7 +112,7 @@ public class EndpointResolverInterceptor<T> implements Interceptor, ServiceResol
 			logger.info("The service endpoint for the servicename + [" + serviceName + "] has been found");
 		} else {
 			logger.info("No service endpoints for the service + [" + serviceName + "] have been found");
-			logger.info("Trying to establish an outbound endpoint for the service: " + serviceName);
+			logger.info("Trying to establish a dynamic outbound endpoint for the service: " + serviceName);
 
 			ServiceEndpoint se = null;
 			ComponentWrapper wrapper = null;
