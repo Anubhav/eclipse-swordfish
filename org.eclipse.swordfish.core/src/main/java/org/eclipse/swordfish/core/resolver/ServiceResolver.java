@@ -29,6 +29,8 @@ public interface ServiceResolver {
 	 */
 	Collection<EndpointDescription> getEndpointsFor(QName portType);
 
+	Collection<EndpointDescription> getEndpointsFor(QName portType, QName consumer);
+
 	EndpointDocumentProvider getServiceDescriptionProvider();
 
 	Collection<EndpointExtractor> getEndpointExtractors();

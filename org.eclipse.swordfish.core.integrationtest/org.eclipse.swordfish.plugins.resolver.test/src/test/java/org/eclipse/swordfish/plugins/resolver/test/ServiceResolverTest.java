@@ -17,6 +17,7 @@ import static org.easymock.EasyMock.verify;
 import static org.easymock.EasyMock.reset;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,6 +210,21 @@ public class ServiceResolverTest extends TargetPlatformOsgiTestCase {
 		verify(resolverMock);
 		verify(endpointMock);
 		verify(serviceMock);
+    }
+
+    public void test6ServiceResolverInvocation() throws Exception {
+        ServiceReference ref =
+        	bundleContext.getServiceReference(ServiceResolver.class.getName());
+        assertNotNull("Reference to ServiceResolver is null", ref);
+
+        ServiceResolver resolver = (ServiceResolver) bundleContext.getService(ref);
+        assertNotNull("Couldn't find the ServiceResolver service", resolver);
+    	
+        Collection<EndpointDescription> c = resolver.getEndpointsFor(
+                new QName("http://service.dynamicendpoint.samples.swordfish.eclipse.org/", "FlightService"),
+                new QName("http://samples.swordfish.eclipse.org", "consumer"));
+        assertNotNull("No endpoints resolved. ", c);
+        assertEquals(c.size(), 1);
     }
 
     private void setExchangeThroughNMR() {
