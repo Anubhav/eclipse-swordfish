@@ -67,6 +67,10 @@ public class PolicyExtractorsRegistry {
 		this.extractors = extractors;
 	}
 
+	public boolean isEmpty() {
+		return extractors == null || extractors.isEmpty();
+	}
+	
 	/**
 	 * Specific checked cast.
 	 * @param <P> platform policy type.

@@ -41,7 +41,13 @@
           <instructions>
             <Bundle-Name>${pom.artifactId}</Bundle-Name>
             <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
-            <Import-Package>org.eclipse.swordfish.core.interceptor,  org.eclipse.swordfish.api.context, org.eclipse.swordfish.api.configuration, org.eclipse.swordfish.core.configuration, org.springframework.beans.factory.config, com.sun.xml.bind.v2, *</Import-Package>
+            <Import-Package>org.eclipse.swordfish.core.interceptor,
+                            org.eclipse.swordfish.api.context,
+                            org.eclipse.swordfish.api.configuration,
+                            org.eclipse.swordfish.core.configuration,
+                            org.springframework.beans.factory.config,
+                            com.sun.xml.bind.v2, *</Import-Package>
+            <Require-Bundle>org.apache.cxf.cxf-bundle</Require-Bundle>
             <Export-Package>org.eclipse.swordfish.policies.*</Export-Package>
           </instructions>
         </configuration>

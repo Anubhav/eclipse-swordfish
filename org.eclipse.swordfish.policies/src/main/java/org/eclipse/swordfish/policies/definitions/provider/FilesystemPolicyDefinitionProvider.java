@@ -35,6 +35,8 @@ public class FilesystemPolicyDefinitionProvider implements
 
 	private static final int DEFAULT_BUFFER_SIZE = 4096;
 
+	private static final int PRIORITY = 5;
+
 	private URL policyStorage;
 
 	private final Map<String, List<String>> directory =
@@ -103,6 +105,10 @@ public class FilesystemPolicyDefinitionProvider implements
 		} catch (IOException e) {
 			throw new SwordfishException("Policy storage read error. ", e);
 		}
+	}
+
+	public int getPriority() {
+		return PRIORITY;
 	}
 
 	private void readOut(final ZipInputStream in) throws IOException {

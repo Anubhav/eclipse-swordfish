@@ -39,9 +39,9 @@ public class ServiceResolverImpl implements ServiceResolver {
 
 	private EndpointExtractorsRegistry extractorsRegistry;
 
-	private PolicyExtractorsRegistry policyExtractorsRegistry;
+	private PolicyProvidersRegistry policyProvidersRegistry;
 
-	private PolicyDefinitionProvider policyDefinitionProvider;
+	private PolicyExtractorsRegistry policyExtractorsRegistry;
 
 	private PolicyProcessor<?> policyProcessor;
 
@@ -60,8 +60,11 @@ public class ServiceResolverImpl implements ServiceResolver {
 		List<EndpointDescription> endpoints = new ArrayList<EndpointDescription>();
 		Collection<ServiceDescription<?>> descriptions =
 			descriptionProvider.getServiceProviderDescriptions(portType);
-		final boolean isPolicySupportActive = policyExtractorsRegistry != null
-				&& policyDefinitionProvider != null && policyProcessor != null
+		final boolean isPolicySupportActive = policyProvidersRegistry != null
+		        && (!policyProvidersRegistry.isEmpty())
+				&& policyExtractorsRegistry != null
+				&& (!policyExtractorsRegistry.isEmpty())
+				&& policyProcessor != null
 				&& consumer != null;
 		PolicyDescription<?> consumerPolicy = null;
 		if (isPolicySupportActive) {
@@ -122,13 +125,13 @@ public class ServiceResolverImpl implements ServiceResolver {
 		this.policyExtractorsRegistry = policyExtractorsRegistry;
 	}
 
-	public PolicyDefinitionProvider getPolicyDefinitionProvider() {
-		return policyDefinitionProvider;
+	public PolicyProvidersRegistry getPolicyProvidersRegistry() {
+		return policyProvidersRegistry;
 	}
 
-	public void setPolicyDefinitionProvider(
-			PolicyDefinitionProvider policyDefinitionProvider) {
-		this.policyDefinitionProvider = policyDefinitionProvider;
+	public void setPolicyProvidersRegistry(
+			PolicyProvidersRegistry policyProvidersRegistry) {
+		this.policyProvidersRegistry = policyProvidersRegistry;
 	}
 
 	public PolicyProcessor<?> getPolicyProcessor() {
@@ -140,8 +143,9 @@ public class ServiceResolverImpl implements ServiceResolver {
 	}
 
 	private List<PolicyDescription<?>> queryPolicies(QName name) {
+		final PolicyDefinitionProvider pr = policyProvidersRegistry.getPreferredProvider();
 		final Collection<PolicyDefinitionDescription> policyDefinitions =
-			policyDefinitionProvider.getPolicyDefinitions(name);
+			pr.getPolicyDefinitions(name);
 		final List<PolicyDescription<?>> policies = new LinkedList<PolicyDescription<?>>();
 		for (final PolicyDefinitionDescription pd : policyDefinitions) {
 			final PolicyExtractor<?, ?> pe = policyExtractorsRegistry.getExtractor(

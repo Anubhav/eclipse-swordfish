@@ -51,14 +51,14 @@
     <bean id="fsPolicyDefinitionProvider"
         class="org.eclipse.swordfish.policies.definitions.provider.FilesystemPolicyDefinitionProvider"/>
     <bean id="policyBuilderInitializer"
-        class="org.eclipse.swordfish.helpers.PolicyBuilderInitializer">
+        class="org.eclipse.swordfish.policies.helpers.PolicyBuilderInitializer">
         <property name="policyBuilder"
             ref="org.apache.cxf.ws.policy.PolicyBuilder"/>
     </bean>
     <bean id="policyStreamExtractor"
         class="org.eclipse.swordfish.policies.extractor.WsPolicyStreamExtractor">
         <property name="policyBuilderInitializer" ref="policyBuilderInitializer"/>
-    <bean/>
+    </bean>
     <bean id="policyProcessor"
         class="org.eclipse.swordfish.policies.processor.WsPolicyProcessor"
         p:policyIntersector-ref="policyIntersector"/>

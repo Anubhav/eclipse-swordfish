@@ -17,4 +17,10 @@ public interface PolicyDefinitionProvider {
 	 * @return assigned policies, an empty Collection if there are none.
 	 */
 	Collection<PolicyDefinitionDescription> getPolicyDefinitions(QName serviceProviderName);
+
+	/**
+	 * Get the provider's priority. If several policy definition providers are registered
+	 * at runtime the one with the highest priority will be chosen.
+	 */
+	int getPriority();
 }

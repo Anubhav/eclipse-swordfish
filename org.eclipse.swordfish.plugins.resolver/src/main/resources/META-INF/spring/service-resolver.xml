@@ -30,6 +30,16 @@
     <osgi:list id="extractors" cardinality="0..N"
         interface="org.eclipse.swordfish.api.registry.EndpointExtractor" />
 
+    <osgi:list id="policyProviders" cardinality="0..N"
+        interface="org.eclipse.swordfish.api.policy.PolicyDefinitionProvider">
+    </osgi:list>
+
+    <osgi:list id="policyExtractors" cardinality="0..N"
+        interface="org.eclipse.swordfish.api.policy.PolicyExtractor" />
+
+    <osgi:reference id="policyProcessor"
+        interface="org.eclipse.swordfish.api.policy.PolicyProcessor"/>
+
     <bean id="providersRegistry"
         class="org.eclipse.swordfish.plugins.resolver.DocumentProvidersRegistry"
         p:providers-ref="providers" />
@@ -38,10 +48,21 @@
         class="org.eclipse.swordfish.plugins.resolver.EndpointExtractorsRegistry"
         p:extractors-ref="extractors" />
 
+    <bean id="policyProvidersRegistry"
+        class="org.eclipse.swordfish.plugins.resolver.PolicyProvidersRegistry"
+        p:providers-ref="policyProviders" />
+
+    <bean id="policyExtractorsRegistry"
+        class="org.eclipse.swordfish.plugins.resolver.PolicyExtractorsRegistry"
+        p:extractors-ref="policyExtractors" />
+
     <bean id="serviceResolver"
         class="org.eclipse.swordfish.plugins.resolver.ServiceResolverImpl"
         p:documentProvidersRegistry-ref="providersRegistry"
-        p:endpointExtractorsRegistry-ref="extractorsRegistry" />
+        p:endpointExtractorsRegistry-ref="extractorsRegistry"
+        p:policyProvidersRegistry-ref="policyProvidersRegistry"
+        p:policyExtractorsRegistry-ref="policyExtractorsRegistry"
+        p:policyProcessor-ref="policyProcessor" />
 
     <osgi:service ref="serviceResolver"
         interface="org.eclipse.swordfish.core.resolver.ServiceResolver" />
