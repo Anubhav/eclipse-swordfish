@@ -73,6 +73,9 @@ public class ServiceResolverImpl implements ServiceResolver {
 			} catch (NoSuchElementException e) {
 				throw new SwordfishException("Policy support active and no consumer policy assigned.", e);
 			}
+		} else if (consumer != null) {
+			throw new SwordfishException("Policy support requested by consumer"
+					+ "but not available. ");
 		}
 		if (!descriptions.isEmpty()) {
 			for (final ServiceDescription<?> description : descriptions) {

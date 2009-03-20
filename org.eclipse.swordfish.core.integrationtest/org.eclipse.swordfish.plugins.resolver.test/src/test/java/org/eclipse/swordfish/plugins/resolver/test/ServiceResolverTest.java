@@ -129,7 +129,7 @@ public class ServiceResolverTest extends TargetPlatformOsgiTestCase {
 		ServiceResolverHolder holder = OsgiSupport.getReference(bundleContext, ServiceResolverHolder.class);
         holder.setServiceResolver(resolverMock);
 
-		expect(resolverMock.getEndpointsFor(service2Interface)).andStubReturn(stubEndpoints);
+		expect(resolverMock.getEndpointsFor(service2Interface, null)).andStubReturn(stubEndpoints);
 		replay(resolverMock);
 
 		setExchangeThroughNMR();
@@ -147,7 +147,7 @@ public class ServiceResolverTest extends TargetPlatformOsgiTestCase {
 		List<EndpointDescription> endpoints = new ArrayList<EndpointDescription>();
 		endpoints.add(endpointMock);
 
-		expect(resolverMock.getEndpointsFor(service2Interface)).andReturn(endpoints).once();
+		expect(resolverMock.getEndpointsFor(service2Interface, null)).andReturn(endpoints).once();
 		expect(endpointMock.getServiceDescription()).andReturn(serviceMock).once();
 		expect(serviceMock.getServiceName()).andReturn(service2).once();
 
@@ -168,7 +168,7 @@ public class ServiceResolverTest extends TargetPlatformOsgiTestCase {
 
 		List<EndpointDescription> endpointsEmpty = new ArrayList<EndpointDescription>();
 
-		expect(resolverMock.getEndpointsFor(service2Interface)).andReturn(endpointsEmpty).once();
+		expect(resolverMock.getEndpointsFor(service2Interface, null)).andReturn(endpointsEmpty).once();
 		replay(resolverMock);
 
 		try {
@@ -190,7 +190,7 @@ public class ServiceResolverTest extends TargetPlatformOsgiTestCase {
 		List<EndpointDescription> endpoints = new ArrayList<EndpointDescription>();
 		endpoints.add(endpointMock);
 
-		expect(resolverMock.getEndpointsFor(service2Interface)).andReturn(endpoints).once();
+		expect(resolverMock.getEndpointsFor(service2Interface, null)).andReturn(endpoints).once();
 		expect(endpointMock.getServiceDescription()).andReturn(serviceMock).times(2);
 		expect(serviceMock.getServiceName()).andReturn(new QName("dummy", "dummy")).times(2);
 		expect(endpointMock.getAddress()).andReturn("non-existing-one").once();

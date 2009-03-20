@@ -30,6 +30,7 @@ import org.apache.servicemix.nmr.api.internal.InternalEndpoint;
 import org.apache.servicemix.nmr.core.StaticReferenceImpl;
 import org.eclipse.swordfish.api.Interceptor;
 import org.eclipse.swordfish.api.SwordfishException;
+import org.eclipse.swordfish.api.policy.PolicyConstants;
 import org.eclipse.swordfish.api.registry.EndpointDescription;
 import org.eclipse.swordfish.core.resolver.ServiceResolver;
 import org.eclipse.swordfish.core.resolver.ServiceResolverHolder;
@@ -73,7 +74,8 @@ public class EndpointResolverInterceptor<T> implements Interceptor, ServiceResol
 				return;
 			}
 
-			EndpointDescription description = getEndpointDescription(interfaceName);
+			EndpointDescription description =
+				getEndpointDescription(interfaceName, extractConsumerName(exchange));
 			if (description == null) {
 				throw new SwordfishException("Error resolving endpoint - no service "
 					+ "description has been fount for the interface: " + interfaceName);
@@ -90,9 +92,9 @@ public class EndpointResolverInterceptor<T> implements Interceptor, ServiceResol
 		}
 	}
 
-	private EndpointDescription getEndpointDescription(QName interfaceName) {
+	private EndpointDescription getEndpointDescription(QName interfaceName, QName consumerName) {
 		EndpointDescription description = null;
-		Collection<EndpointDescription> descriptions = getServiceResolver().getEndpointsFor(interfaceName);
+		Collection<EndpointDescription> descriptions = getServiceResolver().getEndpointsFor(interfaceName, consumerName);
 		if (descriptions.size() > 0) {
 			// add policy matching logic to choose a suitable endpoint
 			// for now use a first one from the list
@@ -191,4 +193,8 @@ public class EndpointResolverInterceptor<T> implements Interceptor, ServiceResol
 		Assert.notNull(serviceResolver);
 	}
 
+	private QName extractConsumerName(final Exchange xch) {
+		final Object o = xch.getProperty(PolicyConstants.POLICY_CONSUMER_NAME);
+		return (o instanceof QName) ? (QName) o : null;
+	}
 }
