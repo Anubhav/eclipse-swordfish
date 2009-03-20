@@ -219,9 +219,9 @@ public class ServiceResolverTest extends TargetPlatformOsgiTestCase {
 
         ServiceResolver resolver = (ServiceResolver) bundleContext.getService(ref);
         assertNotNull("Couldn't find the ServiceResolver service", resolver);
-    	
+
         Collection<EndpointDescription> c = resolver.getEndpointsFor(
-                new QName("http://service.dynamicendpoint.samples.swordfish.eclipse.org/", "FlightService"),
+                new QName("http://service.dynamic.samples.swordfish.eclipse.org/", "FlightService"),
                 new QName("http://samples.swordfish.eclipse.org", "consumer"));
         assertNotNull("No endpoints resolved. ", c);
         assertEquals(c.size(), 1);
