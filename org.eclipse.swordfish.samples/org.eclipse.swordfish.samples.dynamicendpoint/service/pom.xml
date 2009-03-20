@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2008, 2009 SOPERA GmbH.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+    
+    Contributors:
+        SOPERA GmbH - initial API and implementation
+ -->
+ 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.eclipse.swordfish</groupId>
+	<artifactId>org.eclipse.swordfish.samples.dynamicendpoint.service</artifactId>
+	<packaging>bundle</packaging>
+	<version>${swordfishVersion}</version>
+	<name>org.eclipse.swordfish.samples.dynamicendpoint.service</name>
+
+	<parent>
+		<groupId>org.eclipse.swordfish</groupId>
+		<artifactId>samples.dynamicendpoint</artifactId>
+		<version>basic</version>
+	</parent>
+
+	<description></description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-ws-metadata_2.0_spec</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+	    <dependency>
+	      <groupId>javax.xml.bind</groupId>
+	      <artifactId>com.springsource.javax.xml.bind</artifactId>
+	      <version>2.1.7</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>com.sun.xml</groupId>
+	      <artifactId>com.springsource.com.sun.xml.bind</artifactId>
+	      <version>2.1.7</version>
+	      <scope>runtime</scope>
+	    </dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Import-Package>javax.wsdl, javax.jbi.component, org.apache.servicemix.common.osgi, org.apache.servicemix.nmr.api, org.springframework.beans.factory.config, com.sun.xml.bind.v2, *</Import-Package>
+						<Private-Package>org.eclipse.swordfish.samples.dynamic.service.*</Private-Package>
+                        <Require-Bundle>servicemix-http, org.apache.cxf.cxf-bundle, org.apache.servicemix.cxf.transport.nmr</Require-Bundle>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright (c) 2008, 2009 SOPERA GmbH.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+    
+    Contributors:
+        SOPERA GmbH - initial API and implementation
+ -->
+ 
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:http="http://servicemix.apache.org/http/1.0"
+       xmlns:osgi="http://www.springframework.org/schema/osgi"
+       xmlns:swordfish="http://service.dynamic.samples.swordfish.eclipse.org/"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+	 http://www.springframework.org/schema/beans
+	 http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/osgi
+	 http://www.springframework.org/schema/osgi/spring-osgi.xsd
+	 http://servicemix.apache.org/http/1.0
+	 http://servicemix.apache.org/http/1.0/servicemix-http.xsd">
+
+	<bean class="org.apache.servicemix.common.osgi.EndpointExporter" />
+
+    <http:endpoint
+				endpoint="consumerEndpointFlightService"
+				service="consumerEndpointFlightService"
+				targetService="swordfish:FlightServiceImpl"
+				role="consumer"
+				locationURI="http://0.0.0.0:9091/flights/"
+				defaultMep="http://www.w3.org/2004/08/wsdl/in-out" />
+
+    <osgi:reference id="httpComponent" interface="javax.jbi.component.Component"
+        filter="(NAME=servicemix-http)" timeout="4000" cardinality="1..1"/>
+
+</beans>

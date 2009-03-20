@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flights>
+	<flight id="1" flightNumber="LH3553">
+		<departure>
+			<name>Vienna</name>
+			<code>403</code>
+		</departure>
+		<destination>
+			<name>New York</name>
+			<code>67</code>
+		</destination>
+		<date>2009-03-27Z</date>
+	</flight>
+	<flight id="2" flightNumber="SK910">
+		<departure>
+			<name>New York</name>
+			<code>67</code>
+		</departure>
+		<destination>
+			<name>Amsterdam</name>
+			<code>461</code>
+		</destination>
+		<date>2009-03-27Z</date>
+	</flight>
+	<flight id="3" flightNumber="AF2341">
+		<departure>
+			<name>Amsterdam</name>
+			<code>461</code>
+		</departure>
+		<destination>
+			<name>Paris</name>
+			<code>427</code>
+		</destination>
+		<date>2009-03-27Z</date>
+	</flight>
+	<flight id="4" flightNumber="KL1227">
+		<departure>
+			<name>Paris</name>
+			<code>427</code>
+		</departure>
+		<destination>
+			<name>Amsterdam</name>
+			<code>461</code>
+		</destination>
+		<date>2009-04-05Z</date>
+	</flight>
+	<flight id="5" flightNumber="AA6555">
+		<departure>
+			<name>Paris</name>
+			<code>427</code>
+		</departure>
+		<destination>
+			<name>New York</name>
+			<code>67</code>
+		</destination>
+		<date>2009-04-05Z</date>
+	</flight>
+</flights>

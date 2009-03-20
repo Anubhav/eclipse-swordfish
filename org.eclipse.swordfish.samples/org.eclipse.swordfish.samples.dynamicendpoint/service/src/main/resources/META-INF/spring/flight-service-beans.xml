@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright (c) 2008, 2009 SOPERA GmbH.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+    
+    Contributors:
+        SOPERA GmbH - initial API and implementation
+ -->
+ 
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/osgi
+    http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+    <bean id="resourceToStringConverterFl"
+    	class="org.eclipse.swordfish.samples.dynamic.service.util.ResourceToStringConverter">
+		<constructor-arg value="data/flights.xml"/>
+    </bean>
+
+    <bean id="resourceToStringConverterFl.url"
+    	class="org.springframework.beans.factory.config.PropertyPathFactoryBean" />
+
+	<bean id="flightServiceHelper"
+		class="org.eclipse.swordfish.samples.dynamic.service.util.FlightServiceHelper"
+		p:dataUrl-ref="resourceToStringConverterFl.url"
+		init-method="initFlightsData"/>
+
+	<bean id="flightService"
+		class="org.eclipse.swordfish.samples.dynamic.service.FlightServiceImpl"
+		p:helper-ref="flightServiceHelper">
+	</bean>
+
+</beans>
