@@ -27,7 +27,6 @@
 	<description />
 	<modules>
 		<module>org.eclipse.swordfish.samples.jaxws</module>
-		<module>org.eclipse.swordfish.samples.endpointresolver</module>
 		<module>org.eclipse.swordfish.samples.cxfendpoint</module>
 		<module>org.eclipse.swordfish.samples.httpendpoint</module>
 		<module>org.eclipse.swordfish.samples.dynamicendpoint</module>
