@@ -16,29 +16,31 @@
 	<groupId>org.eclipse.swordfish</groupId>
 	<packaging>pom</packaging>
 	<artifactId>samples</artifactId>
+	<name>org.eclipse.swordfish.samples</name>
 	<version>basic</version>
-	
+
 	<parent>
-    		<groupId>org.eclipse.swordfish</groupId>
-    		<artifactId>parent</artifactId>
-    		<version>basic</version>
-  	</parent>
+		<groupId>org.eclipse.swordfish</groupId>
+		<artifactId>parent</artifactId>
+		<version>basic</version>
+	</parent>
 	<description />
-  <modules>    
-      <module>org.eclipse.swordfish.samples.jaxws</module>
-      <module>org.eclipse.swordfish.samples.endpointresolver</module>
-      <module>org.eclipse.swordfish.samples.cxfendpoint</module>
-      <module>org.eclipse.swordfish.samples.httpendpoint</module>	
-      <module>org.eclipse.swordfish.samples.configurationprovider</module>
-      <module>org.eclipse.swordfish.samples.configurationconsumer</module>
-      <module>org.eclipse.swordfish.samples.exceptionlistener</module>
-  </modules>
+	<modules>
+		<module>org.eclipse.swordfish.samples.jaxws</module>
+		<module>org.eclipse.swordfish.samples.endpointresolver</module>
+		<module>org.eclipse.swordfish.samples.cxfendpoint</module>
+		<module>org.eclipse.swordfish.samples.httpendpoint</module>
+		<module>org.eclipse.swordfish.samples.dynamicendpoint</module>
+		<module>org.eclipse.swordfish.samples.configurationprovider</module>
+		<module>org.eclipse.swordfish.samples.configurationconsumer</module>
+		<module>org.eclipse.swordfish.samples.exceptionlistener</module>
+	</modules>
 
 	<dependencies>
 		<dependency>
-            <groupId>org.eclipse.swordfish</groupId>
-            <artifactId>org.eclipse.swordfish.api</artifactId>
-            <version>${swordfishVersion}</version>
-        	</dependency>
-        </dependencies>
+			<groupId>org.eclipse.swordfish</groupId>
+			<artifactId>org.eclipse.swordfish.api</artifactId>
+			<version>${swordfishVersion}</version>
+		</dependency>
+	</dependencies>
 </project>

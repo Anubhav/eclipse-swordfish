@@ -552,6 +552,16 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.swordfish</groupId>
+			<artifactId>org.eclipse.swordfish.samples.dynamicendpoint.service</artifactId>
+            <version>${swordfishVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.swordfish</groupId>
+			<artifactId>org.eclipse.swordfish.samples.dynamicendpoint.consumer</artifactId>
+            <version>${swordfishVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.swordfish</groupId>
             <artifactId>org.eclipse.swordfish.compatibility.cxf.minimal</artifactId>
             <version>${swordfishVersion}</version>
         </dependency>
