@@ -47,7 +47,7 @@ public class TargetPlatformOsgiTestCase extends BaseOsgiTestCase {
         bundlePriorities.put("samples.http", -7);
     }
     protected List<Pattern> getExcludeBundlePatterns() {
-        return Arrays.asList(Pattern.compile("org.eclipse.osgi-3.4.2.*"), Pattern.compile("org.eclipse.swordfish.samples.configuration.*"));
+        return Arrays.asList(Pattern.compile("org.eclipse.osgi-3.4.2.*"), Pattern.compile("org.eclipse.swordfish.samples*"), Pattern.compile("org.eclipse.swordfish.samples.configuration.*"));
     }
 
     @Override

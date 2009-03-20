@@ -537,11 +537,6 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.swordfish</groupId>
-            <artifactId>org.eclipse.swordfish.samples.endpointresolver</artifactId>
-            <version>${swordfishVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.swordfish</groupId>
             <artifactId>org.eclipse.swordfish.samples.jaxws</artifactId>
             <version>${swordfishVersion}</version>
         </dependency>
