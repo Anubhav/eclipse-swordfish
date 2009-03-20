@@ -10,7 +10,11 @@
 *******************************************************************************/
 package org.eclipse.swordfish.registry;
 
+import java.util.Iterator;
+
 import javax.xml.namespace.QName;
+
+import org.eclipse.swordfish.registry.domain.PortType;
 
 public interface WSDLRepository {
 	
@@ -18,11 +22,15 @@ public interface WSDLRepository {
 
 	ListResource<WSDLResource> getReferencingPortType(QName portTypeName);
 
+	Iterator<QName> getAllPortTypeNames();
+
+	Iterator<PortType> getAllPortTypes();
+
 	WSDLResource getWithId(String id);
 
 	void add(WSDLResource wsdl) throws RegistryException;
 
 	ListResource<WSDLResource> getAll();
 
-	boolean delete(String id_1);
+	boolean delete(String id) /*throws RegistryException */;
 }

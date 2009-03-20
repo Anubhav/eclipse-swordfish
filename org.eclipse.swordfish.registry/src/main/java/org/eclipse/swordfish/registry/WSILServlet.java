@@ -12,6 +12,8 @@
 package org.eclipse.swordfish.registry;
 
 import java.io.IOException;
+import java.io.Writer;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +24,7 @@ import javax.xml.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WSDLServlet extends HttpServlet {
+public class WSILServlet extends HttpServlet {
 
 	/**
 	 * 
@@ -30,40 +32,28 @@ public class WSDLServlet extends HttpServlet {
 	private static final long serialVersionUID = -8376659320998034145L;
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(WSDLServlet.class);
+			.getLogger(WSILServlet.class);
 
-	private WSDLReader wsdlReader;
+	private WSILWriter wsilWriter = new WSILWriter();;
 
 	private WSDLRepository repository;
 
-	public WSDLServlet() {
+	public WSILServlet() {
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		LOGGER.info("Recieved request:\n{}", req.getRequestURL());
-		Resource resource = null;
+		ListResource<WSDLResource> resource = null;
 
 		if (req.getParameterMap().isEmpty()) {
 			String resourceId = getResourceId(req);
 			if (resourceId == null) {
-//				System.out.println("Accept: " + req.getHeader("Accept"));
-				String acceptHeader = req.getHeader("Accept");
-				if (acceptHeader != null && acceptHeader.contains("text/html")) {
-					HTMLView view = new HTMLView();
-					view.createView(repository, resp.getWriter());
-					resp.setContentType("text/html");
-					resp.setCharacterEncoding("utf-8");
-					return;
-				}
 				resource = repository.getAll();
 			} else {
-				resource = repository.getWithId(resourceId);
-				if (resource == null) {
-					resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-					return;
-				}
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+				return;
 			}
 
 		} else {
@@ -115,36 +105,11 @@ public class WSDLServlet extends HttpServlet {
 		}
 		resp.setContentType(resource.getContentType());
 		resp.setCharacterEncoding(resource.getCharacterEncoding());
-		resource.appendContent(resp.getWriter());
-	}
-
-	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		WSDLResource wsdl = null;
-		String resourceId = getResourceId(req);
-		try {
-			wsdl = wsdlReader.readFrom(resourceId, req.getReader());
-			repository.add(wsdl);
-		} catch (InvalidFormatException e) {
-			resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
-					"Body does not contain a valid WSDL.");
-			return;
-		} catch (RegistryException e) {
-			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e
-					.getMessage());
-		}
-	}
-
-	@Override
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String resourceId = getResourceId(req);
-		repository.delete(resourceId);
+		wsilWriter.writeTo(resource, getBaseUrl(req), resp.getWriter());
 	}
 
 	public void setWsdlReader(WSDLReader wsdlReader) {
-		this.wsdlReader = wsdlReader;
+
 	}
 
 	public void setRepository(WSDLRepository repository) {
@@ -158,5 +123,41 @@ public class WSDLServlet extends HttpServlet {
 		}
 		return null;
 	}
+	
+	private static String getBaseUrl(HttpServletRequest req) {
+		System.out.println("requestURL: " + req.getRequestURL());
+		System.out.println("requestURI: " + req.getRequestURI());
+		StringBuffer rURL = req.getRequestURL();
+		String base = rURL.substring(0, rURL.lastIndexOf("/") + 1);
 
+		return base + "wsdl";
+	}
+	
+	static class WSILWriter {
+
+		static final public String PREFIX =
+		"<?xml version=\"1.0\"?>\n" + 
+		"<inspection xmlns=\"http://schemas.xmlsoap.org/ws/2001/10/inspection/\">\n"; 
+
+		static final public String ITEM_PREFIX =
+		"  <service>\n" + 
+		"    <description referencedNamespace=\"http://schemas.xmlsoap.org/wsdl/\"\n" + 
+		"                 location=\"";
+		static final public String ITEM_POSTFIX ="\"/>\n  </service>\n";
+		 
+		static final public String POSTFIX =
+				"</inspection>";
+		
+		public void writeTo(ListResource<WSDLResource>resources, String baseUrl, Writer writer) throws IOException {
+			writer.append(PREFIX);
+			
+			Iterator<WSDLResource > resourceIter = resources.getResources();
+			while (resourceIter.hasNext()) {
+				writer.append(ITEM_PREFIX);
+				writer.append(baseUrl + "/" + resourceIter.next().getId());
+				writer.append(ITEM_POSTFIX);
+			}
+			writer.append(POSTFIX);
+		}
+	}
 }

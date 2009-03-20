@@ -21,9 +21,11 @@ import org.slf4j.LoggerFactory;
 
 public class ServletActivator {
 	
+
+	private static final String WSDL_SERVLET_ALIAS = "/registry/wsdl";
 	
-	private static final String SERVLET_ALIAS = "/registry/wsdl";
-	
+	private static final String WSIL_SERVLET_ALIAS = "/registry/wsil";
+
 	private static String webParam = "wsdlLocation";
 
 	private static final String LOCATION_PROPERTY = "org.eclipse.swordfish.registry.fileLocation";
@@ -31,9 +33,11 @@ public class ServletActivator {
     private static final Logger LOGGER = LoggerFactory
     .getLogger(ServletActivator.class);
 
-    private WSDLServlet servlet;
+    private WSDLServlet wsdlServlet;
 	
-	private HttpService httpService;
+    private WSILServlet wsilServlet;
+
+    private HttpService httpService;
 	
 	
 	public void start() throws RegistryException {
@@ -42,21 +46,33 @@ public class ServletActivator {
 		Hashtable<String, String> params = getParams();
 
 		try {
-			httpService.registerServlet(SERVLET_ALIAS, servlet, params, null);
+			httpService.registerServlet(WSDL_SERVLET_ALIAS, wsdlServlet, params, null);
 		} catch (ServletException e) {
-			throwRegistryException("The initialization of the LookupServlet failed.", e);
+			throwRegistryException("The initialization of the WSDLServlet failed.", e);
 		} catch (NamespaceException e) {
-			throwRegistryException("The LookupServlet cannot be registered under the alias " + SERVLET_ALIAS + " because another servlet is already registered under this name", e);
+			throwRegistryException("The LookupServlet cannot be registered under the alias " + WSDL_SERVLET_ALIAS + " because another servlet is already registered under this name", e);
+		}
+		try {
+			httpService.registerServlet(WSIL_SERVLET_ALIAS, wsilServlet, params, null);
+		} catch (ServletException e) {
+			throwRegistryException("The initialization of the WSDLServlet failed.", e);
+		} catch (NamespaceException e) {
+			throwRegistryException("The LookupServlet cannot be registered under the alias " + WSIL_SERVLET_ALIAS + " because another servlet is already registered under this name", e);
 		}
 	}
 
 	public void stop(){
 		LOGGER.info("Stoping the LookupServlet.");
-		httpService.unregister(SERVLET_ALIAS);
+		httpService.unregister(WSDL_SERVLET_ALIAS);
+		httpService.unregister(WSIL_SERVLET_ALIAS);
 	}
-	
-	public void setServlet(WSDLServlet servlet) {
-		this.servlet = servlet;
+
+	public void setWsdlServlet(WSDLServlet servlet) {
+		this.wsdlServlet = servlet;
+	}
+
+	public void setWsilServlet(WSILServlet servlet) {
+		this.wsilServlet = servlet;
 	}
 
 	public void setHttpService(HttpService httpService) {

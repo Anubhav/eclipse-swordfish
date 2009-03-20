@@ -10,19 +10,30 @@
 *******************************************************************************/
 package org.eclipse.swordfish.registry;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import javax.xml.namespace.QName;
-import static java.util.Collections.emptySet;
+
+import org.eclipse.swordfish.registry.domain.Binding;
+import org.eclipse.swordfish.registry.domain.PortType;
+import org.eclipse.swordfish.registry.domain.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class InMemoryRepositoryImpl implements InMemoryRepository {
+	private static final Logger LOGGER = LoggerFactory
+	.getLogger(InMemoryRepositoryImpl.class);
 	
-	private Map<QName, Set<WSDLResource>> portTypeWsdls = new HashMap<QName, Set<WSDLResource>>();
+	private Map<QName, PortType> portTypes = new HashMap<QName, PortType>();
+	
+	private Map<QName, Binding> bindings = new HashMap<QName, Binding>();
 
-	private Map<QName, Set<WSDLResource>> servicesRefPortType = new HashMap<QName, Set<WSDLResource>>();
+	private Map<QName, Service> services = new HashMap<QName, Service>();
 
 	private Map<String, WSDLResource> byId = new HashMap<String, WSDLResource>();
 
@@ -30,87 +41,176 @@ public class InMemoryRepositoryImpl implements InMemoryRepository {
 	 * @see org.eclipse.swordfish.registry.WSDLRepository#getByPortTypeName(javax.xml.namespace.QName)
 	 */
 	public ListResource<WSDLResource> getByPortTypeName(QName portTypeName) {
-		return get(portTypeName, portTypeWsdls);
+		Set<WSDLResource> sources = new HashSet<WSDLResource>();
+		PortType portType = portTypes.get(portTypeName);
+		if (portType != null) {
+			portType.sourcesAddTo(sources);
+		}
+		return new ListResource<WSDLResource>(sources);
+	}
+	
+	public ListResource<WSDLResource> getByBindingName(QName bindingName) {
+		Set<WSDLResource> sources = new HashSet<WSDLResource>();
+		Binding binding = bindings.get(bindingName);
+		if (binding != null) {
+			binding.sourcesAddTo(sources);
+		}
+		return new ListResource<WSDLResource>(sources);
 	}
 
+	public ListResource<WSDLResource> getByServiceName(QName serviceName) {
+		Set<WSDLResource> sources = new HashSet<WSDLResource>();
+		Service service = services.get(serviceName);
+		if (service != null) {
+			service.sourcesAddTo(sources);
+		}
+		return new ListResource<WSDLResource>(sources);
+	}
+	
+
+
 	public ListResource<WSDLResource> getReferencingPortType(QName portTypeName) {
-		return get(portTypeName, servicesRefPortType);
+		Set<WSDLResource> sources = new HashSet<WSDLResource>();
+		PortType portType = portTypes.get(portTypeName);
+		
+		if (portType != null) {
+			Iterator<Service> servicesIter = portType.getServices();
+			while(servicesIter.hasNext()) {
+				Service service = servicesIter.next();
+				service.sourcesAddTo(sources);
+			}
+		}
+		return new ListResource<WSDLResource>(sources);
 	}
 
 	public WSDLResource getWithId(String id) {
 		return byId.get(id);
 	}
+
+	public Iterator<QName> getAllPortTypeNames() {
+		Collection<PortType> definedPortTypes = getDefinedPortTypes();
+		Set<QName> portTypeNames = new HashSet<QName>();
+		for (PortType portType : definedPortTypes) {
+			portTypeNames.add(portType.getName());
+			
+		}
+		return portTypeNames.iterator();
+	}
+
+	public Iterator<PortType> getAllPortTypes() {
+		return getDefinedPortTypes().iterator();
+	}
 	
+	private Collection<PortType> getDefinedPortTypes() {
+		Set<PortType> definedPortTypes =  new HashSet<PortType>();
+		for (PortType portType : portTypes.values()) {
+			if (portType.sourcesDefined()) {
+				definedPortTypes.add(portType);
+			}
+		}
+		return definedPortTypes;
+	}
+
 	public ListResource<WSDLResource> getAll() {
 		return new ListResource<WSDLResource>(byId.values());
 	}
 
 	public void add(WSDLResource wsdl) throws RegistryException {
+		byId.put(wsdl.getId(), wsdl);
 		wsdl.register(this);
 	}
 	
 	public boolean delete(String id) {
-		WSDLResource toBeDeleted = getWithId(id);
+		WSDLResource toBeDeleted = byId.get(id);
 		if (toBeDeleted != null) {
-			unregisterAll(id);
+			byId.remove(id);
+			try {
+				toBeDeleted.deregister(this);
+			} catch (RegistryException e) {
+				LOGGER.error("WSDL " + id +" could not be unregistered from InMemorysRepositoryImpl", e);
+			}
 			toBeDeleted.delete();
 			return true;
 		}
 		return false;
 	}
 
-
 	/* (non-Javadoc)
 	 * @see org.eclipse.swordfish.registry.WSDLRepository#registerByPortTypeName(javax.xml.namespace.QName, org.eclipse.swordfish.registry.WSDLResource)
 	 */
-	public void registerByPortTypeName(QName name, WSDLResource wsdl) {
-		register( name, wsdl, portTypeWsdls);
+	public void registerPortType(QName name, WSDLResource wsdl) {
+		PortType portType = getPortType(name);
+		portType.addSource(wsdl);
 	}
 
-	public void registerServiceRefPortType(QName name, WSDLResource wsdl) {
-		register( name, wsdl, servicesRefPortType);
+	public void registerBinding(QName bindingName, WSDLResource wsdl,
+			QName portTypeName) {
+		PortType portType = getPortType(portTypeName);
+		Binding binding = getBinding(bindingName);
+		binding.addSource(wsdl, portType);
+	}
+
+	public void registerService(QName serviceName, WSDLResource wsdl,
+			QName... bindingNames) {
+		Service service = getService(serviceName);
+
+		Binding[] bindings = new Binding[bindingNames.length];
+		for (int i = 0; i < bindingNames.length; i++) {
+			bindings[i] = getBinding(bindingNames[i]);
+		}
+		service.addSource(wsdl, bindings);
+	}
+
+	public void deregisterPortType(QName portTypeName, WSDLResource wsdl) {
+		PortType portType = portTypes.get(portTypeName);
+		if (portType != null) {
+			portType.removeSource(wsdl);
+		}
 	}
 	
+	public void deregisterBinding(QName bindingName, WSDLResource wsdl) {
+		Binding binding = bindings.get(bindingName);
+		if (binding != null) {
+			binding.removeSource(wsdl);
+		}
+	}
+	
+	public void deregisterService(QName serviceName, WSDLResource wsdl) {
+		Service service = services.get(serviceName);
+		if (service != null) {
+			service.removeSource(wsdl);
+		}
+	}
+
+	@Deprecated
 	public void registerById(String id, WSDLResource wsdl) {
 		byId.put(id, wsdl);	
 	}
 
-	public void unregisterAll(String id) {
-		WSDLResource toBeRemoved = wsdlResource(id);
-		unregister(toBeRemoved, portTypeWsdls);
-		unregister(toBeRemoved, servicesRefPortType);
-		byId.remove(id);
-	}
-	
-	private static <T extends Resource> ListResource<T> get(QName name, Map<QName, Set<T>> wsdls) {
-		Set<T> referencing = wsdls.get(name);
-		if (referencing == null) {
-			referencing =  emptySet();
+	PortType getPortType(QName name) {
+		PortType portType = portTypes.get(name);
+		if (portType == null) {
+			portType = new PortType(name);
+			portTypes.put(name, portType);
 		}
-		return new ListResource<T>(referencing);
-	}
-	
-	private static <T extends Resource> void register(QName name, T wsdl, Map<QName, Set<T>> wsdls) {
-		Set<T> matching = wsdls.get(name);
-		if (matching == null) {
-			matching = new HashSet<T>();
-			wsdls.put(name, matching);
-		}
-		matching.add(wsdl);
+		return portType;
 	}
 
-	private static void unregister(WSDLResource toBeRemoved, Map<QName, Set<WSDLResource>> wsdlSets) {
-		for (Set<WSDLResource> wsdls : wsdlSets.values()) {
-			wsdls.remove(toBeRemoved);
+	Binding getBinding(QName name) {
+		Binding binding = bindings.get(name);
+		if (binding == null) {
+			binding = new Binding(name);
+			bindings.put(name, binding);
 		}
+		return binding;
 	}
-	
-	private static WSDLResource wsdlResource(final String id) {
-		return new WSDLResource(null) {
-			@Override
-			public String getId() {
-				return id;
-			}
-		};
+
+	Service getService(QName name) {
+		Service service = services.get(name);
+		if (service == null) {
+			service = new Service(name);
+			services.put(name, service);
+		}
+		return service;
 	}
 }

@@ -7,10 +7,15 @@
 	<bean id="servletActivator"
 	      class="org.eclipse.swordfish.registry.ServletActivator"
 	      init-method="start" destroy-method="stop">
-		<property name="servlet" ref="lookupServlet"/>
+		<property name="wsdlServlet" ref="wsdlServlet"/>
+		<property name="wsilServlet" ref="wsilServlet"/>
 		<property name="httpService" ref="httpService"/>
 	</bean>
-	<bean id="lookupServlet" class="org.eclipse.swordfish.registry.LookupServlet">
+	<bean id="wsdlServlet" class="org.eclipse.swordfish.registry.WSDLServlet">
+		<property name="wsdlReader" ref="wsdlManager"/>
+		<property name="repository" ref="wsdlRepository"/> 
+	</bean>
+	<bean id="wsilServlet" class="org.eclipse.swordfish.registry.WSILServlet">
 		<property name="wsdlReader" ref="wsdlManager"/>
 		<property name="repository" ref="wsdlRepository"/> 
 	</bean>

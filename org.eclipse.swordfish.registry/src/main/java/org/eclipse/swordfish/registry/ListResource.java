@@ -10,6 +10,7 @@
 *******************************************************************************/
 package org.eclipse.swordfish.registry;
 
+import static java.util.Collections.emptyList;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
@@ -18,6 +19,10 @@ import java.util.Iterator;
 public class ListResource<T extends Resource> implements Resource {
 
 	private final Collection<T> resources;
+
+	public ListResource() {
+		this.resources = emptyList();
+	}
 
 	public ListResource(Collection<T> resources) {
 		this.resources = resources;

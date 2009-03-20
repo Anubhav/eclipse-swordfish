@@ -10,20 +10,43 @@
 *******************************************************************************/
 package org.eclipse.swordfish.registry;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.wsdl.Definition;
+import javax.wsdl.PortType;
+import javax.wsdl.WSDLException;
+import javax.wsdl.factory.WSDLFactory;
+import javax.wsdl.xml.WSDLWriter;
+import javax.xml.namespace.QName;
+
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.easymock.IArgumentMatcher;
+import org.junit.Before;
 
 public final class TstUtil {
+	
+	static WSDLFactory factory;
+
+	static {
+		try {
+			factory = WSDLFactory.newInstance();
+		} catch (WSDLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 
 	public static WSDLResource wsdlResource(final String id) {
 		return new WSDLResource(null) {
@@ -48,7 +71,63 @@ public final class TstUtil {
 			public void appendContent(Writer writer) throws IOException {
 				writer.append(content);
 			}
+			@Override
+			public void delete() {}
 		};
+	}
+	
+	public static WSDLResource wsdlResource(final String id, final Definition content) {
+		return new WSDLResource(new PersistentDataStub() {
+			@Override
+			public String getId() {
+				return id;
+			}
+			public InputStream read() throws IOException {
+				return definition2Stream(content);
+			}			
+		});
+	}
+
+	public  static Definition createWSDlWithPortType(String targetNamespace, String... portTypeNames) throws WSDLException, IOException {
+		Definition result = createDefinition(targetNamespace);
+		
+		for (String portTypeName : portTypeNames) {
+			PortType portType = result.createPortType();
+			portType.setQName(new QName(targetNamespace, portTypeName));
+			portType.setUndefined(false);
+			result.addPortType(portType);
+		}
+
+		definition2Stream(result);
+
+		return result;
+	}
+
+	
+	private static Definition createDefinition(String targetNamespace) throws WSDLException {
+		Definition result = factory.newDefinition();
+		result.setTargetNamespace(targetNamespace);
+
+		return result;
+	}
+
+	private static InputStream definition2Stream(Definition definition) throws IOException {
+		String content = definition2String(definition);
+		return new ByteArrayInputStream(content.getBytes("utf8"));
+	}
+
+	private static String definition2String(Definition definition) throws IOException {
+		WSDLWriter writer = factory.newWSDLWriter();
+		writer = factory.newWSDLWriter();
+		
+		StringWriter writerStr = new StringWriter(); 
+		try {
+			writer.writeWSDL(definition, writerStr);
+		} catch (WSDLException e) {
+			throw new IOException();
+		}
+		
+		return writerStr.toString();
 	}
 	
 	public static <K, V> Map<K, V> asMap(Entry<K, V>...entries) {
@@ -76,14 +155,17 @@ public final class TstUtil {
 	public static <T> IAnswer<Iterator<T>> asIterator(final T... items) {
 		return new IAnswer<Iterator<T>>() {
 			public Iterator<T> answer() {
-				List<T> result = new ArrayList<T>();
-				for (T item : items) {
-					result.add(item);
-				}
-				return result.iterator();
+				return list(items).iterator();
 			}
 		};		
 	}
+	
+	public static <T> List<T> list(T... items) {
+		List<T> result = new ArrayList<T>();
+		Collections.addAll(result, items);
+		return result;
+	}
+
 	
 	public static Reader eqReader(String expected) {
 	    EasyMock.reportMatcher(new ReaderEquals(expected));

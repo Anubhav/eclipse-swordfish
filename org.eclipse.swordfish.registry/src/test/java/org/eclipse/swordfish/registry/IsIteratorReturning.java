@@ -62,4 +62,9 @@ public class IsIteratorReturning<T> extends TypeSafeMatcher<Iterator<T>> {
 	public static <T> Matcher<Iterator<T>> isIteratorReturning(Collection<T> matchers ) {
 		return new IsIteratorReturning<T>(matchers);
 	}
+
+	@Factory
+	public static <T> Matcher<Iterator<T>> isIteratorReturning(Class<T>cls, T... matchers ) {
+		return new IsIteratorReturning<T>(matchers);
+	}
 }

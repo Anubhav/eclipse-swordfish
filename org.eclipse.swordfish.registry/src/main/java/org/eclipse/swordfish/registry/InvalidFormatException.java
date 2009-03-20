@@ -24,4 +24,8 @@ public class InvalidFormatException extends RegistryException {
 	public InvalidFormatException(Throwable e) {
 		super(e);
 	}
+
+	public InvalidFormatException(String msg) {
+		super(msg);
+	}
 }

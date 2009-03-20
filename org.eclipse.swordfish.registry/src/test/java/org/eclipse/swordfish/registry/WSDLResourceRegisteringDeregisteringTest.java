@@ -11,6 +11,10 @@
 package org.eclipse.swordfish.registry;
 
 
+import static org.easymock.EasyMock.*;
+import static org.eclipse.swordfish.registry.TstData.*;
+import static org.eclipse.swordfish.registry.TstUtil.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,14 +30,11 @@ import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLWriter;
 import javax.xml.namespace.QName;
 
-import static org.easymock.EasyMock.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.eclipse.swordfish.registry.TstData.*;
 
-public class WSDLResourceRegisteringTest {
+public class WSDLResourceRegisteringDeregisteringTest {
 
 	private final WSDLResource wsdl = new WSDLResource(null);
 
@@ -52,10 +53,8 @@ public class WSDLResourceRegisteringTest {
 
 		wsdl.setData(createPersistentData(definition, ID_1));
 
-		repositoryMock.unregisterAll(ID_1);
-		repositoryMock.registerByPortTypeName(PORT_TYPE_NAME_11, wsdl);
-		repositoryMock.registerByPortTypeName(PORT_TYPE_NAME_12, wsdl);
-		repositoryMock.registerById(ID_1, wsdl);
+		repositoryMock.registerPortType(PORT_TYPE_NAME_11, wsdl);
+		repositoryMock.registerPortType(PORT_TYPE_NAME_12, wsdl);
 		
 		replay(repositoryMock);
 	    
@@ -70,9 +69,6 @@ public class WSDLResourceRegisteringTest {
 
 		wsdl.setData(createPersistentData(definition, ID_1));
 
-		repositoryMock.unregisterAll(ID_1);
-		repositoryMock.registerById(ID_1, wsdl);
-
 		replay(repositoryMock);
 			
 		wsdl.register(repositoryMock);
@@ -82,12 +78,11 @@ public class WSDLResourceRegisteringTest {
 
 	@Test
 	public void shouldRegisterWithServiceRefPortTypeAtRepository() throws Exception {
-		Definition definition = createWSDlWithServiceRefPortType(NAME_SPACE_1, PORT_TYPE_NAME_21);
+		Definition definition = createWSDlWithServiceRefPortType(NAME_SPACE_1, QNAME_21);
 		
 		wsdl.setData(createPersistentData(definition, ID_1));
-		repositoryMock.unregisterAll(ID_1);
-		repositoryMock.registerServiceRefPortType(PORT_TYPE_NAME_21, wsdl);
-		repositoryMock.registerById(ID_1, wsdl);
+		repositoryMock.registerBinding((QName)anyObject(), eq(wsdl), eq(QNAME_21));
+		repositoryMock.registerService((QName)anyObject(), eq(wsdl), (QName)anyObject());
 
 		replay(repositoryMock);
 
@@ -97,13 +92,12 @@ public class WSDLResourceRegisteringTest {
 	}
 
 	@Test
-	public void shouldNotRegisterWithRefPortTypeWhenNoSericeDefined() throws Exception {
-		Definition definition = createWSDlWithBindingRefPortType(NAME_SPACE_1, PORT_TYPE_NAME_21);
+	public void shouldNotRegisterWithRefPortTypeWhenNoServiceDefined() throws Exception {
+		Definition definition = createWSDlWithBindingRefPortType(NAME_SPACE_1, QNAME_21);
 		
 		wsdl.setData(createPersistentData(definition, ID_1));
 
-		repositoryMock.unregisterAll(ID_1);
-		repositoryMock.registerById(ID_1, wsdl);
+		repositoryMock.registerBinding((QName)anyObject(), eq(wsdl), eq(QNAME_21));
 
 		replay(repositoryMock);
 
@@ -112,20 +106,36 @@ public class WSDLResourceRegisteringTest {
 		verify(repositoryMock);
 
 	}
+	
+	@Test
+	public void shouldDeregisterWithAllPortTypNamesAtRepository() throws Exception {
+		Definition definition = createWSDlWithPortType(NAME_SPACE_1, LOCAL_NAME_1, LOCAL_NAME_2);
 
-	public  Definition createWSDlWithPortType(String targetNamespace, String... portTypeNames) throws WSDLException, IOException {
-		Definition result = createDefinition(targetNamespace);
+		wsdl.setData(createPersistentData(definition, ID_1));
+
+		repositoryMock.deregisterPortType(QNAME_11, wsdl);
+		repositoryMock.deregisterPortType(QNAME_12, wsdl);
 		
-		for (String portTypeName : portTypeNames) {
-			PortType portType = result.createPortType();
-			portType.setQName(new QName(targetNamespace, portTypeName));
-			portType.setUndefined(false);
-			result.addPortType(portType);
-		}
+		replay(repositoryMock);
+	    
+		wsdl.deregister(repositoryMock);
 
-		definition2Stream(result);
+		verify(repositoryMock);
+	}
 
-		return result;
+	@Test
+	public void shouldDeRegisterWithServiceRefPortTypeAtRepository() throws Exception {
+		Definition definition = createWSDlWithServiceRefPortType(NAME_SPACE_1, QNAME_21);
+		
+		wsdl.setData(createPersistentData(definition, ID_1));
+		repositoryMock.deregisterBinding((QName)anyObject(), eq(wsdl));
+		repositoryMock.deregisterService((QName)anyObject(), eq(wsdl));
+
+		replay(repositoryMock);
+
+		wsdl.deregister(repositoryMock);
+
+		verify(repositoryMock);
 	}
 
 	public  Definition createWSDlWithBindingRefPortType(String targetNamespace, QName portTypeName) throws WSDLException, IOException {
@@ -182,7 +192,7 @@ public class WSDLResourceRegisteringTest {
 		return result;
 	}
 	
-	private InputStream definition2Stream(Definition definition) throws IOException {
+	private  InputStream definition2Stream(Definition definition) throws IOException {
 		WSDLWriter writer = factory.newWSDLWriter();
 		writer = factory.newWSDLWriter();
 		

@@ -27,9 +27,13 @@ import org.osgi.service.http.NamespaceException;
 
 public class ServletActivatorTest {
 	
-	public static final String ALIAS = "/registry/wsdl";
+	public static final String WSDL_ALIAS = "/registry/wsdl";
 
-	private WSDLServlet servlet = new WSDLServlet();
+	public static final String WSIL_ALIAS = "/registry/wsil";
+
+	private WSDLServlet wsdlServlet = new WSDLServlet();
+
+	private WSILServlet wsilServlet = new WSILServlet();
 
 	private HttpService httpService = createMock(HttpService.class);
 
@@ -40,7 +44,8 @@ public class ServletActivatorTest {
 		unsetLocationProperty();
 		
 		activator.setHttpService(httpService);
-		activator.setServlet(servlet);		
+		activator.setWsdlServlet(wsdlServlet);		
+		activator.setWsilServlet(wsilServlet);		
 	}
 
 	@After
@@ -53,7 +58,8 @@ public class ServletActivatorTest {
 		Dictionary<String, String> params = servletParams("directory");
 		setLocationProperty("directory");
 
-		httpService.registerServlet(ALIAS, servlet, params, null);
+		httpService.registerServlet(WSDL_ALIAS, wsdlServlet, params, null);
+		httpService.registerServlet(WSIL_ALIAS, wsilServlet, params, null);
 		replay(httpService);
 
 		activator.start();
@@ -64,7 +70,8 @@ public class ServletActivatorTest {
 	@Test
 	public void givenStopCalledShouldUnregisterServlet() throws Exception {
 
-		httpService.unregister(ALIAS);
+		httpService.unregister(WSDL_ALIAS);
+		httpService.unregister(WSIL_ALIAS);
 		replay(httpService);
 
 		activator.stop();
@@ -87,7 +94,8 @@ public class ServletActivatorTest {
 		Dictionary<String, String> params = servletParams("directory");
 		setLocationProperty("directory");
 
-		httpService.registerServlet(ALIAS, servlet, params, null);
+		httpService.registerServlet(WSDL_ALIAS, wsdlServlet, params, null);
+		httpService.registerServlet(WSIL_ALIAS, wsilServlet, params, null);
 		expectLastCall().andThrow(throwIt);
 		replay(httpService);
 
@@ -108,7 +116,8 @@ public class ServletActivatorTest {
 		Dictionary<String, String> params = servletParams("directory");
 		setLocationProperty("directory");
 
-		httpService.registerServlet(ALIAS, servlet, params, null);
+		httpService.registerServlet(WSDL_ALIAS, wsdlServlet, params, null);
+		httpService.registerServlet(WSIL_ALIAS, wsilServlet, params, null);
 		expectLastCall().andThrow(throwIt);
 		replay(httpService);
 

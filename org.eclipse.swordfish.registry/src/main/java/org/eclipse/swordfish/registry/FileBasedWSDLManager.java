@@ -18,7 +18,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FileBasedWSDLManager implements WSDLReader {
+
+	private static final Logger LOGGER = LoggerFactory
+	.getLogger(FileBasedWSDLManager.class);
 
 	private static final String LOCATION_PROPERTY = "org.eclipse.swordfish.registry.fileLocation";
 
@@ -52,7 +58,12 @@ public class FileBasedWSDLManager implements WSDLReader {
 		
 		for (File file : files) {
 			WSDLResource wsdl = new WSDLResource(new FileData(file));
-			wsdl.register(repos);
+			try {
+				repos.add(wsdl);
+			} catch (RegistryException e) {
+				LOGGER.error("Unable to load file " + file.getAbsolutePath(), e);
+				
+			}
 		}
 	}
 	

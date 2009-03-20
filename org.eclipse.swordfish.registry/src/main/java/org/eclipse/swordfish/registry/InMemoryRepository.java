@@ -14,11 +14,24 @@ import javax.xml.namespace.QName;
 
 public interface InMemoryRepository extends WSDLRepository {
 
-	void registerByPortTypeName(QName portTypeName, WSDLResource wsdl);
+	void registerPortType(QName portTypeName, WSDLResource wsdl);
 
-	void registerServiceRefPortType(QName portTypeName, WSDLResource wsdl);
 
-	void registerById(String id, WSDLResource wsdl);
+	void registerBinding(QName bindingName, WSDLResource wsdl,
+			QName portTypeName);
 
-	void unregisterAll(String id);
+	 void registerService(QName serviceName, WSDLResource wsdl,
+			QName... bindingName);
+
+//	void registerServiceRefPortType(QName portTypeName, WSDLResource wsdl);
+
+//	void registerById(String id, WSDLResource wsdl);
+	
+	void deregisterPortType(QName portTypeName, WSDLResource wsdl);
+
+	void deregisterBinding(QName bindingName, WSDLResource wsdl);
+
+	void deregisterService(QName serviceName, WSDLResource wsdl);
+
+//	void unregisterAll(String id);
 }
