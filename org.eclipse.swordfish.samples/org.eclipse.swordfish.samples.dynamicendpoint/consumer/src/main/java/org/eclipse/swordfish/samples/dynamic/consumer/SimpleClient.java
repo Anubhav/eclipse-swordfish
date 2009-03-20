@@ -25,7 +25,6 @@ import org.apache.servicemix.jbi.runtime.impl.MessageExchangeImpl;
 import org.apache.servicemix.jbi.runtime.impl.NormalizedMessageImpl;
 import org.apache.servicemix.nmr.api.Endpoint;
 import org.apache.servicemix.nmr.api.NMR;
-import org.apache.servicemix.nmr.core.ClientChannel;
 import org.apache.servicemix.nmr.core.ExchangeImpl;
 import org.apache.servicemix.nmr.core.MessageImpl;
 import org.apache.servicemix.soap.Context;
@@ -33,14 +32,12 @@ import org.apache.servicemix.soap.SoapHelper;
 import org.apache.servicemix.soap.marshalers.JBIMarshaler;
 import org.apache.servicemix.soap.marshalers.SoapMarshaler;
 import org.apache.servicemix.soap.marshalers.SoapMessage;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.eclipse.swordfish.core.util.MockSoapHelper;
 import org.eclipse.swordfish.core.util.ServiceMixSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 public class SimpleClient implements InitializingBean {
 
@@ -102,7 +99,7 @@ public class SimpleClient implements InitializingBean {
 
         log.info("!!SimpleClient is sending synchronous request with in message " + dataToSend);
 
-        new ClientChannel(nmr).sendSync(exchange);
+        nmr.createChannel().sendSync(exchange);
         if (exchange.getError() != null) {
             log.error("The invocation wasn't successful", exchange.getError());
         }

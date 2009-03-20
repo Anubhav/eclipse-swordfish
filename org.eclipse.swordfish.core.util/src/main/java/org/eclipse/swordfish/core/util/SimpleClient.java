@@ -14,21 +14,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.transform.Source;
 
 import org.apache.servicemix.common.JbiConstants;
-import org.apache.servicemix.executors.impl.ExecutorImpl;
 import org.apache.servicemix.jbi.jaxp.SourceTransformer;
 import org.apache.servicemix.jbi.runtime.impl.MessageExchangeImpl;
 import org.apache.servicemix.jbi.runtime.impl.NormalizedMessageImpl;
 import org.apache.servicemix.nmr.api.Endpoint;
 import org.apache.servicemix.nmr.api.NMR;
-import org.apache.servicemix.nmr.core.ClientChannel;
 import org.apache.servicemix.nmr.core.ExchangeImpl;
 import org.apache.servicemix.nmr.core.MessageImpl;
 import org.apache.servicemix.soap.Context;
@@ -111,7 +107,7 @@ public class SimpleClient implements InitializingBean {
         targetProps.put(Endpoint.ENDPOINT_NAME, targetEndpointName);
         exchange.setTarget(nmr.getEndpointRegistry().lookup(targetProps));
         log.info("!!SimpleClient is sending synchronous request with in message " + dataToSend);
-        new ClientChannel(nmr,  new ExecutorImpl((ThreadPoolExecutor) Executors.newFixedThreadPool(2), 500L, true)).sendSync(exchange);
+        nmr.createChannel().sendSync(exchange);
         if (exchange.getError() != null) {
             log.error("The invocation wasn't successful", exchange.getError());
         }
