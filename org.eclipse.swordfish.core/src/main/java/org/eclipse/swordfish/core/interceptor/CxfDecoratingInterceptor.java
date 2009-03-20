@@ -98,7 +98,7 @@ public class CxfDecoratingInterceptor implements Interceptor {
 	public void process(MessageExchange exchange) throws SwordfishException {
 		InternalExchange messageExchange = (InternalExchange) ServiceMixSupport.toNMRExchange(exchange);
 		if (messageExchange.getTarget() == null) {
-			throw new UnsupportedOperationException();
+			return;
 		}
 		InternalEndpoint endpoint = ServiceMixSupport.getEndpoint(nmr, messageExchange.getTarget());
 		if (endpoint == null) {
