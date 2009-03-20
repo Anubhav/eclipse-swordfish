@@ -18,24 +18,48 @@
 	osgi:default-cardinality="0..X"
     default-lazy-init="false"
 	xsi:schemaLocation="
-  http://www.springframework.org/schema/beans
-  http://www.springframework.org/schema/beans/spring-beans.xsd
-  http://www.springframework.org/schema/util
-  http://www.springframework.org/schema/util/spring-util.xsd
-  http://www.springframework.org/schema/osgi
-  http://www.springframework.org/schema/osgi/spring-osgi.xsd">
-  
-  <bean id="loggingInterceptor"
-		class="org.eclipse.swordfish.core.interceptor.LoggingInterceptor"/> 
-  
-  <bean id="cxfDecoratingInterceptor"
-		class="org.eclipse.swordfish.core.interceptor.CxfDecoratingInterceptor" p:nmr-ref="nmr"/>
-  <osgi:service ref="cxfDecoratingInterceptor" interface="org.eclipse.swordfish.api.Interceptor">
-      <osgi:service-properties>  
-          <entry key="priority" value="1"/>  
-      </osgi:service-properties>
-  </osgi:service>
-   
-  <osgi:reference id="nmr" interface="org.apache.servicemix.nmr.api.NMR"/>
-  
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util.xsd
+	http://www.springframework.org/schema/osgi
+	http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+	<bean id="loggingInterceptor"
+		class="org.eclipse.swordfish.core.interceptor.LoggingInterceptor" />
+
+	<bean id="cxfDecoratingInterceptor"
+		class="org.eclipse.swordfish.core.interceptor.CxfDecoratingInterceptor"
+		p:nmr-ref="nmr" />
+	<osgi:service ref="cxfDecoratingInterceptor" interface="org.eclipse.swordfish.api.Interceptor">
+		<osgi:service-properties>
+			<entry key="priority" value="1" />
+		</osgi:service-properties>
+	</osgi:service>
+
+	<bean id="endpointResolverInterceptor"
+		class="org.eclipse.swordfish.core.interceptor.EndpointResolverInterceptor"
+		p:nmr-ref="nmr" p:serviceResolver-ref="serviceResolver"
+		p:componentRegistry-ref="componentRegistry" />
+	<osgi:service ref="endpointResolverInterceptor">
+		<osgi:interfaces>
+			<value>org.eclipse.swordfish.api.Interceptor</value>
+			<value>org.eclipse.swordfish.core.resolver.ServiceResolverHolder</value>
+		</osgi:interfaces>
+		<osgi:service-properties>
+			<entry key="priority" value="2" />
+		</osgi:service-properties>
+	</osgi:service>
+
+	<osgi:reference id="swordfishContext"
+		interface="org.eclipse.swordfish.api.context.SwordfishContext" />
+
+	<osgi:reference id="serviceResolver"
+		interface="org.eclipse.swordfish.core.resolver.ServiceResolver" />
+
+	<osgi:reference id="componentRegistry"
+		interface="org.apache.servicemix.jbi.runtime.ComponentRegistry" />
+
+	<osgi:reference id="nmr" interface="org.apache.servicemix.nmr.api.NMR" />
+
 </beans>
