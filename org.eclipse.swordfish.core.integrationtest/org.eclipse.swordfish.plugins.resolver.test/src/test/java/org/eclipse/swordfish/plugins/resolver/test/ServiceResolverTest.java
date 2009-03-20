@@ -225,6 +225,26 @@ public class ServiceResolverTest extends TargetPlatformOsgiTestCase {
                 new QName("http://samples.swordfish.eclipse.org", "consumer"));
         assertNotNull("No endpoints resolved. ", c);
         assertEquals(c.size(), 1);
+        assertNotNull(c.iterator().next().getServiceDescription());
+        assertEquals(c.iterator().next().getServiceDescription().getServiceName(),
+        		new QName("http://service.dynamic.samples.swordfish.eclipse.org/", "FlightServiceImpl"));
+    }
+
+    public void test7ServiceResolverNoPolicyMatching() throws Exception {
+        ServiceReference ref =
+        	bundleContext.getServiceReference(ServiceResolver.class.getName());
+        assertNotNull("Reference to ServiceResolver is null", ref);
+
+        ServiceResolver resolver = (ServiceResolver) bundleContext.getService(ref);
+        assertNotNull("Couldn't find the ServiceResolver service", resolver);
+
+        Collection<EndpointDescription> c = resolver.getEndpointsFor(
+                new QName("http://service.dynamic.samples.swordfish.eclipse.org/", "FlightService"));
+        assertNotNull("No endpoints resolved. ", c);
+        assertEquals(c.size(), 1);
+        assertNotNull(c.iterator().next().getServiceDescription());
+        assertEquals(c.iterator().next().getServiceDescription().getServiceName(),
+        		new QName("http://service.dynamic.samples.swordfish.eclipse.org/", "FlightServiceImpl"));
     }
 
     private void setExchangeThroughNMR() {
@@ -264,4 +284,5 @@ public class ServiceResolverTest extends TargetPlatformOsgiTestCase {
 	protected String getManifestLocation() {
 		return "classpath:org/eclipse/swordfish/plugins/resolver/test/MANIFEST.MF";
 	}
+
 }
