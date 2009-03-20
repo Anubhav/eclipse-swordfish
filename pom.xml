@@ -267,7 +267,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.3</version>
+                <version>2.5</version>
+                <configuration>
+				    <excludePackageNames>javax.*:*.internal</excludePackageNames>
+        		</configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
