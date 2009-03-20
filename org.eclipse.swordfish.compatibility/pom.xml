@@ -5,6 +5,7 @@
 	<groupId>org.eclipse.swordfish</groupId>
 	<packaging>pom</packaging>
 	<artifactId>compatibility</artifactId>
+	<name>org.eclipse.swordfish.compatibility</name>
 	<version>basic</version>
 	
 	<parent>

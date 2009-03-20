@@ -15,6 +15,7 @@
     <groupId>org.eclipse.swordfish</groupId>
     <packaging>pom</packaging>
     <artifactId>org.eclipse.swordfish.bundles</artifactId>
+    <name>org.eclipse.swordfish.bundles</name>
     <version>basic</version>
     <description />
     <parent>
