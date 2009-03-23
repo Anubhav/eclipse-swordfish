@@ -474,12 +474,7 @@
             <artifactId>com.springsource.org.jvnet.staxex</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>edu.emory.mathcs.backport</groupId>
-            <artifactId>com.springsource.edu.emory.mathcs.backport</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-        
+
    <!--Swordfish bundles-->
         <dependency>
             <groupId>org.eclipse.swordfish</groupId>

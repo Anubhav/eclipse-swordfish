@@ -10,22 +10,23 @@
 *******************************************************************************/
 package org.eclipse.swordfish.registry.domain;
 
-import static java.util.Collections.emptyList;
+// import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 import static org.eclipse.swordfish.registry.TstData.*;
-import static org.eclipse.swordfish.registry.TstUtil.list;
+import static org.eclipse.swordfish.registry.TstUtil.asSet;
 import static org.eclipse.swordfish.registry.TstUtil.wsdlResource;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.swordfish.registry.WSDLResource;
 import org.junit.Test;
 
 public class WSDLElementTest {
 
-	public static List<WSDLResource> EMPTY = emptyList();
+	public static Set<WSDLResource> EMPTY_SET = emptySet();
 
 	private WSDLResource wsdl_1 = wsdlResource(ID_1);
 
@@ -40,15 +41,16 @@ public class WSDLElementTest {
 
 	@Test
 	public void givenJustCreatedGetSourcesShouldReturnEmpty() {
-		assertThat(getSources(wsdlElement), equalTo(EMPTY));
+		assertThat(getSources(wsdlElement), equalTo(EMPTY_SET));
 	}
 
 	@Test
 	public void givenAddedSourceShouldReturnInGetSources() {
 		wsdlElement.addSource(wsdl_1);
 		wsdlElement.addSource(wsdl_2);
-
-		assertThat(getSources(wsdlElement), equalTo(list(wsdl_1, wsdl_2)));
+		// BAD TEST: WHERE AN ORDER IS NOT ASSUMED, AN ORDER MUST NOT BE TESTED:
+		// assertThat(getSources(wsdlElement), equalTo(list(wsdl_1, wsdl_2)));
+		assertThat(getSources(wsdlElement), equalTo(asSet(wsdl_1, wsdl_2)));
 	}
 
 	@Test
@@ -57,7 +59,7 @@ public class WSDLElementTest {
 		wsdlElement.addSource(wsdl_2);
 		wsdlElement.removeSource(wsdl_1);
 
-		assertThat(getSources(wsdlElement), equalTo(list(wsdl_2)));
+		assertThat(getSources(wsdlElement), equalTo(asSet(wsdl_2)));
 
 	}
 
@@ -72,8 +74,17 @@ public class WSDLElementTest {
 		assertTrue(wsdlElement.sourcesDefined());
 	}
 
+	/*
+	// UNORDERED COLLECTiON OF SOURCES - NOT A LIST
 	private static List<WSDLResource> getSources(WSDLElement element) {
 		List<WSDLResource> sources = new ArrayList<WSDLResource>();
+		element.sourcesAddTo(sources);
+		return sources;
+	}
+	*/
+
+	private static Set<WSDLResource> getSources(WSDLElement element) {
+		Set<WSDLResource> sources = new HashSet<WSDLResource>();
 		element.sourcesAddTo(sources);
 		return sources;
 	}

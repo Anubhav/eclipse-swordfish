@@ -19,9 +19,11 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.wsdl.Definition;
 import javax.wsdl.PortType;
@@ -33,7 +35,6 @@ import javax.xml.namespace.QName;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.easymock.IArgumentMatcher;
-import org.junit.Before;
 
 public final class TstUtil {
 	
@@ -155,13 +156,19 @@ public final class TstUtil {
 	public static <T> IAnswer<Iterator<T>> asIterator(final T... items) {
 		return new IAnswer<Iterator<T>>() {
 			public Iterator<T> answer() {
-				return list(items).iterator();
+				return asList(items).iterator();
 			}
 		};		
 	}
 	
-	public static <T> List<T> list(T... items) {
+	public static <T> List<T> asList(T... items) {
 		List<T> result = new ArrayList<T>();
+		Collections.addAll(result, items);
+		return result;
+	}
+
+	public static <T> Set<T> asSet(T... items) {
+		Set<T> result = new HashSet<T>();
 		Collections.addAll(result, items);
 		return result;
 	}

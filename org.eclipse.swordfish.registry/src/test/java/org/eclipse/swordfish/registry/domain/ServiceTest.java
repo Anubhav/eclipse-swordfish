@@ -12,7 +12,6 @@ package org.eclipse.swordfish.registry.domain;
 
 import static org.eclipse.swordfish.registry.IsIteratorReturning.isIteratorReturning;
 import static org.eclipse.swordfish.registry.TstData.*;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
