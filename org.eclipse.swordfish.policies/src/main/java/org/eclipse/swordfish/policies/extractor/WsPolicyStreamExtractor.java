@@ -12,6 +12,7 @@ package org.eclipse.swordfish.policies.extractor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.cxf.ws.policy.PolicyBuilderImpl;
@@ -26,7 +27,7 @@ import org.eclipse.swordfish.policies.definitions.WsPolicyStreamDefinition;
 import org.eclipse.swordfish.policies.helpers.PolicyBuilderInitializer;
 import org.eclipse.swordfish.policies.processor.WsPolicyDescription;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+
 
 public class WsPolicyStreamExtractor implements PolicyExtractor<WsPolicyStreamDefinition, Policy>{
 
@@ -91,7 +92,6 @@ public class WsPolicyStreamExtractor implements PolicyExtractor<WsPolicyStreamDe
 	@SuppressWarnings("unchecked")
 	private static List<Class<WsPolicyStreamDefinition>> unmodifiableList(
 			final List<Class<WsPolicyStreamDefinition>> l) {
-		return (List<Class<WsPolicyStreamDefinition>>)
-				Collections.unmodifiableList(l);
+		return Collections.unmodifiableList(l);
 	}
 }
