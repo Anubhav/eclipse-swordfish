@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     SOPERA GmbH - initial API and implementation
  *******************************************************************************/
@@ -12,7 +12,6 @@ package org.eclipse.swordfish.core.context;
 
 import javax.jbi.component.ComponentContext;
 
-import org.apache.servicemix.nmr.api.EndpointRegistry;
 import org.apache.servicemix.nmr.api.NMR;
 import org.eclipse.swordfish.api.configuration.ConfigurationService;
 import org.eclipse.swordfish.api.context.SwordfishContext;
@@ -27,10 +26,6 @@ public class SwordfishContextImpl implements SwordfishContext, InitializingBean 
 
     public ComponentContext getComponentContext() {
        throw new UnsupportedOperationException("This method is not implemented yet");
-    }
-
-    public EndpointRegistry getEndpointRegistry() {
-        return nmr.getEndpointRegistry();
     }
 
     public void afterPropertiesSet() throws Exception {
@@ -61,7 +56,7 @@ public class SwordfishContextImpl implements SwordfishContext, InitializingBean 
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
 	}
-	
+
 
 
 }
