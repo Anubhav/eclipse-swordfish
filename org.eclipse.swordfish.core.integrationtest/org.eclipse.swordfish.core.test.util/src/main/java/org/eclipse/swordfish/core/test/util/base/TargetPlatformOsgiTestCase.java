@@ -48,7 +48,7 @@ public class TargetPlatformOsgiTestCase extends BaseOsgiTestCase {
     }
     protected List<Pattern> getExcludeBundlePatterns() {
         return Arrays.asList(
-        	Pattern.compile("org.eclipse.osgi-3.4.2.*"),
+        	Pattern.compile("org.eclipse.osgi_.*"),
         	Pattern.compile("org.eclipse.swordfish.samples.*"));
     }
 

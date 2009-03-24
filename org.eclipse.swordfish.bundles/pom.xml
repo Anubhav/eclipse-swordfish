@@ -554,7 +554,7 @@
                 <configuration>
                     <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                     <excludeTransitive>true</excludeTransitive>
-                    <excludeGroupIds>junit,org.osgi</excludeGroupIds>
+                    <excludeGroupIds>junit,org.osgi,org.eclipse.osgi</excludeGroupIds>
                 </configuration>
             </plugin>
             <plugin>
