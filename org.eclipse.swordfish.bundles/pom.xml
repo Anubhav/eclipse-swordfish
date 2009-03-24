@@ -108,42 +108,7 @@
             <version>1.4.2_1</version>
         </dependency>
    
-<!--Eclipse bundles-->
-        <dependency>
-            <groupId>org.eclipse.osgi</groupId>
-            <artifactId>org.eclipse.osgi.services</artifactId>
-            <version>3.1.200.v20071203</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.osgi</groupId>
-            <artifactId>org.eclipse.osgi.util</artifactId>
-            <version>3.1.100</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.osgi</groupId>
-            <artifactId>org.eclipse.osgi</artifactId>
-            <version>3.4.2.R34x_v20080826-1230</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.osgi</groupId>
-            <artifactId>org.eclipse.equinox.cm</artifactId>
-            <version>1.0.0.v20080509-1800</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>event</artifactId>
-            <version>1.0.100-v20070516</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>org.eclipse.equinox.preferences</artifactId>
-            <version>3.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>common</artifactId>
-            <version>3.3.0-v20070426</version>
-        </dependency>
+<!--Eclipse bundles-->        
 <!--Spring bundles-->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -311,6 +276,11 @@
             <groupId>org.apache.servicemix.specs</groupId>
             <artifactId>org.apache.servicemix.specs.jbi-api-1.0</artifactId>
             <version>1.2.0</version>    
+        </dependency> 
+        <dependency>
+            <groupId>org.apache.servicemix.specs</groupId> 
+            <artifactId>org.apache.servicemix.specs.stax-api-1.0</artifactId>
+            <version>1.2.0</version> 
         </dependency> 
         <dependency>
             <groupId>org.apache.servicemix.specs</groupId>
@@ -558,11 +528,6 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.swordfish</groupId>
-            <artifactId>org.eclipse.swordfish.compatibility.stax-api</artifactId>
-            <version>${swordfishVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.swordfish</groupId>
             <artifactId>org.eclipse.swordfish.compatibility.ode</artifactId>
             <version>1.2</version>
         </dependency>
@@ -601,9 +566,14 @@
                                     <tasks>
                                         <echo>Copying configuration.ini file</echo>
                                         <mkdir dir="target/bundles/configuration"/>
-					<copy todir="target/bundles/configuration\">
+					                       <copy todir="target/bundles/configuration\">
                                             <fileset dir=".">
                                                 <include name="config.ini" />
+                                            </fileset>
+                                        </copy>
+                                        <copy todir="target/bundles/\">
+                                            <fileset dir="predefined-bundles">
+                                            <include name="*.jar"/>
                                             </fileset>
                                         </copy>
                                     </tasks>

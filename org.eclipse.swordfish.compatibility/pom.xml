@@ -15,8 +15,7 @@
   	</parent>
 	<description />
   <modules>
-      <module>org.eclipse.swordfish.compatibility.cxf.minimal</module>
-      <module>org.eclipse.swordfish.compatibility.stax-api</module>
+      <module>org.eclipse.swordfish.compatibility.cxf.minimal</module>      
 	  <module>org.eclipse.swordfish.compatibility.ode</module>
   </modules>
 </project>

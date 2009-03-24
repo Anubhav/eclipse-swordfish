@@ -1,4 +1,4 @@
 #!/bin/bash
 cd ./target/bundles
-java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 -jar org.eclipse.osgi-3.4.2.R34x_v20080826-1230.jar -console -clean
+java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 -jar org.eclipse.osgi_3.5.0.v20090311-1300.jar -console -clean
 
