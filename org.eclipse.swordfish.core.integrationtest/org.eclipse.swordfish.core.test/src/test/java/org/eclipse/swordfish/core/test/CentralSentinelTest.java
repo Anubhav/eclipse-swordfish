@@ -15,7 +15,7 @@ public class CentralSentinelTest extends TargetPlatformOsgiTestCase {
     public void test1SwordfishHasStarted() {
         for (Bundle bundle : bundleContext.getBundles()) {
             if (OsgiBundleUtils.isFragment(bundle)) {
-                assertEquals(String.format("Fragment bundle [%s] should be in the INSTALLED state", bundle.getSymbolicName()), Bundle.INSTALLED, bundle.getState());
+                assertEquals(String.format("Fragment bundle [%s] should be in the RESOLVED state", bundle.getSymbolicName()), Bundle.RESOLVED, bundle.getState());
             } else {
                 assertEquals(String.format("Bundle [%s] should be in the ACTIVE state", bundle.getSymbolicName()), Bundle.ACTIVE, bundle.getState());
 
@@ -25,5 +25,9 @@ public class CentralSentinelTest extends TargetPlatformOsgiTestCase {
         assertNotNull(swordfishContext);
         assertNotNull(swordfishContext.getConfigurationService());
         assertNotNull(swordfishContext.getEventService());
+    }
+    @Override
+    protected String getManifestLocation() {
+        return "classpath:org/eclipse/swordfish/core/planner/test/MANIFEST.MF";
     }
 }
