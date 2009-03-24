@@ -32,6 +32,7 @@ import org.apache.servicemix.soap.SoapHelper;
 import org.apache.servicemix.soap.marshalers.JBIMarshaler;
 import org.apache.servicemix.soap.marshalers.SoapMarshaler;
 import org.apache.servicemix.soap.marshalers.SoapMessage;
+import org.eclipse.swordfish.api.policy.PolicyConstants;
 import org.eclipse.swordfish.core.util.MockSoapHelper;
 import org.eclipse.swordfish.core.util.ServiceMixSupport;
 import org.slf4j.Logger;
@@ -45,6 +46,7 @@ public class SimpleClient implements InitializingBean {
 
     private String dataToSend;
     private String interfaceName;
+    private String consumerPolicyName;
     private String operationName;
     private Integer delayBeforeSending = 5000;
     private NMR nmr;
@@ -90,6 +92,11 @@ public class SimpleClient implements InitializingBean {
                 .getInternalExchange();
     	exchange.setProperty(
     		MessageExchangeImpl.INTERFACE_NAME_PROP, QName.valueOf(interfaceName));
+    	if (consumerPolicyName != null && consumerPolicyName.length() > 0) {
+    		exchange.setProperty(
+    				PolicyConstants.POLICY_CONSUMER_NAME,
+    				QName.valueOf(consumerPolicyName));
+    	}
     	exchange.setOperation(QName.valueOf(operationName));
 
     	//TODO please find more suitable solution
@@ -127,7 +134,15 @@ public class SimpleClient implements InitializingBean {
 		this.interfaceName = interfaceName;
 	}
 
-    public String getOperationName() {
+    public String getConsumerPolicyName() {
+		return consumerPolicyName;
+	}
+
+	public void setConsumerPolicyName(String consumerPolicyName) {
+		this.consumerPolicyName = consumerPolicyName;
+	}
+
+	public String getOperationName() {
 		return operationName;
 	}
 
