@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.servicedesc.ServiceEndpoint;
 import javax.xml.namespace.QName;
@@ -53,10 +54,17 @@ public class EndpointResolverInterceptor<T> implements Interceptor, ServiceResol
 	public void process(MessageExchange messageExchange) throws SwordfishException {
 		Exchange exchange = ServiceMixSupport.toNMRExchange(messageExchange);
 		try {
-			if (exchange.getRole() != Role.Consumer) {
+			
+			if(messageExchange.getStatus() == ExchangeStatus.DONE){
+				logger.warn("could't process terminated (status == DONE) message exchange!");
+				exchange.setTarget(null);
 				return;
 			}
 
+			if (exchange.getRole() != Role.Consumer) {
+				return;
+			}
+				
 			if (exchange.getTarget() != null && ServiceMixSupport.getEndpoint(getNmr(), exchange.getTarget()) != null) {
 			    return;
 			}
