@@ -12,9 +12,9 @@ package org.eclipse.swordfish.registry.domain;
 
 // import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
-import static org.eclipse.swordfish.registry.TstData.*;
-import static org.eclipse.swordfish.registry.TstUtil.asSet;
-import static org.eclipse.swordfish.registry.TstUtil.wsdlResource;
+import static org.eclipse.swordfish.registry.TestData.*;
+import static org.eclipse.swordfish.registry.TestUtilities.asSet;
+import static org.eclipse.swordfish.registry.TestUtilities.wsdlResource;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 

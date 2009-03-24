@@ -14,7 +14,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.eclipse.swordfish.registry.TstData.ID_1;
+import static org.eclipse.swordfish.registry.TestData.ID_1;
 
 import org.junit.Before;
 import org.junit.Test;

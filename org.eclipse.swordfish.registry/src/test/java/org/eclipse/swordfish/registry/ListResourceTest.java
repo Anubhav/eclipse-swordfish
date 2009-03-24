@@ -15,8 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.eclipse.swordfish.registry.IsIteratorReturning.isIteratorReturning;
-import static org.eclipse.swordfish.registry.TstData.*;
-import static org.eclipse.swordfish.registry.TstUtil.*;
+import static org.eclipse.swordfish.registry.TestData.*;
+import static org.eclipse.swordfish.registry.TestUtilities.*;
 
 import org.junit.Before;
 import org.junit.Test;

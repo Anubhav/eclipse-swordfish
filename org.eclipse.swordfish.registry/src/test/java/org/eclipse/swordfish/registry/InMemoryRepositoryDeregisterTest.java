@@ -1,7 +1,7 @@
 package org.eclipse.swordfish.registry;
 
 import static org.eclipse.swordfish.registry.IsIteratorReturning.isIteratorReturning;
-import static org.eclipse.swordfish.registry.TstData.*;
+import static org.eclipse.swordfish.registry.TestData.*;
 
 import java.util.Iterator;
 

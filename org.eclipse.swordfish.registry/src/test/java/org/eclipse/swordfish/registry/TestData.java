@@ -10,19 +10,14 @@
 *******************************************************************************/
 package org.eclipse.swordfish.registry;
 
-import static org.eclipse.swordfish.registry.TstData.ID_1;
-import static org.eclipse.swordfish.registry.TstData.ID_2;
-import static org.eclipse.swordfish.registry.TstData.ID_3;
-import static org.eclipse.swordfish.registry.TstData.ID_4;
-import static org.eclipse.swordfish.registry.TstData.ID_5;
-import static org.eclipse.swordfish.registry.TstUtil.wsdlResource;
+import static org.eclipse.swordfish.registry.TestUtilities.wsdlResource;
 
 import java.util.Collections;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-public class TstData {
+public interface TestData {
 
 	public static final String NAME_SPACE_1 = "NameSpace_1";
 	public static final String NAME_SPACE_2 = "NameSpace_2";

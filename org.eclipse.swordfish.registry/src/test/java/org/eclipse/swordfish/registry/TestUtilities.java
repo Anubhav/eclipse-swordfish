@@ -35,8 +35,10 @@ import javax.xml.namespace.QName;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.easymock.IArgumentMatcher;
+import org.junit.Ignore;
 
-public final class TstUtil {
+@Ignore
+public final class TestUtilities {
 	
 	static WSDLFactory factory;
 

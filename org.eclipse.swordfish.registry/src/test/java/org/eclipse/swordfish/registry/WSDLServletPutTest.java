@@ -14,8 +14,8 @@ import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
-import static org.eclipse.swordfish.registry.TstData.*;
-import static org.eclipse.swordfish.registry.TstUtil.*;
+import static org.eclipse.swordfish.registry.TestData.*;
+import static org.eclipse.swordfish.registry.TestUtilities.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

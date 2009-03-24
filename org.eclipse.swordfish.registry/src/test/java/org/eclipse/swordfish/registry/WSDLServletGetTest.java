@@ -13,8 +13,8 @@ package org.eclipse.swordfish.registry;
 import static java.util.Collections.emptyList;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.easymock.EasyMock.*;
-import static org.eclipse.swordfish.registry.TstData.*;
-import static org.eclipse.swordfish.registry.TstUtil.*;
+import static org.eclipse.swordfish.registry.TestData.*;
+import static org.eclipse.swordfish.registry.TestUtilities.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 

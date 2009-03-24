@@ -11,9 +11,9 @@
 package org.eclipse.swordfish.registry;
 
 import static org.easymock.EasyMock.*;
-import static org.eclipse.swordfish.registry.TstData.ID_1;
-import static org.eclipse.swordfish.registry.TstData.ID_2;
-import static org.eclipse.swordfish.registry.TstUtil.wsdlResource;
+import static org.eclipse.swordfish.registry.TestData.ID_1;
+import static org.eclipse.swordfish.registry.TestData.ID_2;
+import static org.eclipse.swordfish.registry.TestUtilities.wsdlResource;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;

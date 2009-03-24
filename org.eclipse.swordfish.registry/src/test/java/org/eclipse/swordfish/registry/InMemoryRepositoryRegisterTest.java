@@ -14,8 +14,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.*;
 import static org.junit.Assert.*;
 
-import static org.eclipse.swordfish.registry.TstData.*;
-import static org.eclipse.swordfish.registry.TstUtil.*;
+import static org.eclipse.swordfish.registry.TestData.*;
+import static org.eclipse.swordfish.registry.TestUtilities.*;
 import static org.eclipse.swordfish.registry.IsIteratorReturning.isIteratorReturning;
 
 import java.util.Iterator;

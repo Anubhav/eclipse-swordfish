@@ -12,8 +12,8 @@ package org.eclipse.swordfish.registry;
 
 
 import static org.easymock.EasyMock.*;
-import static org.eclipse.swordfish.registry.TstData.*;
-import static org.eclipse.swordfish.registry.TstUtil.*;
+import static org.eclipse.swordfish.registry.TestData.*;
+import static org.eclipse.swordfish.registry.TestUtilities.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
