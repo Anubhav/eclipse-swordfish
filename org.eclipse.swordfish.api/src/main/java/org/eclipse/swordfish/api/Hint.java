@@ -35,7 +35,8 @@ public interface Hint<T> {
 	 * Get the information object wrapped by the receiver.
 	 * @return the information extracted from the message exchange
 	 * (must not be <code>null</code>).
+	 * this is test
 	 */
 	T getInfo();
-
+	
 }
