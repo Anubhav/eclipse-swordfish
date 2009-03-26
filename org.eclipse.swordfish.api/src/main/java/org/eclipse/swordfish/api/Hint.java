@@ -37,6 +37,7 @@ public interface Hint<T> {
 	 * (must not be <code>null</code>).
 	 * this is test
 	 * this is a new test
+	 * this is one more change
 	 */
 	T getInfo();
 	
