@@ -105,15 +105,15 @@
             <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>  
             <url>http://repository.springsource.com/maven/bundles/external</url> 
         </repository>
-	 <repository>
-		<id>spring-maven-milestone</id>
-		<name>Springframework Maven Repository</name>
-		<url>http://s3.amazonaws.com/maven.springframework.org/milestone</url>
+		 <repository>
+			<id>spring-maven-milestone</id>
+			<name>Springframework Maven Repository</name>
+			<url>http://s3.amazonaws.com/maven.springframework.org/milestone</url>
+			</repository>
+	     <repository>  
+	      	<id>snapshots</id>
+	      	<url>http://people.apache.org/repo/m2-snapshot-repository/</url>
 		</repository>
-     <repository>  
-      	<id>snapshots</id>
-      	<url>http://people.apache.org/repo/m2-snapshot-repository/</url>
-	</repository>
 
     </repositories>
 
