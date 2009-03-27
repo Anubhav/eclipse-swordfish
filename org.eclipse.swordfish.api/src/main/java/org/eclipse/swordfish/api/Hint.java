@@ -38,6 +38,7 @@ public interface Hint<T> {
 	 * this is test
 	 * this is a new test
 	 * And what is this???
+	 * this is one more change
 	 */
 	T getInfo();
 	
