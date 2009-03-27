@@ -22,7 +22,7 @@ import javax.jbi.messaging.MessageExchange;
  * {@link FilterStrategy} and {@link SortingStrategy} components which can
  * use them to shape the interceptor chain for appropriate processing of the
  * current message exchange.
- *
+ * Test change JŸrgen is there
  */
 public interface HintExtractor {
 
